@@ -1,0 +1,77 @@
+from django.shortcuts import render,redirect
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
+from .models import *
+
+# Create your views here.
+
+def login(request):
+    return render(request, 'login.html')
+
+def goDashboard(request):
+    return render(request, 'dashboard.html')
+
+def registerUser(request):
+    try:
+        if request.method == 'POST':
+            usrnm = request.POST['username']
+            eml = request.POST['email']
+            phn = request.POST['phone']
+            adrs = request.POST['address']
+            gstn = request.POST['gstnum']
+            cmpny = request.POST['company']
+            pswrd = request.POST['password']
+            cpswrd = request.POST['confirmPassword']
+
+            if User.objects.filter(username=usrnm).exists():
+                messages.info(request, f"`{usrnm}` already exists!! Please try another..")
+                return redirect(login)
+            elif User.objects.filter(email=eml).exists():
+                messages.info(request, f"`{eml}` already exists!! Please try another..")
+                return redirect(login)
+            else:
+                if pswrd == cpswrd:
+                    userInfo = User.objects.create_user(
+                        username=usrnm,
+                        email=eml,
+                        password=pswrd,
+                    )
+                    userInfo.save()
+                    print('auth user saved...')
+                    cData = User.objects.get(id=userInfo.id)
+                    cmpnyData = Company(
+                        user=cData,
+                        company_name=cmpny,
+                        phone_number=phn,
+                        address=adrs,
+                        gst_number = gstn
+                    )
+                    cmpnyData.save()
+                    print('cmpny==saved..')
+                    # messages.info(request, 'Registration Successful..')
+                    return redirect(login)
+                else:
+                    # messages.warning(request, "Passwords doesn't match..Please try again.")
+                    # return HttpResponse('please! verify your passwords')
+                    return redirect(login)
+        else:
+            return redirect(login)    
+    except Exception as e:
+        print(e)
+        return redirect(login)
+    
+
+def userLogin(request):
+    if request.method == "POST":
+        uName = request.POST["username"]
+        password = request.POST["password"]
+
+        user = auth.authenticate(username=uName, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect(goDashboard)
+        else:
+            messages.info(request, "Incorrect Username or Password..Please try again")
+            return redirect(login)
+    else:
+        return redirect(login)
