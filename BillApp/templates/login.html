@@ -10,9 +10,11 @@
             src="https://kit.fontawesome.com/64d58efce2.js"
             crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
     <title>Super Market</title>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
@@ -27,12 +29,15 @@
             font-family: "Poppins", sans-serif;
         }
 
-        .container {
+        .container-main {
             position: relative;
             width: 100%;
             background-color: #fff;
             min-height: 100vh;
             overflow: hidden;
+            /* overflow-y: auto; */
+        }
+        .container-main.sign-up-mode {
             overflow-y: auto;
         }
 
@@ -55,8 +60,13 @@
             grid-template-columns: 1fr;
             z-index: 5;
         }
-        .container.sign-up-mode .signin-signup {
-            margin: 12rem 1rem;
+        /* @media (min-width:871px){
+            .signin-signup{
+                background: #003e27;
+            }
+        } */
+        .container-main.sign-up-mode .signin-signup {
+            margin: 12rem 0rem;
             padding: 5rem 0rem;
         }
 
@@ -180,7 +190,7 @@
 
         .btn {
             width: 150px;
-            background-color: #213e57;
+            background-color: #003e27;
             border: none;
             outline: none;
             height: 49px;
@@ -194,7 +204,9 @@
         }
 
         .btn:hover {
-            background-color: #213e57;
+            background-color: #fff;
+            color: #003e27;
+            border: 2px solid #003e27;
         }
 
         .panels-container {
@@ -207,7 +219,7 @@
             grid-template-columns: repeat(2, 1fr);
         }
 
-        /* .container:before {
+        /* .container-main:before {
             content: "";
             position: absolute;
             height: 2000px;
@@ -243,7 +255,8 @@
 
         .right-panel {
             pointer-events: none;
-            padding: 3rem 12% 2rem 17%;
+            /* padding: 3rem 12% 2rem 17%; */
+            padding: 3rem 24% 2rem 24%;
         }
 
         .panel .content {
@@ -266,7 +279,7 @@
         .btn.transparent {
             margin: 0;
             /* background: none; */
-            border: 2px solid #fff;
+            border: 2px solid #003e27;
             width: 130px;
             height: 41px;
             font-weight: 600;
@@ -280,45 +293,45 @@
 
         /* ANIMATION */
 
-        .container.sign-up-mode:before {
+        .container-main.sign-up-mode:before {
             transform: translate(100%, -50%);
             right: 52%;
         }
 
-        .container.sign-up-mode .left-panel .image,
-        .container.sign-up-mode .left-panel .content {
+        .container-main.sign-up-mode .left-panel .image,
+        .container-main.sign-up-mode .left-panel .content {
             transform: translateX(-800px);
         }
 
-        .container.sign-up-mode .signin-signup {
+        .container-main.sign-up-mode .signin-signup {
             left: 25%;
         }
 
-        .container.sign-up-mode form.sign-up-form {
+        .container-main.sign-up-mode form.sign-up-form {
             opacity: 1;
             z-index: 2;
         }
 
-        .container.sign-up-mode form.sign-in-form {
+        .container-main.sign-up-mode form.sign-in-form {
             opacity: 0;
             z-index: 1;
         }
 
-        .container.sign-up-mode .right-panel .image,
-        .container.sign-up-mode .right-panel .content {
+        .container-main.sign-up-mode .right-panel .image,
+        .container-main.sign-up-mode .right-panel .content {
             transform: translateX(0%);
         }
 
-        .container.sign-up-mode .left-panel {
+        .container-main.sign-up-mode .left-panel {
             pointer-events: none;
         }
 
-        .container.sign-up-mode .right-panel {
+        .container-main.sign-up-mode .right-panel {
             pointer-events: all;
         }
 
         @media (max-width: 870px) {
-            .container {
+            .container-main {
                 min-height: 800px;
                 height: 100vh;
             }
@@ -329,9 +342,15 @@
                 transform: translate(-50%, -100%);
                 transition: 1s 0.8s ease-in-out;
             }
-
+            .container-main.sign-up-mode .signin-signup {
+                margin: 0rem;
+                padding: 1rem 0rem;
+            }
+            .container-main.sign-up-mode .right-panel {
+                margin-top: 48rem;
+            }
             .signin-signup,
-            .container.sign-up-mode .signin-signup {
+            .container-main.sign-up-mode .signin-signup {
                 left: 50%;
             }
 
@@ -383,7 +402,7 @@
                 font-size: 0.7rem;
             }
 
-            .container:before {
+            .container-main:before {
                 width: 1500px;
                 height: 1500px;
                 transform: translateX(-50%);
@@ -394,19 +413,19 @@
                 transition: 2s ease-in-out;
             }
 
-            .container.sign-up-mode:before {
+            .container-main.sign-up-mode:before {
                 transform: translate(-50%, 100%);
                 bottom: 32%;
                 right: initial;
             }
 
-            .container.sign-up-mode .left-panel .image,
-            .container.sign-up-mode .left-panel .content {
+            .container-main.sign-up-mode .left-panel .image,
+            .container-main.sign-up-mode .left-panel .content {
                 transform: translateY(-300px);
             }
 
-            .container.sign-up-mode .right-panel .image,
-            .container.sign-up-mode .right-panel .content {
+            .container-main.sign-up-mode .right-panel .image,
+            .container-main.sign-up-mode .right-panel .content {
                 transform: translateY(0px);
             }
 
@@ -415,7 +434,7 @@
                 transform: translateY(300px);
             }
 
-            .container.sign-up-mode .signin-signup {
+            .container-main.sign-up-mode .signin-signup {
                 top: 5%;
                 transform: translate(-50%, 0);
             }
@@ -434,16 +453,16 @@
                 padding: 0.5rem 1rem;
             }
 
-            .container {
+            .container-main {
                 padding: 1.5rem;
             }
 
-            .container:before {
+            .container-main:before {
                 bottom: 72%;
                 left: 50%;
             }
 
-            .container.sign-up-mode:before {
+            .container-main.sign-up-mode:before {
                 bottom: 28%;
                 left: 50%;
             }
@@ -490,7 +509,7 @@
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container-main">
     <div class="forms-container">
         <div class="signin-signup">
             <form action="{% url 'userLogin' %}" method="post" class="sign-in-form">
@@ -538,6 +557,7 @@
                 <div class="input-field">
                     <i class="fa fa-pencil"></i>
                     <input type="text" placeholder="GST Number" name="gstnum" id="gstin" required/>
+                    <div class="text-danger" style="font-size: 0.85rem; width: max-content;" id="gstErr"></div>
                 </div>
                 <div class="input-field textarea">
                     <!-- <i class="fa fa-address-card"></i> -->
@@ -555,11 +575,13 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" placeholder="Password" 
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="password" id="pwd"/>
+                    <div class="text-danger" style="font-size: 0.85rem; width: max-content;" id="passErr"></div>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
                     <input type="password" placeholder="Confirm Password"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"  name="confirmPassword" id="cnfpwd"/>
+                    <div class="text-danger" style="font-size: 0.85rem; width: max-content;" id="cnfrmPassErr"></div>
                 </div>
                 <input type="submit" class="btn" value="Sign up"/>
             </form>
@@ -589,7 +611,7 @@
                     Sign in
                 </button>
             </div>
-            <img src="{% static 'assets/img/register.svg' %}" class="image" alt=""/>
+            <img src="{% static 'assets/img/sup_reg.jpg' %}" class="image" alt=""/>
         </div>
     </div>
 </div>
@@ -597,7 +619,7 @@
 <script>
     const sign_in_btn = document.querySelector("#sign-in-btn");
     const sign_up_btn = document.querySelector("#sign-up-btn");
-    const container = document.querySelector(".container");
+    const container = document.querySelector(".container-main");
 
     sign_up_btn.addEventListener("click", () => {
         container.classList.add("sign-up-mode");
@@ -613,14 +635,29 @@
         var pwd = document.getElementById("pwd").value;
         var cnfpwd = document.getElementById("cnfpwd").value;
         var usnm = document.getElementById("user").value;
+        var gstin = document.getElementById('gstin').value;
+        const gstregex = /\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/;
+
+        if (gstin !="" && !gstregex.test(gstin)){
+            document.getElementById('gstErr').innerHTML = "Invalid..! Ex: '22AAAAA0000A1Z5'"
+            return false;
+        }else{
+            document.getElementById('gstErr').innerHTML = ""
+        }
 
         if (pwd.length < 8 || pwd.length > 18) {
-            alert("Password length is invalid");
+            // alert("Password length is invalid");
+            document.getElementById('passErr').innerHTML = "Password length should be 8-18"
             return false;
+        }else{
+            document.getElementById('passErr').innerHTML = "";
         }
         if (pwd != cnfpwd) {
-            alert("password and confirm password does not match");
+            // alert("password and confirm password does not match");
+            document.getElementById('cnfrmPassErr').innerHTML = "password and confirm password does not match.!"
             return false;
+        }else{
+            document.getElementById('cnfrmPassErr').innerHTML = ""
         }
         return true;
     }
