@@ -4,8 +4,8 @@
     {% load static %}
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet"/>
-    <script src="{% static 'assets/js/pace.min.js' %}"></script>
+    <!-- <link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'assets/js/pace.min.js' %}"></script> -->
     <script
             src="https://kit.fontawesome.com/64d58efce2.js"
             crossorigin="anonymous">
@@ -60,11 +60,25 @@
             grid-template-columns: 1fr;
             z-index: 5;
         }
-        /* @media (min-width:871px){
+        @media (min-width:871px){
             .signin-signup{
-                background: #003e27;
+                background: #0d6847;
             }
-        } */
+            .sign-in-form h2, .sign-up-form h2 {
+                color: white;
+            }
+            .forgot-password
+            {
+                text-decoration: none;
+                font-size: 12px;
+                color: rgb(235, 235, 243) !important;     
+            }
+            .forgot-password:hover
+            {
+                color: rgb(181, 181, 197) !important; 
+                opacity: 0.8;  
+            }
+        }
         .container-main.sign-up-mode .signin-signup {
             margin: 12rem 0rem;
             padding: 5rem 0rem;

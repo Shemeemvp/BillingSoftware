@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/css/pace.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'assets/js/pace.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/boxicons/css/boxicons.css' %}">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- Vector CSS -->
+    <link href="{% static 'assets/plugins/vectormap/jquery-jvectormap-2.0.2.css' %}" rel="stylesheet" />
+    <!--plugins-->
+    <link href="{% static 'assets/plugins/simplebar/css/simplebar.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/plugins/metismenu/css/metisMenu.min.css' %}" rel="stylesheet" />
+    
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>{%block title%}Home{%endblock%}</title>
+</head>
+<body>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+        :root {
+          --header-height: 5rem;
+          --nav-width: 68px;
+          --first-color: #4723d9;
+          --first-color-light: #afa5d9;
+          --white-color: #f7f6fb;
+          --body-font: "Nunito", sans-serif;
+          --normal-font-size: 1rem;
+          --z-fixed: 100;
+        }
+        body{
+            background: #005f3cf7;
+        }
+        main{
+          margin-top: calc(var(--header-height) + 4rem);
+        }
+        #header{
+         background: #003e27;
+         height: var(--header-height);
+         padding: 0.5rem 0rem;
+        }
+        #navigation{
+         background: #003e27;
+         /* margin-top: var(--header-height); */
+         border-top: 1px solid #8faf9f;
+        }
+        .navbar{
+         display: flex;
+         justify-content: space-between;   
+        }
+        .header .logo-text {
+         font-family: "Poppins", sans-serif;
+        }
+        .search_bar{
+          width: 33.3%;
+        }
+        .sidebar-header{
+          width: 33.3%;
+        }
+        .profile-seg{
+          width: 33.3%;
+        }
+        .search_bar .search_bar_input{
+            width: 80%;
+        }
+        .navbar-nav .dropdown-menu {
+        right: 0 !important;
+        top: 100%;
+        left: unset;
+        margin-top: 0.125rem;
+        }
+        .menu_bar{
+            display: flex;
+            list-style-type: none;
+        }
+        .menubar_item{
+            margin: 0.4rem 0.3rem;
+            padding: 0.7rem;
+            width: 13vw;
+            text-align: center;
+            background: #0d5b3e;
+        }
+        .menubar_item:hover{
+            background: #124d37;
+        }
+        .menubar_item a{
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+
+
+    <header class="header fixed-top" id="header">
+        <nav class="navbar navbar-expand container-fluid">
+            <div class="sidebar-header d-flex justify-content-start">
+                <div class="d-none d-lg-flex">
+                  <img src="" class="logo-icon-2" alt="" />
+                </div>
+                <div class="logo-text text-white">
+                  <h4><b>BillingSoftware</b></h4>
+                </div>
+                <a href="javascript:;"  type="button" data-bs-toggle="offcanvas" data-bs-target="#navigation" aria-controls="navigationBar" class="toggle-btn ms-3 fs-5"> <i class="bx bx-menu text-white"></i></a>
+            </div>
+            <div class="search_bar">
+                <form
+                  class="form-inline d-flex justify-content-center"
+                  method="get"
+                  action=""
+                  role="search"
+                  id="navBarSearchForm"
+                >
+                  <div class="search_bar_input">
+                    <input
+                      class="form-control srch mr-sm-2"
+                      type="search"
+                      name="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                      required
+                    />
+                  </div>
+                  <button class="btn btn-light srchbtn ms-2" type="submit">
+                    <i class="bx bx-search-alt-2"></i>
+                  </button>
+                </form>
+            </div>
+            <div class="profile-seg">
+              <ul class="navbar-nav justify-content-end">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link d-flex d-inline-block align-items-center dropdown-toggle text-white"
+                    data-bs-toggle="dropdown"
+                    id="navbarDropdown"
+                    href="#"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    ><div class="header_img">
+                      {%if reader.image %}
+                      <img src="{{reader.image.url}}" alt="" />
+                      {%else%}
+                      <img src="{% static 'assets/img/no-image.webp' %}" class="rounded-circle" alt="NoImg" />
+                      {%endif%}
+                    </div>
+                    <span class="ms-2 text-white">{{request.user.first_name}}</span>
+                  </a>
+                  <div class="dropdown-menu head-dd" id="navbar-dropdown-main" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href=""
+                      ><span><i class="fa-solid fa-building text-secondary me-2"></i></span>Company</a
+                    >
+                    <a class="dropdown-item" href="#dueAlerts" data-bs-toggle="modal"
+                      ><span><i class="fa-solid fa-bell text-secondary me-2"></i></span>
+                      Notifications</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      role="button"
+                      ><span><i class="fa-solid fa-key text-secondary me-2"></i></span> Reset
+                      Password</a
+                    >
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'userLogout' %}"
+                      ><span><i class="fa-solid fa-power-off text-danger me-2"></i></span>
+                      Logout</a
+                    >
+                  </div>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    data-mdb-toggle="dropdown"
+                    id="navbarDropdown"
+                    href="#"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <div class="header_img">
+                      <img src="{% static 'assets/img/no-image.webp' %}" alt="" />
+                    </div>
+                  </a>
+                  <div class="dropdown-menu head-dd" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href=""
+                      ><span
+                        ><i class="fa-solid fa-right-to-bracket text-info"></i
+                      ></span>
+                      Login</a
+                    >
+                    <div class="dropdown-divider"></div>
+                    <a
+                      class="dropdown-item d-flex d-inline-block align-items-center"
+                      href=""
+                      ><span><i class="fa fa-user text-secondary me-2"></i></span>
+                      New Customer?
+                      <div class="w-100 ms-2 d-flex justify-content-end">
+                        <span class="btn btn-outline-primary">Sign Up</span>
+                      </div></a
+                    >
+                  </div>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+        </nav>
+        <div class="offcanvas offcanvas-top mb-2" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="navigation" aria-labelledby="navigationBarLabel">
+          <div class="offcanvas-body">
+              <nav class="topbar-nav">
+                  <ul class="menu_bar" id="menu_bar_items">
+                    <li class="menubar_item">
+                      <a href="{% url 'goDashboard' %}">
+                        <div class="menu-title">Dashboard</div>
+                      </a>
+                    </li>
+                    <li class="menubar_item">
+                      <a href="{% url 'goDashboard' %}">
+                        <div class="menu-title">Stock</div>
+                      </a>
+                    </li>
+                    <li class="menubar_item">
+                      <a href="{% url 'goDashboard' %}">
+                        <div class="menu-title">Purchase</div>
+                      </a>
+                    </li>
+                    <li class="menubar_item">
+                      <a href="{% url 'goDashboard' %}">
+                        <div class="menu-title">Sales</div>
+                      </a>
+                    </li>
+                    <li class="menubar_item">
+                      <a href="{% url 'goDashboard' %}">
+                        <div class="menu-title">Transactions</div>
+                      </a>
+                    </li>
+                  </ul>
+              </nav>
+          </div>
+        </div>
+      </header>
+      
+
+    <main class="container-fluid">
+        {%block content%}
+        
+        {%endblock%}
+    </main>
+    <footer></footer>
+
+
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>
