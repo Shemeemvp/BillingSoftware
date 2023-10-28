@@ -6,7 +6,9 @@
     --light: #6C7293;
     --dark: #000000;
 }
-
+.b-primary{
+    background: #003e29;
+}
 .back-to-top {
     position: fixed;
     display: none;
@@ -136,7 +138,7 @@
 .sidebar .navbar .navbar-nav .nav-link.active {
     color: white;
     background: var(--dark);
-    border-color: var(--primary);
+    border-color: white;
 }
 
 .sidebar .navbar .navbar-nav .nav-link i {

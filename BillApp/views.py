@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -88,3 +89,19 @@ def userLogout(request):
     request.session["uid"] = ""
     auth.logout(request)
     return redirect("/")
+
+
+def validateEmail(request):
+    email = request.GET['email']
+
+    if User.objects.filter(email = email).exists():
+        return JsonResponse({'is_taken':True})
+    JsonResponse({'is_taken':False})
+
+
+def validateUsername(request):
+    uName = request.GET['username']
+
+    if User.objects.filter(username = uName).exists():
+        return JsonResponse({'is_taken':True})
+    JsonResponse({'is_taken':False})
