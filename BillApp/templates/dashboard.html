@@ -4,7 +4,7 @@
 {% block content %}
 
 <!-- Sale & Revenue Start -->
-<style>
+<!-- <style>
     .bg-light{
         background: #d3d3d3 !important;
     }
@@ -13,6 +13,20 @@
     }
     .content {
         background: white;
+    }
+    .text-primary{
+        color: #003e27 !important;
+    }
+</style> -->
+<style>
+    .bg-light{
+        background: #eae9c4 !important;
+    }
+    .bg-white {
+        background-color: #407d58!important;
+    }
+    .content {
+        background: rgb(255, 255, 255);
     }
     .text-primary{
         color: #003e27 !important;
@@ -42,7 +56,7 @@
             <div class="bg-light  rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-chart-area fa-3x text-primary"></i>
                 <div class="ms-3">
-                    <p class="mb-2">Purchase</p>
+                    <p class="mb-2">Today Purchase</p>
                     <h6 class="mb-0">$1234</h6>
                 </div>
             </div>
@@ -51,7 +65,7 @@
             <div class="bg-light  rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-chart-pie fa-3x text-primary"></i>
                 <div class="ms-3">
-                    <p class="mb-2">Total Revenue</p>
+                    <p class="mb-2">Total Purchase</p>
                     <h6 class="mb-0">$1234</h6>
                 </div>
             </div>
@@ -67,7 +81,7 @@
         <div class="col-sm-12 col-xl-6">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h6 class="mb-0">Worldwide Sales</h6>
+                    <h6 class="mb-0">Stock In hand Reports</h6>
                     <a href="">Show All</a>
                 </div>
                 <canvas id="worldwide-sales"></canvas>
@@ -76,7 +90,7 @@
         <div class="col-sm-12 col-xl-6">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h6 class="mb-0">Salse & Revenue</h6>
+                    <h6 class="mb-0">Sale & Purchase</h6>
                     <a href="">Show All</a>
                 </div>
                 <canvas id="salse-revenue"></canvas>

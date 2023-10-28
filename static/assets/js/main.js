@@ -101,13 +101,13 @@
         data: {
             labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
             datasets: [{
-                    label: "Salse",
+                    label: "Sales",
                     data: [15, 30, 55, 45, 70, 65, 85],
                     backgroundColor: "#003e27",
                     fill: true
                 },
                 {
-                    label: "Revenue",
+                    label: "Purchase",
                     data: [99, 135, 170, 130, 190, 180, 270],
                     backgroundColor: "#218560",
                     fill: true
