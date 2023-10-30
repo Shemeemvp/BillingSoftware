@@ -295,4 +295,17 @@
     </div>
 </div> -->
 <!-- Widgets End -->
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-dashboard')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    });
+</script>
 {% endblock %}

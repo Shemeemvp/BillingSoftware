@@ -80,14 +80,14 @@ main{
     transition: 0.5s;
     z-index: 999;
 }
-.sidebar .navbar{
-    /* background: var(--primary); */
-}
+/* .sidebar .navbar{
+    background: var(--primary);
+} */
 
 .content {
     margin-left: 250px;
     min-height: 100vh;
-    background: var(--dark);
+    background: white;
     transition: 0.5s;
 }
 
@@ -127,22 +127,27 @@ main{
 
 
 /*** Navbar ***/
+
 .sidebar .navbar .navbar-nav .nav-link {
     padding: 7px 10px 7px 13px;
-    color: var(--light);
+    /* color: var(--light); */
+    color: white;
     font-weight: 500;
     border-left: 3px solid var(--secondary);
     border-radius: 0 30px 30px 0;
     outline: none;
+    cursor: pointer;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover,
 .sidebar .navbar .navbar-nav .nav-link.active {
-    color: white;
-    background: var(--dark);
-    border-color: white;
+    color: rgb(11, 11, 11);
+    background:white;
+    border-color: rgb(254, 232, 30);
 }
-
+.add-icon{
+    color: white;
+}
 .sidebar .navbar .navbar-nav .nav-link:hover .add-icon,
 .sidebar .navbar .navbar-nav .nav-link.active .add-icon{
     color: #C6AA58;
@@ -156,13 +161,14 @@ main{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--dark);
+    background:#C6AA58;
     border-radius: 40px;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover i,
 .sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--secondary);
+    background:  #C6AA58;
+    color: white;
 }
 
 .sidebar .navbar .dropdown-toggle::after {
@@ -181,26 +187,27 @@ main{
 }
 
 .sidebar .navbar .dropdown-item {
-    padding-left: 25px;
-    border-radius: 0 30px 30px 0;
-    color: var(--light);
+    padding-left:50px;
+    color: rgb(255, 255, 255);
 }
 
 .sidebar .navbar .dropdown-item:hover,
 .sidebar .navbar .dropdown-item.active {
-    background: var(--dark);
+    background:white;
+    color: rgb(2, 2, 2);
+    border-color: rgb(254, 232, 30);
 }
 
 .content .navbar .navbar-nav .nav-link {
     margin-left: 25px;
     padding: 12px 0;
-    color: var(--light);
+    color: white;
     outline: none;
 }
 
 .content .navbar .navbar-nav .nav-link:hover,
 .content .navbar .navbar-nav .nav-link.active {
-    color: white;
+    color: rgb(220, 219, 219);
 }
 
 .content .navbar .sidebar-toggler,
@@ -210,17 +217,18 @@ main{
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--dark);
+    background:#C6AA58;
     border-radius: 40px;
 }
 
 .content .navbar .dropdown-item {
-    color: var(--light);
+    color: white;
 }
 
 .content .navbar .dropdown-item:hover,
 .content .navbar .dropdown-item.active {
-    background: var(--dark);
+    background: white;
+    color: black;
 }
 
 .content .navbar .dropdown-toggle::after {
