@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+# import requests
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -14,7 +15,11 @@ def login(request):
 
 @login_required(login_url="login")
 def goDashboard(request):
-    return render(request, "dashboard.html")
+    cmp = Company.objects.get(user = request.user.id)
+    context = {
+        'cmp':cmp,
+    }
+    return render(request, "dashboard.html",context)
 
 
 def registerUser(request):
@@ -105,3 +110,116 @@ def validateUsername(request):
     if User.objects.filter(username = uName).exists():
         return JsonResponse({'is_taken':True})
     JsonResponse({'is_taken':False})
+
+
+@login_required(login_url='login')
+def goItems(request):
+    cmp = Company.objects.get(user = request.user.id)
+    iData = Items.objects.filter(cid = cmp).first()
+    context = {
+        'cmp':cmp,
+        'items':Items.objects.filter(cid = cmp),
+        'item_data':iData,
+        'item_transaction': Item_transactions.objects.filter(cid = cmp, item = iData)
+    }
+    return render(request, 'items.html',context)
+
+
+@login_required(login_url='login')
+def showItemData(request,id):
+    cmp = Company.objects.get(user = request.user.id)
+    iData = Items.objects.get(cid = cmp, id = id)
+    context = {
+        'cmp':cmp,
+        'items':Items.objects.filter(cid = cmp),
+        'item_data':iData,
+        'item_transaction': Item_transactions.objects.filter(cid = cmp, item = iData)
+    }
+    return render(request, 'items.html',context)
+
+
+@login_required(login_url='login')
+def addNewItem(request):
+    context = {
+        'cmp':Company.objects.get(user = request.user.id),
+        'itemunit':Item_units.objects.filter(cid = Company.objects.get(user = request.user.id))
+    }
+    return render(request, 'additem.html',context)
+
+@login_required(login_url='login')
+def createNewItem(request):
+    if request.user:
+        cmp = Company.objects.get(user = request.user.id)
+        try:
+            if request.method =='POST':
+                item = Items(
+                    cid = cmp,
+                    name = request.POST['name'],
+                    hsn = request.POST['hsn'],
+                    unit = request.POST['item_unit'],
+                    tax = request.POST['tax'],
+                    sale_price = request.POST['sale_price'],
+                    purchase_price = request.POST['purchase_price'],
+                    stock = request.POST['stock']
+                )
+                item.save()
+                
+                #Opening stock transaction
+                transaction = Item_transactions(cid = cmp, item = item, type = 'Opening Stock', quantity = item.stock)
+                transaction.save()
+
+                if 'next_item' in request.POST:
+                    return redirect(addNewItem)
+                else:
+                    return redirect(goItems)
+            else:
+                messages.error(request, 'Something went wrong, Please try again..!')
+                return redirect(addNewItem)
+        except Exception as e:
+            print(e)
+            messages.error(request, 'Something went wrong, Please try again..!')
+            return redirect(addNewItem)
+    else:
+        messages.error(request, 'Something went wrong, Please try again..!')
+        return redirect(addNewItem)
+
+
+
+def createitemunit(request):
+    if request.user:
+        cmp = Company.objects.get(user = request.user.id)
+        try:
+            if request.method == 'POST':
+                unit = Item_units(cid = cmp, symbol = request.POST['usymbol'], name = request.POST['uname'])
+                unit.save()
+                return JsonResponse({'message':'success'})
+            else:
+                return JsonResponse({'message':'failed'})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'message':'failed'})
+    return JsonResponse({'message':'failed'})
+
+
+def getItemUnits(request):
+        if request.user:
+            try:
+                cmp= Company.objects.get(user = request.user.id)
+                options = {}
+                list= []
+                option_objects = Item_units.objects.filter(cid = cmp)
+
+                for item in option_objects:
+                    itemUnitDict = {
+                    'symbol': item.symbol,
+                    'name': item.name,
+                    }
+                    list.append(itemUnitDict)
+                
+                print(list)
+                return JsonResponse({'units':list},safe=False)
+            except Exception as e:
+                print(e)
+                return JsonResponse({'message':'failed'})
+        else:
+            return JsonResponse({'message':'failed'})
