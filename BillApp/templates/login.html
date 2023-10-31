@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer" ></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
@@ -554,7 +555,17 @@
             color: rgb(35, 34, 103); 
             opacity: 0.8;  
         }
-
+        .submit_btn, .submitunit_btn {
+            background: #c6aa589e;
+            border: 1px solid white;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+        }
+        .submit_btn:hover, .submitunit_btn:hover{
+            background: #C6AA58;
+        }
     </style>
 </head>
 <body>
@@ -597,7 +608,7 @@
                                 <input type="password" placeholder="Password" name="password" required/>
                             </div>
                             <input type="submit" value="Login" class="btn solid"/>
-                            <a href="" class="forgot-password">Forgot password...?</a>
+                            <a href="#forgot_password" data-bs-toggle="modal" class="forgot-password">Forgot password...?</a>
                             <msg></msg>
                         </form>
                     </div>
@@ -679,7 +690,89 @@
     </div>
 
 
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgot_password" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="forgot_passwordLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background: #ddddbe;">
+        <div class="modal-header" style="border-bottom: 1px solid #ffffff;">
+          <h5 class="modal-title text-dark" id="forgot_passwordLabel">Forgot Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" class="needs-validation w-100" id="forgot_pass_form">
+            {% csrf_token %}
+            <div class="form-group w-100">
+                <label for="item_unitsymbol">Enter Your registered Email ID</label>
+                <input type="email" class="form-control" name="forgot_email" id="forgot_email" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: 1px solid #ffffff;">
+          <button type="button" id="send_code" class="submit_btn w-50 text-uppercase">SEND CODE</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
 <script>
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    $(document).on("click","#send_code",function(){
+        var email = $("#forgot_email").val();
+        if (email ==""){
+            swal({
+                position: "top-end",
+                icon: "warning",
+                title: "Enter Email.!",
+            });
+        }else if(!emailRegex.test(email)){
+            swal({
+                position: "top-end",
+                icon: "warning",
+                title: "Invalid Email.!",
+            });
+        }
+        else{
+            $.ajax({
+            type : 'POST',
+            url:"{% url 'forgotPassword' %}",
+            data:{
+                email : email,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            
+            success: function(response) {
+                console.log("AJAX Success - Response Data:", response);
+                document.getElementById("forgot_pass_form").reset();
+                $('#forgot_password').modal('toggle');
+
+                if(response.message == "success"){
+                    swal({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Password has been sent via mail.!",
+                    });
+                }else if(response.message == 'not_found'){
+                    swal({
+                        position: "top-end",
+                        icon: "error",
+                        title: "Incorrect Email ID or does not exist, Please check.!",
+                    });
+                }
+                else{
+                    swal({
+                        position: "top-end",
+                        icon: "warning",
+                        title: "Something went wrong.!",
+                    });
+                }
+            },         
+        });
+        }
+    });
+
+
+
     $(document).ready(()=>{
         // $('#register-form')[0].reset();
         document.getElementById('register-form').reset();
@@ -781,5 +874,39 @@ $(document).ready(function(){
 
 
 </script>
+
+{%if messages%} {%for message in messages%} {%if message.tags == "success"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "success",
+    title: "{{message}}",
+  });
+</script>
+{%elif message.tags == "warning"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "warning",
+    title: "{{message}}",
+  });
+</script>
+{%elif message.tags == "error"%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "error",
+    title: "{{message}}",
+  });
+</script>
+{%else%}
+<script>
+  swal({
+    position: "top-end",
+    icon: "info",
+    title: "{{message}}",
+  });
+</script>
+{%endif%} {%endfor%} {%endif%}
 </body>
 </html>
