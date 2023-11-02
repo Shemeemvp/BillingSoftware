@@ -4,6 +4,7 @@ from django.contrib import messages
 from random import randint
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db import connection
 # import requests
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -143,6 +144,31 @@ def updateUserProfile(request):
             return redirect(showProfile)
     return redirect('/')
 
+
+def forgotPassword(request):
+    try:
+        email = request.POST['email']
+        user = User.objects.filter(email = email).first()
+        if User.objects.filter(email = email).exists():
+            password = str(randint(100000, 999999))
+            # print(password)
+            user.set_password(password)
+            user.save()
+
+            # SEND MAIL CODE
+            # subject = "Forgot Password"
+            # message = f"Dear user,\nYour Password has been reset as you requested. You can login with the password given below\n\nPassword:{password}"
+            # recipient = user.email
+            # send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
+
+
+            return JsonResponse({'message':'success'})
+        else:
+            return JsonResponse({'message':'not_found'})
+    except Exception as e:
+        print(e)
+        return redirect(login)
+    
 
 @login_required(login_url="login")
 def updateLogo(request,id):
@@ -500,26 +526,40 @@ def editTransactionData(request, id):
     return redirect("/")
 
 
-def forgotPassword(request):
-    try:
-        email = request.POST['email']
-        user = User.objects.filter(email = email).first()
-        if User.objects.filter(email = email).exists():
-            password = str(randint(100000, 999999))
-            # print(password)
-            user.set_password(password)
-            user.save()
+    
+@login_required(login_url="login")
+def goPurchases(request):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            context = {
+                'cmp': cmp,
+            }
+            return render(request, 'purchases.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(goDashboard)
+    return redirect('/')
 
-            # SEND MAIL CODE
-            # subject = "Forgot Password"
-            # message = f"Dear user,\nYour Password has been reset as you requested. You can login with the password given below\n\nPassword:{password}"
-            # recipient = user.email
-            # send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
 
+@login_required(login_url="login")
+def addNewPurchase(request):
+    if request.user:
+        try:
+            model_meta = Purchases._meta
+            pk_name = model_meta.pk.name
+            table_name = model_meta.db_table
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
+                next_id = cursor.fetchone()[0]
 
-            return JsonResponse({'message':'success'})
-        else:
-            return JsonResponse({'message':'not_found'})
-    except Exception as e:
-        print(e)
-        return redirect(login)
+            cmp = Company.objects.get(user=request.user.id)
+            context = {
+                'cmp': cmp,
+                'bill_no':next_id
+            }
+            return render(request, 'add_purchase.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(goDashboard)
+    return redirect('/')

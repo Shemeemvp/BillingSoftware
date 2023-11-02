@@ -17,8 +17,13 @@ urlpatterns = [
 
 
     path('go_dashboard', views.goDashboard, name='goDashboard'),
+
     path('show_items',views.goItems, name='goItems'),
     path('show_item_details/<int:id>',views.showItemData, name= 'showItemData'),
+
+
+    path('show_purchases',views.goPurchases, name='goPurchases'),
+    path('add_new_purchase',views.addNewPurchase, name='addNewPurchase'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),

@@ -36,3 +36,14 @@ class Item_transactions(models.Model):
     type = models.CharField(max_length=100)
     date = models.DateField(auto_now_add=True, auto_now=False, blank=True, null= True)
     quantity = models.IntegerField()
+
+class Purchases(models.Model):
+    bill_no = models.AutoField(('bill_no'),primary_key=True)
+    date = models.DateField(null=True, blank=True)
+    party_name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=15)
+    gstin = models.CharField(max_length=15)
+    subtotal = models.DecimalField(max_digits=10,decimal_places=2)
+    tax = models.DecimalField(max_digits=10,decimal_places=2)
+    adjustment = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)

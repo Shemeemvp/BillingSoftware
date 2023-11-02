@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add New Purchase{% endblock %}
+{% block content %}
+<style>
+    main{
+        padding: 2rem 1rem;
+    }
+    /* .form-group select{
+        width: -webkit-fill-available;
+    } */
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    }
+
+    .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 2px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+
+    .slider {
+    background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+    border-radius: 32px;
+    }
+
+    .slider.round:before {
+    border-radius: 50%;
+    }
+    .submit_btn, .submitunit_btn {
+        background: #c6aa589e;
+        border: 1px solid white;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+    .submit_btn:hover, .submitunit_btn:hover{
+        background: #C6AA58;
+    }
+    input:read-only{
+        background: #fff !important;
+    }
+    .amount_summary{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 1rem;
+    }
+    .amt_head_label label{
+        font-size: 1rem;
+        /* font-weight: 500; */
+    }
+</style>
+<div class="page-content">
+    <div class="card radius-15" style="background-color: #ddddbeed;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-lg-12 col-xl-12">
+                    <div class="card" style="background-color: #eae9c4;">
+                        <div class="row no-gutters">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8 mt-4 mb-4">
+                                <center>
+                                    <h4 class="card-title text-dark">ADD PURCHASE</h4>
+                                </center>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                   <form action="" method="post" class="needs-validation">
+                    {% csrf_token %}
+                        <div class="row mt-3">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="pur_date">Date</label>
+                                    <input type="date" name="date" id="pur_date" class="form-control" value="{% now 'Y-m-d' %}" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="item_hsn">Bill No.</label>
+                                    <input type="number" name="bill_no" id="bill_no" value="{{bill_no}}" class="form-control" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="check_party">Party</label>
+                            <input type="checkbox" name="party" id="check_party">
+                        </div>
+                        <div class="row mt-3" id="party_details" style="display: none;">
+                            <div class="col-md-4">
+                                <label for="party_name">Party's Name</label>
+                                <input type="text" name="party_name" id="party_name" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="party_phone">Phone number</label>
+                                <input type="tel" name="party_phone" id="party_phone" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="party_gstin">GST IN</label>
+                                <input type="text" name="party_gstin" id="party_gstin" class="form-control" pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}" title="Ex: 22AAAAA0000A1Z5">
+                            </div>
+                        </div>
+
+                        <div class="row clearfix mt-3">
+                            <div class="col-md-12 table-responsive-md">
+                              <table class="table table-bordered table-hover mt-3" id="items_table" style="background-color: #eae9c4; border-color: white;">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col" class="text-center col-2" >ITEM</th>
+                                    <th scope="col" class="text-center col-2">HSN</th>
+                                    <th scope="col" class="text-center col-2">QTY</th>
+                                    <th scope="col" class="text-center col-2">RATE</th>
+                                    <th scope="col" class="text-center col-2">TAX</th>
+                                    <th scope="col" class="text-center col-2">AMOUNT</th>
+                                    <th scope="col" class=""></th>
+                                  </tr>
+                                </thead>
+                                <tbody id="pur-items-table-body">
+                                    <tr id='addr01'>
+                                        <td class="item_sl_num">1</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <select name='item[]' id="item1" class="form-control item">
+                                                    <option value="Nill" selected>Select Item</option>
+                                                    {% for i in items %}
+                                                    {% if i.cid_id == cmp1.cid %}
+                                                        <option value="{{ i.name  }}">{{ i.name  }} </option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                            </select>
+                    
+                                                <!-- <a href="#">
+                                                    <button type="button" class="btn btn-outline-secondary ml-1" 
+                                                    data-target="#newitem" data-toggle="modal">+</button>
+                                                </a> -->
+                                                <!-- <button class="btn btn-outline-secondary ml-1" data-bs-target="#newitem" data-bs-toggle="modal">+</button> -->
+                                            </div>
+                                        
+                                        
+                                        </td>
+                                        <td><input type="number" name='hsn[]' id="hsn1" placeholder='Enter HSN Code' class="form-control" readonly/></td>
+                                        <td><input type="number" name='qty[]'placeholder='Enter Qty' id="qty1" value=0 class="form-control qty"/></td>
+                                        <td><input type="number" name='price[]' id="unit1" placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0" /></td>
+                                        <td><input class="form-control" value="VAT" id="tax"></td>
+                                        <td><input type="number" name='total[]' id="total1" placeholder=0 class="form-control total" value=0 step="any" readonly /></td>
+                                        <td style="display: none;"><input type="number" step="any" name='taxamount1' id="taxamount1" class="form-control taxamount"/></td></td>
+                                        <td>
+                                            <button type="button" id="clone_row" class="btn clone_row btn-outline-secondary mb-1 w-100" title="Clone Row">+</button><br>
+                                            <button type="button" id="remove_row" class="btn remove_row btn-outline-secondary w-100" title="Remove Row">-</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tr>
+                                    <td><button type="button" id="add_row_btn" class="btn btn-outline-secondary w-100" title="Add Row">+</button></td>
+                                </tr>
+                              </table>
+                
+                            </div>
+                          </div>
+
+
+
+
+                        <div class="row mt-3">
+                            <div class="col-sm-12 col-md-7"></div>
+                            <div class="col-sm-12 col-md-5">
+                                <div class="card px-3 py-4" style="background-color: #eae9c4;">
+                                    <div class="sub_total align-items-center amount_summary">
+                                        <div class="amt_head_label">
+                                            <label>SUB TOTAL</label>
+                                        </div>
+                                        <div class="val">
+                                            <input type="number" placeholder="0.00" class="form-control" name="subtotal" id="sub_total" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="tax align-items-center amount_summary">
+                                        <div class="amt_head_label">
+                                            <label>TAX</label>
+                                        </div>
+                                        <div class="val">
+                                            <input type="number" placeholder="0.00" class="form-control" name="tax" id="tax" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="adjustment align-items-center amount_summary">
+                                        <div class="amt_head_label">
+                                            <label>ADJUSTMENT</label>
+                                        </div>
+                                        <div class="val">
+                                            <input type="number" placeholder="0.00" class="form-control" name="adjustment" id="adjustment">
+                                        </div>
+                                    </div>
+
+                                    <div class="grand_total align-items-center amount_summary">
+                                        <div class="amt_head_label">
+                                            <label>GRAND TOTAL</label>
+                                        </div>
+                                        <div class="val">
+                                            <input type="number" placeholder="0.00" class="form-control" name="grand_total" id="grand_total" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-5 mb-5">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <button class="submit_btn w-100 text-uppercase" type="submit" name="next_item">Save & New</button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="submit_btn w-100 text-uppercase" type="submit">Save</button>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+
+                    </form> 
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-purchase')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    })
+
+    $('#check_party').change(()=>{
+        $('#check_party').is(":checked") ? $('#party_details').css('display','flex') : $('#party_details').css('display','none');
+    })
+
+</script>
+{% endblock %}
