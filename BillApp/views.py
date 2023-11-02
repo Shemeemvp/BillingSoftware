@@ -296,9 +296,13 @@ def editItem(request,id):
         if request.user:
             cmp = Company.objects.get(user=request.user.id)
             try:
+                itemData = Items.objects.get(cid = cmp, id = id)
+                trns = Item_transactions.objects.get(cid = cmp, item = itemData, type = "Opening Stock")
+                op_stock = trns.quantity
                 context = {
                     'cmp':cmp,
-                    'item':Items.objects.get(cid = cmp, id = id),
+                    'item':itemData,
+                    'op_stock': op_stock,
                     "itemunit": Item_units.objects.filter(cid=Company.objects.get(user=request.user.id)),
                 }
                 return render(request,'edititem.html',context)
@@ -314,6 +318,9 @@ def editItemData(request,id):
         cmp = Company.objects.get(user=request.user.id)
         item = Items.objects.get(cid = cmp, id = id)
         trns = Item_transactions.objects.filter(cid = cmp , item = item.id).filter(type = 'Opening Stock').first()
+        crQty = trns.quantity
+        chQty = int(request.POST['stock'])
+        diff = abs(crQty - chQty)
         try:
             if request.method == 'POST':
                 item.name = request.POST['name']
@@ -321,7 +328,11 @@ def editItemData(request,id):
                 item.unit = request.POST['item_unit']
                 item.tax = request.POST['tax']
                 item.sale_price = request.POST['sale_price']
-                item.stock = request.POST['stock']
+                if chQty > crQty:
+                    item.stock += diff
+                elif chQty < crQty:
+                    item.stock -= diff
+                # item.stock = request.POST['stock']
                 item.purchase_price = request.POST['purchase_price']
 
                 item.save()
@@ -386,7 +397,6 @@ def updateStock(request, id):
         try:
             if request.method == "POST":
                 item = Items.objects.get(cid=cmp, id=id)
-                print("data---", request.POST)
                 if not "update_qty" in request.POST:
                     print("num===", int(request.POST["qty_update"]))
                     item.stock += int(request.POST["qty_update"])
@@ -472,6 +482,12 @@ def editTransactionData(request, id):
                     item.stock += diff
                 elif str(request.POST['type']).lower() == 'add stock' and chQty < crQty:
                     item.stock -= diff
+
+                if str(request.POST['type']).lower() == 'opening stock' and  chQty > crQty:
+                    item.stock += diff
+                elif str(request.POST['type']).lower() == 'opening stock' and chQty < crQty:
+                    item.stock -= diff
+
                 trns.quantity = request.POST['quantity']
                 trns.date = request.POST['date']
                 trns.save()
