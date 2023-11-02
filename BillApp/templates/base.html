@@ -59,7 +59,11 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="{% static 'assets/img/nouser.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                        {% if not cmp.logo %}
+                        <img class="rounded-circle me-lg-2" src="{% static 'assets/img/nouser.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                        {% else %}
+                        <img class="rounded-circle me-lg-2" src="{{cmp.logo.url}}" alt="" style="width: 40px; height: 40px;">
+                        {% endif %}
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -167,11 +171,15 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            {% if not cmp.logo %}
                             <img class="rounded-circle me-lg-2" src="{% static 'assets/img/nouser.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                            {% else %}
+                            <img class="rounded-circle me-lg-2" src="{{cmp.logo.url}}" alt="" style="width: 40px; height: 40px;">
+                            {% endif %}
                             <span class="d-none d-lg-inline-flex text-uppercase">{{cmp.company_name}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-dark border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">Profile</a>
+                            <a href="{% url 'showProfile' %}" class="dropdown-item">Profile</a>
                             <a href="#" class="dropdown-item">Company</a>
                             <a href="#" class="dropdown-item">Settings</a>
                             <a href="{% url 'userLogout' %}" class="dropdown-item">Log Out</a>
@@ -208,7 +216,7 @@
 
 
         <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-lg-square back-to-top" style="background: var(--primary);color: white;"><i class="bi bi-arrow-up"></i></a>
+        <!-- <a href="#" class="btn btn-lg btn-lg-square back-to-top" style="background: var(--primary);color: white;"><i class="bi bi-arrow-up"></i></a> -->
     </div>
 
     <!-- JavaScript Libraries -->

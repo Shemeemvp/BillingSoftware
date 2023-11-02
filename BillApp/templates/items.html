@@ -181,7 +181,7 @@
                         <tr>
                             <th scope="col" class="col-7">ITEM</th>
                             <th scope="col" class="col-4">QUANTITY</th>
-                            <th scope="col" class="col-1"></th>
+                            <!-- <th scope="col" class="col-1"></th> -->
                         </tr>
                         </thead>
                         <tbody>
@@ -189,8 +189,8 @@
                             <tr class="table_rows" onclick="window.location=`{% url 'showItemData' i.id %}`">
                                 <td class="itm_name">{{ i.name }}</td>
                                 <td class="itm_id" hidden>{{i.id}}</td>
-                                <td class="itm_stock">{{ i.stock }}</a></td>
-                                <td class="itm_action"><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                                <td class="itm_stock text-center">{{ i.stock }}</a></td>
+                                <!-- <td class="itm_action"><i class="fa-solid fa-ellipsis-vertical"></i></td> -->
                             </tr> 
                         {% endfor %}
                         </tbody>
@@ -261,9 +261,9 @@
                                         <div class="trns_table_menu">
                                             <i class="fa-solid fa-ellipsis-vertical dropdown-button"></i>
                                             <ul class="trans-dropdown-menu">
-                                                <li><a href="#">Edit</a></li>
+                                                <li><a href="{% url 'editTransaction' i.id %}">Edit</a></li>
                                                 <li><a href="{% url 'deleteTransaction' i.id %}" onclick="return confirm('Are you sure you want to delete this transaction.?')">Delete</a></li>
-                                                <li><a href="#">Duplicate</a></li>
+                                                <!-- <li><a href="#">Duplicate</a></li> -->
                                             </ul>
                                         </div>
                                     </td>

@@ -130,7 +130,7 @@
                                                 {% endfor %}
                                         </select>
                                         <a href="#" class="ms-2">
-                                            <button type="button"  data-bs-toggle="modal" data-bs-target="#create_unit" class="btn btn-outline-light"><i class="fa fa-plus" style="color: #C6AA58;"></i></button>
+                                            <button type="button"  data-bs-toggle="modal" data-bs-target="#create_unit" class="btn btn-outline-light"><i class="fa fa-plus text-dark"></i></button>
                                         </a>
                                     </div>
                                 </div>
@@ -144,12 +144,12 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <div class="d-block">
-                                        <label for="taxable">Taxable</label>
+                                        <label for="taxable">Tax</label>
                                         <label class="switch">
                                             <input type="checkbox" name="tax_ref" id="tax_ref">
                                             <span class="slider round"></span>
                                         </label>
-                                        <label for="exempt">Exempt Nill</label>
+                                        <label for="exempt">Exempted Nill</label>
                                     </div>
                                 </div>
                             </div>
@@ -216,11 +216,11 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="item_unitsymbol">Unit Symbol</label>
-                <input type="text" class="form-control" name="unit_symbol" id="item_unitsymbol" required>
+                <input type="text" class="form-control text-uppercase" name="unit_symbol" id="item_unitsymbol" required>
             </div>
             <div class="form-group mt-2">
                 <label for="item_unitname">Unit Name</label>
-                <input type="text" class="form-control" name="unit_name" id="item_unitname" required>
+                <input type="text" class="form-control text-uppercase" name="unit_name" id="item_unitname" required>
             </div>
           </form>
         </div>
