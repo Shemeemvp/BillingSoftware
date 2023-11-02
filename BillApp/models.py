@@ -9,6 +9,9 @@ class Company(models.Model):
     phone_number = models.CharField(max_length=25)
     gst_number = models.CharField(max_length=50)
     address = models.TextField()
+    state = models.CharField(max_length=150,null=True,blank=True)
+    country = models.CharField(max_length=150,null=True,blank=True)
+    logo = models.ImageField(upload_to='logo/',null=True)
 
 
 class Items(models.Model):

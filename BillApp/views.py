@@ -34,6 +34,8 @@ def registerUser(request):
             adrs = request.POST["address"]
             gstn = request.POST["gstnum"]
             cmpny = request.POST["company"]
+            state = request.POST['state']
+            cntry = request.POST['country']
             pswrd = request.POST["password"]
             cpswrd = request.POST["confirmPassword"]
 
@@ -61,6 +63,8 @@ def registerUser(request):
                         phone_number=phn,
                         address=adrs,
                         gst_number=gstn,
+                        state = state,
+                        country = cntry,
                     )
                     cmpnyData.save()
                     # messages.info(request, 'Registration Successful..')
@@ -90,6 +94,84 @@ def userLogin(request):
             return redirect(login)
     else:
         return redirect(login)
+
+
+def showProfile(request):
+    if request.user:
+        cmp = Company.objects.get(user=request.user.id)
+        try:
+            context = {
+                'cmp':cmp,
+            }
+            return render(request, 'profile.html',context)
+        except Exception as e:
+            print(e)
+            return redirect("/")
+    return redirect("/")
+
+
+@login_required(login_url="login")
+def updateUserProfile(request):
+    if request.user:
+        user = User.objects.get(id = request.user.id)
+        cmp = Company.objects.get(user = user.id)
+        try:
+            if request.method == 'POST':
+                cmp.company_name = request.POST['company_name']
+                cmp.gst_number = request.POST['gst_number']
+                cmp.phone_number = request.POST['phone_number']
+                cmp.address = request.POST['address']
+                cmp.state = request.POST['state']
+                cmp.country = request.POST['country']
+                cmp.save()
+            
+                if User.objects.filter(username = request.POST['username']).exists():
+                    messages.error(request, 'Username already exists, Try another.!')
+                    return redirect(showProfile)
+                if User.objects.filter(email = request.POST['email']).exists():
+                    messages.error(request, 'Email already exists, Try another.!')
+                    return redirect(showProfile)
+                    
+                user.username = request.POST['username']
+                user.email = request.POST['email']
+                user.save()
+                
+                messages.success(request, 'Profile updated successfully.!')
+                return redirect(showProfile)
+        except Exception as e:
+            print(e)
+            return redirect(showProfile)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def updateLogo(request,id):
+    if request.user:
+        cmp = Company.objects.get(user = id)
+        try:
+            if request.method == 'POST':
+                cmp.logo = request.FILES.get('logo')
+                cmp.save()
+                return redirect(showProfile)
+        except Exception as e:
+            print(e)
+            return redirect(showProfile)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def removeLogo(request):
+    if request.user:
+        cmp = Company.objects.get(user = request.user.id)
+        try:
+            cmp.logo = None
+            cmp.save()
+            return redirect(showProfile)
+        except Exception as e:
+            print(e)
+            return redirect(showProfile)
+    return redirect('/')
+
 
 
 @login_required(login_url="login")
@@ -206,7 +288,7 @@ def deleteItem(request, id):
         except Exception as e:
             print(e)
             return redirect(showItemData, id)
-
+    return redirect("/")
 
 
 @login_required(login_url="login")
@@ -223,7 +305,7 @@ def editItem(request,id):
             except Exception as e:
                 print(e)
                 return redirect(showItemData, id)
-
+        return redirect("/")
 
 
 @login_required(login_url="login")
@@ -231,6 +313,7 @@ def editItemData(request,id):
     if request.user:
         cmp = Company.objects.get(user=request.user.id)
         item = Items.objects.get(cid = cmp, id = id)
+        trns = Item_transactions.objects.filter(cid = cmp , item = item.id).filter(type = 'Opening Stock').first()
         try:
             if request.method == 'POST':
                 item.name = request.POST['name']
@@ -242,6 +325,10 @@ def editItemData(request,id):
                 item.purchase_price = request.POST['purchase_price']
 
                 item.save()
+
+                trns.quantity = request.POST['stock']
+                trns.save()
+
                 return redirect(showItemData,id)
         except Exception as e:
             print(e)
@@ -331,6 +418,7 @@ def updateStock(request, id):
         except Exception as e:
             print(e)
             return redirect(showItemData, id)
+    return redirect("/")
 
 
 @login_required(login_url="login")
@@ -344,7 +432,56 @@ def deleteTransaction(request, id):
         except Exception as e:
             print(e)
             return redirect(showItemData, trns.item.id)
-    return redirect(showItemData, trns.item.id)
+    return redirect("/")
+
+
+@login_required(login_url="login")
+def editTransaction(request,id):
+    if request.user:
+        cmp = Company.objects.get(user=request.user.id)
+        try:
+            trns = Item_transactions.objects.get(cid=cmp, id=id)
+            context = {
+                'cmp':cmp,
+                'transaction':trns,
+            }
+            return render(request, 'edit_transaction.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(showItemData, trns.item.id)
+    return redirect("/")
+
+
+@login_required(login_url="login")
+def editTransactionData(request, id):
+    if request.user:
+        cmp = Company.objects.get(user=request.user.id)
+        trns = Item_transactions.objects.get(cid=cmp, id=id)
+        item = Items.objects.get(cid =cmp, id = trns.item.id)
+        crQty = trns.quantity
+        chQty = int(request.POST['quantity'])
+        diff = abs(crQty - chQty)
+        try:
+            if request.method == 'POST':
+                trns.type = request.POST['type']
+                if str(request.POST['type']).lower() == 'reduce stock' and chQty > crQty:
+                    item.stock -= diff
+                elif str(request.POST['type']).lower() == 'reduce stock' and chQty < crQty:
+                    item.stock += diff
+                elif str(request.POST['type']).lower() == 'add stock' and chQty > crQty:
+                    item.stock += diff
+                elif str(request.POST['type']).lower() == 'add stock' and chQty < crQty:
+                    item.stock -= diff
+                trns.quantity = request.POST['quantity']
+                trns.date = request.POST['date']
+                trns.save()
+                item.save()
+
+                return redirect(showItemData, trns.item.id)
+        except Exception as e:
+            print(e)
+            return redirect(editTransaction, id)
+    return redirect("/")
 
 
 def forgotPassword(request):
