@@ -24,6 +24,13 @@ urlpatterns = [
 
     path('show_purchases',views.goPurchases, name='goPurchases'),
     path('add_new_purchase',views.addNewPurchase, name='addNewPurchase'),
+    path('get_item_data',views.getItemData, name='getItemData'),
+    path('create_new_purchase',views.createNewPurchase, name='createNewPurchase'),
+
+
+    path('show_sales',views.goSales, name='goSales'),
+    path('add_new_sale',views.addNewSale, name='addNewSale'),
+    path('create_new_sale',views.createNewSale,name='createNewSale'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),

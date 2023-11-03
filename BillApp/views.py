@@ -526,6 +526,8 @@ def editTransactionData(request, id):
     return redirect("/")
 
 
+
+# PURCHASES
     
 @login_required(login_url="login")
 def goPurchases(request):
@@ -554,12 +556,165 @@ def addNewPurchase(request):
                 next_id = cursor.fetchone()[0]
 
             cmp = Company.objects.get(user=request.user.id)
+            items = Items.objects.filter( cid = cmp)
             context = {
                 'cmp': cmp,
-                'bill_no':next_id
+                'bill_no':next_id,
+                'items': items,
+
             }
             return render(request, 'add_purchase.html',context)
         except Exception as e:
             print(e)
             return redirect(goDashboard)
+    return redirect('/')
+
+
+def getItemData(request):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            id = request.GET.get('id')
+
+            item = Items.objects.get(name = id, cid=cmp)
+            hsn = item.hsn
+            pur_rate = item.purchase_price
+            sale_rate = item.sale_price
+            tax = item.tax
+            return JsonResponse({"status":True,'hsn':hsn,'pur_rate':pur_rate,'sale_rate':sale_rate, 'tax':tax})
+        except Exception as e:
+            print(e)
+            return JsonResponse({"status":False})
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def createNewPurchase(request):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            if request.method == 'POST':
+                purchase = Purchases(
+                    cid = cmp,
+                    date = request.POST['date'],
+                    party_name = request.POST['party_name'],
+                    phone_number = request.POST['party_phone'],
+                    gstin = request.POST['party_gstin'],
+                    subtotal = request.POST['subtotal'],
+                    tax = request.POST['tax'],
+                    adjustment = request.POST['adjustment'],
+                    total_amount = request.POST['grand_total'],
+                )
+                purchase.save()
+
+                item = request.POST.getlist("item[]")
+                hsn  = request.POST.getlist("hsn[]")
+                qty = request.POST.getlist("qty[]")
+                price = request.POST.getlist("price[]")
+                tax = request.POST.getlist("tax[]")
+                total = request.POST.getlist("total[]")
+
+                pid = Purchases.objects.get( bill_no = purchase.bill_no)
+
+                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total) and item and hsn and qty and price and tax and total:
+                    mapped = zip(item,hsn,qty,price,tax,total)
+                    mapped = list(mapped)
+                    for ele in mapped:
+                        pItems = Purchase_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],pid = pid, cid=cmp)
+
+
+                if 'new_purchase' in request.POST:
+                    return redirect(addNewPurchase)
+                return redirect(goPurchases)
+        except Exception as e:
+            print(e)
+            messages.error(request, 'Something went wrong, Please try again.!')
+            return redirect(addNewPurchase)
+    return redirect('/')
+
+
+# SALES
+
+@login_required(login_url="login")
+def goSales(request):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user = request.user.id)
+            context = {
+                'cmp':cmp,
+            }
+            return render(request, 'sales.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(goDashboard)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def addNewSale(request):
+    if request.user:
+        try:
+            model_meta = Sales._meta
+            pk_name = model_meta.pk.name
+            table_name = model_meta.db_table
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
+                next_id = cursor.fetchone()[0]
+
+            cmp = Company.objects.get(user=request.user.id)
+            items = Items.objects.filter( cid = cmp)
+            context = {
+                'cmp': cmp,
+                'bill_no':next_id,
+                'items': items,
+
+            }
+            return render(request, 'add_sale.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(goDashboard)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def createNewSale(request):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            if request.method == 'POST':
+                sale = Sales(
+                    cid = cmp,
+                    date = request.POST['date'],
+                    party_name = request.POST['party_name'],
+                    phone_number = request.POST['party_phone'],
+                    gstin = request.POST['party_gstin'],
+                    subtotal = request.POST['subtotal'],
+                    tax = request.POST['tax'],
+                    adjustment = request.POST['adjustment'],
+                    total_amount = request.POST['grand_total'],
+                )
+                sale.save()
+
+                item = request.POST.getlist("item[]")
+                hsn  = request.POST.getlist("hsn[]")
+                qty = request.POST.getlist("qty[]")
+                price = request.POST.getlist("price[]")
+                tax = request.POST.getlist("tax[]")
+                total = request.POST.getlist("total[]")
+
+                sid = Sales.objects.get( bill_no = sale.bill_no)
+
+                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total) and item and hsn and qty and price and tax and total:
+                    mapped = zip(item,hsn,qty,price,tax,total)
+                    mapped = list(mapped)
+                    for ele in mapped:
+                        sItems = Sales_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],sid = sid, cid=cmp)
+
+
+                if 'new_sale' in request.POST:
+                    return redirect(addNewSale)
+                return redirect(goSales)
+        except Exception as e:
+            print(e)
+            return redirect(addNewSale)
     return redirect('/')

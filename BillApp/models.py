@@ -39,6 +39,7 @@ class Item_transactions(models.Model):
 
 class Purchases(models.Model):
     bill_no = models.AutoField(('bill_no'),primary_key=True)
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
     date = models.DateField(null=True, blank=True)
     party_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=15)
@@ -47,3 +48,37 @@ class Purchases(models.Model):
     tax = models.DecimalField(max_digits=10,decimal_places=2)
     adjustment = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+class Purchase_items(models.Model):
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    pid = models.ForeignKey(Purchases, on_delete=models.CASCADE)
+    # item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=200)
+    hsn = models.CharField(max_length=15)
+    quantity = models.IntegerField()
+    rate = models.FloatField()
+    tax = models.CharField(max_length=10)
+    total = models.FloatField()
+
+class Sales(models.Model):
+    bill_no = models.AutoField(('bill_no'),primary_key=True)
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    date = models.DateField(null=True, blank=True)
+    party_name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=15)
+    gstin = models.CharField(max_length=15)
+    subtotal = models.DecimalField(max_digits=10,decimal_places=2)
+    tax = models.DecimalField(max_digits=10,decimal_places=2)
+    adjustment = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+class Sales_items(models.Model):
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    sid = models.ForeignKey(Sales, on_delete=models.CASCADE)
+    # item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
+    name = models.CharField(max_length=200)
+    hsn = models.CharField(max_length=15)
+    quantity = models.IntegerField()
+    rate = models.FloatField()
+    tax = models.CharField(max_length=10)
+    total = models.FloatField()

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Add New Purchase{% endblock %}
+{% block title %}Add New Sale{% endblock %}
 {% block content %}
 <style>
     main{
@@ -45,9 +45,6 @@
     -webkit-transition: .4s;
     transition: .4s;
     }
-    /* .slider {
-    background-color: #fff;
-    } */
 
     input:checked + .slider:before {
     -webkit-transform: translateX(26px);
@@ -101,7 +98,7 @@
                             <div class="col-md-2"></div>
                             <div class="col-md-8 mt-4 mb-4">
                                 <center>
-                                    <h4 class="card-title text-dark">ADD PURCHASE</h4>
+                                    <h4 class="card-title text-dark">ADD SALE</h4>
                                 </center>
                             </div>
                             <div class="col-md-2"></div>
@@ -111,7 +108,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-12">
-                   <form action="{% url 'createNewPurchase' %}" method="post" class="needs-validation">
+                   <form action="{% url 'createNewSale' %}" method="post" class="needs-validation">
                     {% csrf_token %}
                         <div class="row mt-3">
                             <div class="col-md-6 col-lg-6">
@@ -165,7 +162,7 @@
                                     <th scope="col" class=""></th>
                                   </tr>
                                 </thead>
-                                <tbody id="pur-items-table-body">
+                                <tbody id="sale-items-table-body">
                                     <tr id='addr01'>
                                         <td class="item_sl_num">1</td>
                                         <td>
@@ -198,9 +195,9 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <!-- <tr> -->
+                                <tr>
                                     <td><button type="button" id="add_row_btn" class="btn btn-outline-secondary w-100" title="Add Row">+</button></td>
-                                <!-- </tr> -->
+                                </tr>
                               </table>
                 
                             </div>
@@ -256,7 +253,7 @@
                         <div class="row mt-5 mb-5">
                             <div class="col-md-3"></div>
                             <div class="col-md-3">
-                                <button class="submit_btn w-100 text-uppercase" type="submit" name="new_purchase">Save & New</button>
+                                <button class="submit_btn w-100 text-uppercase" type="submit" name="new_sale">Save & New</button>
                             </div>
                             <div class="col-md-3">
                                 <button class="submit_btn w-100 text-uppercase" type="submit">Save</button>
@@ -281,7 +278,7 @@
         
         for(var i = 0; i < nav_links.length; i++){
             $(nav_links[i]).removeClass('active')
-            if($(nav_links[i]).hasClass('nav-purchase')){
+            if($(nav_links[i]).hasClass('nav-sales')){
                 $(nav_links[i]).addClass('active');
                 break;
             }
@@ -303,8 +300,8 @@
 
 
     $(document).on('click','.clone_row',function(){
-        var roinc = $("#pur-items-table-body tr").length;
-        var originalRow = $(this).closest('#pur-items-table-body tr'); 
+        var roinc = $("#sale-items-table-body tr").length;
+        var originalRow = $(this).closest('#sale-items-table-body tr'); 
         var clonedRow = originalRow.clone();
 
         clonedRow.attr('id', 'addr0' +(roinc+1));
@@ -332,12 +329,11 @@
         calc();
         
     });
-
     $(document).ready(function(){
         $('#add_row_btn').click(function(){
-            var roinc = $("#pur-items-table-body tr").length;
+            var roinc = $("#sale-items-table-body tr").length;
             roinc++;
-            $('#pur-items-table-body').append(
+            $('#sale-items-table-body').append(
                 `<tr id='addr0${roinc}'>
                     <td class="item_sl_num">${roinc}</td>
                     <td>
@@ -373,7 +369,7 @@
         });
     });
 
-    $('#pur-items-table-body').on('keyup change', function () {
+    $('#sale-items-table-body').on('keyup change', function () {
         calc();
     });
 
@@ -396,7 +392,7 @@
         success: function(response) {
             if (response.status){
                 document.getElementById('hsn'+n).value = response.hsn;
-                document.getElementById('price'+n).value = response.pur_rate;
+                document.getElementById('price'+n).value = response.sale_rate;
                 document.getElementById('tax'+n).value = response.tax;
             }
         },
