@@ -1,0 +1,542 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Purchase Bill | B - {{bill.bill_no}}{% endblock %}
+{% block content %}
+<style>
+    main{
+        background: #ddddbeed;
+    }
+    .btn:focus{
+        box-shadow: none;
+    }
+    .add_newpurchase_btn{
+        border: 1px solid lightgoldenrodyellow;
+        padding: 0.5rem 2rem;
+        border-radius: 7px;
+        background: #c6aa58d9;
+        color: white;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+    .add_newpurchase_btn:hover {
+        background: #b19542d9;
+    }
+    #search_box {
+        width: 68%;
+    }
+    .add_new_btn, .fltr_btn, .tmplt_swtch, .action_btn{
+        background: #0d533ae6;
+        font-weight: 600;
+        color: white;
+    }
+    .add_new_btn:hover, .tmplt_swtch:hover, .action_btn:hover{
+        background: #1d8d68;
+        color: white;
+    }
+    .purchases_section{
+        background: #eae9c4;
+    }
+
+
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    }
+
+    .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 2px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    }
+
+    .slider {
+    background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+    border-radius: 32px;
+    }
+
+    .slider.round:before {
+    border-radius: 50%;
+    }
+
+    .adjsutstock_btn {
+        background: #c6aa589e;
+        border: 1px solid white;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+    .adjsutstock_btn:hover{
+        background: #C6AA58;
+    }
+    .trns_table_menu {
+    position: relative;
+    display: inline-block;
+    }
+    .dropdown-button {
+        cursor: pointer;
+    }
+    .trans-dropdown-menu {
+        position: absolute;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 10;
+    }
+
+    /* .trns_table_menu:hover .trans-dropdown-menu {
+        display: block;
+    } */
+
+    .trans-dropdown-menu li {
+        padding: 5px 25px;
+        display: flex;
+        border-bottom: 1px solid khaki;
+        justify-content: left;
+    }
+
+    .trans-dropdown-menu li a{
+        color: black;
+        text-decoration: none;
+    }
+
+    .trans-dropdown-menu li:hover {
+        background-color: #f0f0f0;
+    }
+    .trns_table_menu i{
+        z-index: 5;
+    }
+    #purchases_search_box{
+        width: 70%;
+    }
+
+    .bill_template_section{
+        padding: 1rem;
+        background: #ad9e72;
+        margin: 0.5rem;
+    }
+</style>
+<div class="container-fluid">
+<style>
+    main{
+        background: #fff;
+    }
+</style>
+<div class="purchases_section py-4">
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="all_purchases">
+                <div class="all_purchases_table px-1 py-2 border rounded-1">
+                    <div class="top d-flex justify-content-start px-2 py-3">
+                        <div class="purchs_head">
+                            <h4>All Purchases</h4>
+                        </div>
+                    </div>
+                    <div class="row px-2">
+                        <div class="col-md-12 d-flex justify-content-start">
+                            <input type="text" id="purchases_search_box" placeholder="Search..." class="form-control" autocomplete="off">
+                            <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewPurchase' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
+                        </div>
+                    </div>
+                    <div class="purchases_table_section">
+                        <table class="table table-responsive-md mt-2 table-hover purchases_table" id="purchases_table">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="col-2">BILL NO.</th>
+                                <th scope="col" class="col-2">TOTAL</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in purchases %}
+                                <tr class="purchase_bills" onclick="window.location.href='/view_purchase_bill/{{i.bill_no}}'">
+                                    <td>{{i.bill_no}}</td>
+                                    <td>{{i.total_amount}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <div class="purchase_bill_view">
+                <div class="purchase_bill px-1 py-2 border rounded-1">
+                    <div class="top d-flex justify-content-start px-2 py-3">
+                        <div class="purchs_head">
+                            <h3>BILL - {{bill.bill_no}}</h3>
+                        </div>
+                    </div>
+                    <div class="row px-2">
+                        <div class="col-md-12 d-flex justify-content-between">
+                            <div class="template_switch">
+                                <button class="btn btn_sm tmplt_swtch"><i class="fas fa-file-alt me-1"></i>TEMPLATE</button>
+                            </div>
+                            <div class="action_btns">
+                                <a href="{% url 'editPurchaseBill' bill.bill_no %}"><button class="btn btn_sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
+                                <a href="#"><button class="btn btn_sm action_btn"><i class="fa-solid fa-trash me-1" onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)"></i>DELETE</button></a>
+                                <button class="btn btn_sm action_btn"><i class="fas fa-print fs-5 me-1"></i>PRINT</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bill_template_section">
+                        <div  id="whatToPrint" class="printTemplates template1">
+                            <div class="my-3 page bg-light" size="A4" >
+                                <div class="row px-3 py-4" style="background-color: #433f42;">
+                                    <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
+                                    </div>
+                                    <div class="col-md-4 d-flex justify-content-center">
+                                        <center class="h3 text-white"><b>BILL</b></center>
+                                    </div>  
+                                    <div class="col-md-4 d-flex justify-content-end">
+                                        <div class="text-white">
+                                            <p class="mb-0">BILL #: <b>{{bill.bill_no }}</b></p>
+                                            <p class="mb-0">Date: <b>{{ bill.date | date:'d-m-Y' }}</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5 px-3 bg-light">
+                                    <div class="col-md-8">
+                                        <h5 class="text-secondary" style="font-weight: bold;">{{cmp.company_name }}</h5>
+                                        <p class="address" style="font-weight: normal; color: #000;"> {{cmp.address}}<br>
+                                            {{cmp.city}},
+                                            {{cmp.state}}<br>
+                                            {{cmp.pincode}}<br>
+                                            {{cmp.cemail}}<br>
+                                            {{cmp.phone_number}}<br>
+                                        </p> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <p class="text-muted mt-2 mb-0" style="color: #000;">Transaction: <span style="float: right;"><b>{{ ewbill.transaction_type}}</b></span></p>
+                                            <p class="text-muted mb-0" style="color: #000;">Document Type: <span style="float: right;"><b>{{ ewbill.document_type}}</b></span></p>
+                                            <p class="text-muted mb-0" style="color: #000;">Trns. sub type: <span style="float: right;"><b>{{ ewbill.transaction_subtype}}</b></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <section class="store-user">
+                                        <div class="col-12">
+                                            <div class="row bb pb-2 mt-3">
+                                                <div class="col-4 pl-0">
+                                                    <label class="text-white bg-grey w-100 p-1"><b>BILLING ADDRESS</b></label>
+                                                    <h5 class="text-secondary" style="font-weight: bold;">{{ewbill.customer_name}}</h5>
+                                                    <p class="address" style="font-weight: bold;color: #000;">
+                                                        {{ewbill.customer_email}}
+                                                        <br>
+                                                        {{ewbill.cust.street}}
+                                                        <br>
+                                                        {{ewbill.cust.city}}
+                                                        <br>
+                                                        {{ewbill.cust.state}} - {{ewbill.cust.pincode}}
+                                                        <br>
+                                                        <span>Mob: </span><b>{{ewbill.cust.mobile}}</b>
+                                                    </p>  
+                                                </div>
+                                                <div class="col-4"></div>
+                                                <div class="col-4 pr-0">
+                                                    <label class="text-white bg-grey w-100 p-1"><b>SHIPPING ADDRESS</b></label>
+                                                    <h5 class="text-secondary" style="font-weight: bold;">{{ewbill.customer_name}}</h5>
+                                                    <p class="address" style="font-weight: bold;color: #000;">{{ ewbill.delivery_address|linebreaksbr }} </p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </section>
+                        
+                                    <section class="product-area mt-2">
+                                        <table class="table table-hover table-bordered table-dark template3table">
+                                            <thead class="table-dark">
+                                                <tr class="template3tablehead">
+                                                    <th class="text-center">Items</th>
+                                                    <th class="text-center">HSN Code</th>
+                                                    <th class="text-center">Quantity</th>
+                                                    <th class="text-center">Rate</th>
+                                                    <th class="text-center">Tax</th>
+                                                    <th class="text-center">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for itm in items %}
+                                                    <tr>
+                                                        <td class="text-center">{{ itm.name }}</td>
+                                                        <td class="text-center">{{ itm.hsn }}</td>
+                                                        <td class="text-center">{{ itm.quantity }}</td>
+                                                        <td class="text-center">{{ itm.rate  }}</td>
+                                                        <td class="text-center">{{ itm.tax  }}</td>
+                                                        <td class="text-center">{{ itm.total }}</td>
+                                                    </tr>
+                                                {% endfor %} 
+                                            </tbody>
+                                        </table>
+                                    </section>
+                        
+                                    <section class="balance-info">
+                                        <div class="row mt-3">
+                                            <div class="col-4"></div>
+                                            <div class="col-4"></div>
+                                            <div class="col-4">
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                        <tr >
+                                                            <td style="color: #000;">Sub Total</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.sub_total}}</td>
+                                                        </tr>
+                                                        
+                                                        {% if ewbill.igst != 0.0 %}
+                                                        <tr >
+                                                            <td style="color: #000;">IGST</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.igst}}</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                        {% if ewbill.cgst != 0.0 %}
+                                                        <tr>
+                                                            <td style="color: #000;">CGST</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.cgst}}</td>
+                                                            
+                                                        </tr>
+                                                        {% endif %}
+                                                        {% if ewbill.sgst != 0.0 %}
+                                                        <tr>
+                                                            <td style="color: #000;">SGST</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.sgst}}</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                        <tr >
+                                                            <td style="color: #000;">Shipping Charge</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.shipping_charge}}</td>
+                                                        </tr>
+                                                        {% if ewbill.adjustment != 0.0 %}
+                                                        <tr >
+                                                            <td style="color: #000;">Adjustment</td>
+                                                            <td style="color: #000;">:</td>
+                                                            <td class="text-center" style="color: #000;">{{ewbill.adjustment}}</td>
+                                                        </tr>
+                                                        {%endif%}
+                                                        {% if ewbill.tcs != "0.00" %}
+                                                        <tr style="display: none;">
+                                                            <td style="color:black">TCS:</td>
+                                                            <td style="color:black">{{ewbill.tcs}}</td>
+                                                        </tr>
+                                                        {% endif %}
+                                                        
+                                                    </tbody>
+                                                </table>
+                                                <hr>
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                        <tr >
+                                                            <th style="color: #000;">Grand Total</th>
+                                                            <th style="color: #000;">:</th>
+                                                            <th class="text-center" style="color: #000;">{{ewbill.grand_total}}</th>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div> 
+                                        </div>
+                                        <div class="row container-fluid  p-2 m-0">
+                                            <div class="col-sm-3 m-0 p-0"><label style="color: #000;"><b>Authorized Signature</b></label></div>
+                                            <div class="col-sm-4 m-0 p-0 text-dark">________________________</div>
+                                            <div class="col-sm-4 m-0 p-0"></div>
+                                        </div>
+                                    </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-purchase')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    });
+
+    $(document).ready(function() {
+        var $rows = $('.itemslist tbody tr');
+        $('#search_box').keyup(function() {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+            $rows.show().filter(function() {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+
+    });
+    
+    $('#item_qty_update').keyup(function() {
+        var cQty = parseInt(`{{item_data.stock}}`);
+        if($(this).val() == "" || $(this).val() == " " || $(this).val() == 0){
+            $('#current_qty').text(cQty);
+            return
+        }
+        var qty = parseInt($(this).val());
+
+        if(qty !=NaN || qty != 0){
+            if ($("#update_qty").is(":checked") && qty>cQty){
+                $("#qty_err").text('Maximum number of stock can be reduced is '+cQty+'.!');
+            }else{
+                $("#qty_err").text('');
+                $("#update_qty").is(":checked") ? $('#current_qty').text(cQty - qty) : $('#current_qty').text(cQty + qty);
+            }
+        }else{
+            $('#current_qty').text(cQty);
+        }
+        
+    });
+
+    $("#update_qty").change(()=>{
+        var cQty = parseInt(`{{item_data.stock}}`);
+        if($('#item_qty_update').val() == "" || $('#item_qty_update').val() == " " || $('#item_qty_update').val() == 0){
+            $('#current_qty').text(cQty);
+            return
+        }
+        var qty = parseInt($('#item_qty_update').val());
+
+        if(qty !=NaN || qty != 0){
+            if ($("#update_qty").is(":checked") && qty>cQty){
+                $("#qty_err").text('Maximum number of stock can be reduced is '+cQty+'.!');
+            }else{
+                $("#qty_err").text('');
+                $("#update_qty").is(":checked") ? $('#current_qty').text(cQty - qty) : $('#current_qty').text(cQty + qty);
+            }
+        }else{
+            $('#current_qty').text(cQty);
+        }
+    })
+
+    function validateQuantity(){
+        var cQty = parseInt(`{{item_data.stock}}`);
+        var change = parseInt($('#item_qty_update').val());
+        if ($("#update_qty").is(":checked") && change>cQty){
+            $("#qty_err").text('Maximum number of stock can be reduced is '+cQty+'.!');
+            return false
+        }else{
+            $("#qty_err").text('');
+            return true
+        }
+    }
+
+    $(document).ready(function() {
+        var $rows = $('.purchases_table tbody tr');
+        $('#purchases_search_box').keyup(function() {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+            $rows.show().filter(function() {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+
+    });
+    
+
+    function ExportToExcel(type, fn, dl) {
+        var elt = document.getElementById('purchases_table');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) : XLSX.writeFile(wb, fn || ('{{item_data.name}}-purchases.' + (type || 'xlsx')));
+    }
+
+    $(document).ready(()=>{
+        // $("#items_table tbody tr:first").addClass('table-active');
+        // $(this).closest('tr').children('td.two').text();
+
+        var rows = $("#items_table tbody tr");
+        
+        for(var i = 0; i < rows.length; i++){
+            $(rows[i]).removeClass('table-active')
+            if($(rows[i]).children('td.itm_id').text() == `{{item_data.id}}`){
+                $(rows[i]).addClass('table-active');
+                break;
+            }
+        }
+    })
+
+    // $('.trns_table_menu').click(function(){
+    //     $(this).children('.dropdown-menu').toggle();
+    // })
+
+    $(document).ready(function(){
+        $(".trns_table_menu").click(function(){
+            $(".trans-dropdown-menu").slideUp("fast");
+            $(this).find(".trans-dropdown-menu").slideToggle("fast");
+        });
+    });
+    $(document).on("click", function(event){
+        var $trigger = $(".trns_table_menu");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $(".trans-dropdown-menu").slideUp("fast");
+        }
+    });
+
+    function printSection(sectionId) {
+        var printContents = document.getElementById(sectionId).innerHTML;
+        var originalContents = document.body.innerHTML;
+    
+        document.body.innerHTML = printContents;
+    
+        window.print();
+    
+        document.body.innerHTML = originalContents;
+    }
+</script>
+{% endblock %}

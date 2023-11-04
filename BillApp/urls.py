@@ -26,11 +26,16 @@ urlpatterns = [
     path('add_new_purchase',views.addNewPurchase, name='addNewPurchase'),
     path('get_item_data',views.getItemData, name='getItemData'),
     path('create_new_purchase',views.createNewPurchase, name='createNewPurchase'),
+    path('purchases_in_between',views.purchasesInBetween, name='purchasesInBetween'),
+    path('view_purchase_bill/<int:id>',views.viewPurchaseBill, name='viewPurchaseBill'),
+    path('edit_purchase_bill/<int:id>',views.editPurchaseBill, name='editPurchaseBill'),
+    path('update_purchase_bill/<int:id>',views.updatePurchaseBill, name='updatePurchaseBill'),
 
 
     path('show_sales',views.goSales, name='goSales'),
     path('add_new_sale',views.addNewSale, name='addNewSale'),
     path('create_new_sale',views.createNewSale,name='createNewSale'),
+    path('sales_in_between',views.salesInBetween, name='salesInBetween'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),
