@@ -24,12 +24,12 @@
     #search_box {
         width: 68%;
     }
-    .add_new_btn, .fltr_btn{
+    .add_new_btn, .fltr_btn, .print_btn{
         background: #0d533ae6;
         font-weight: 600;
         color: white;
     }
-    .add_new_btn:hover{
+    .add_new_btn:hover, .print_btn:hover, .fltr_btn:hover{
         background: #1d8d68;
         color: white;
     }
@@ -146,6 +146,9 @@
     .trns_table_menu i{
         z-index: 5;
     }
+    table tr {
+        cursor: pointer;
+    }
 </style>
 <div class="container-fluid">
 {% if not purchases %}
@@ -190,9 +193,12 @@
                         </form>
                     </div>
                     <div class="row px-2">
-                        <div class="col-md-12 d-flex justify-content-start">
+                        <div class="col-md-6 d-flex justify-content-start">
                             <input type="text" id="purchases_search_box" placeholder="Search..." class="form-control w-25" autocomplete="off">
                             <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewPurchase' %}`"><i class="fa fa-plus me-2"></i>PURCHASE</button>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <button class="btn print_btn btn-sm ms-2" onclick="printSection('print_prchs_table')"><i class="fas fa-print me-2"></i>PRINT</button>
                         </div>
                     </div>
                     <div class="purchases_table_section">
@@ -209,7 +215,7 @@
                             </thead>
                             <tbody>
                                 {% for i in purchases %}
-                                <tr class="purchase_bills" onclick="window.location.href='/view_purchase_bill/{{i.bill_no}}'">                                  
+                                <tr class="purchase_bills" onclick="window.location.href='/view_purchase_bill/{{i.bill_no}}'">
                                     <td>{{forloop.counter}}</td>
                                     <td>{{i.date}}</td>
                                     <td>{{i.bill_no}}</td>
@@ -229,6 +235,36 @@
 {% endif %}
 </div>
 
+
+<div class="print_purchases_table" id="print_prchs_table" style="display: none;">
+    <div>
+        <h4>ALL PURCHASES</h4>
+    </div>
+    <table class="table table-bordered mt-2" id="purchases_table_print">
+        <thead>
+        <tr>
+            <th scope="col" class="col-1">#</th>
+            <th scope="col" class="col-2">DATE</th>
+            <th scope="col" class="col-2">BILL NO.</th>
+            <th scope="col" class="col-3">PARTY NAME</th>
+            <th scope="col" class="col-2">TAX</th>
+            <th scope="col" class="col-2">TOTAL</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for i in purchases %}
+            <tr>                                  
+                <td>{{forloop.counter}}</td>
+                <td>{{i.date}}</td>
+                <td>{{i.bill_no}}</td>
+                {% if i.party_name != "" %}<td>{{i.party_name}}</td>{% else %}<td>Nill</td>{% endif %}
+                <td>{{i.tax}}</td>
+                <td>{{i.total_amount}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 
 

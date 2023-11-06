@@ -30,12 +30,18 @@ urlpatterns = [
     path('view_purchase_bill/<int:id>',views.viewPurchaseBill, name='viewPurchaseBill'),
     path('edit_purchase_bill/<int:id>',views.editPurchaseBill, name='editPurchaseBill'),
     path('update_purchase_bill/<int:id>',views.updatePurchaseBill, name='updatePurchaseBill'),
+    path('delete_purchase_bill/<int:id>',views.deletePurchaseBill, name='deletePurchaseBill'),
+    
 
 
     path('show_sales',views.goSales, name='goSales'),
     path('add_new_sale',views.addNewSale, name='addNewSale'),
     path('create_new_sale',views.createNewSale,name='createNewSale'),
     path('sales_in_between',views.salesInBetween, name='salesInBetween'),
+    path('view_sales_bill/<int:id>',views.viewSalesBill, name='viewSalesBill'),
+    path('edit_sales_bill/<int:id>',views.editSalesBill, name='editSalesBill'),
+    path('update_sale_bill/<int:id>',views.updateSaleBill, name='updateSaleBill'),
+    path('delete_sale_bill/<int:id>',views.deleteSaleBill, name='deleteSaleBill'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),

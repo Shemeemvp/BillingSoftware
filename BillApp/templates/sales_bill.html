@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Purchase Bill | B - {{bill.bill_no}}{% endblock %}
+{% block title %}Sale Bill | B - {{bill.bill_no}}{% endblock %}
 {% block content %}
 <style>
     main{
@@ -24,14 +24,18 @@
     #search_box {
         width: 68%;
     }
-    .add_new_btn, .fltr_btn, .tmplt_swtch, .action_btn{
-        background: #0d533ae6;
+    .template_switch button{
+        background: darkkhaki;
+        color: white;
+    }
+    .add_new_btn, .fltr_btn, .tmplt_swtch, .action_btn, .switch_btn_active{
+        background: #0d533ae6 !important;
         font-weight: 600;
         color: white;
     }
-    .add_new_btn:hover, .tmplt_swtch:hover, .action_btn:hover{
-        background: #1d8d68;
-        color: white;
+    .add_new_btn:hover, .tmplt_swtch:hover, .action_btn:hover, .switch_btn_active:hover, .template_switch button:hover{
+        background: #1d8d68 !important;
+        color: white !important;
     }
     .purchases_section{
         background: #eae9c4;
@@ -175,8 +179,8 @@
             <div class="all_purchases">
                 <div class="all_purchases_table px-1 py-2 border rounded-1">
                     <div class="top d-flex justify-content-start px-2 py-3">
-                        <div class="purchs_head">
-                            <h4>All Purchases</h4>
+                        <div class="sales_head">
+                            <h4>All Sales</h4>
                         </div>
                     </div>
                     <div class="row px-2">
@@ -194,8 +198,8 @@
                             </tr>
                             </thead> -->
                             <tbody>
-                                {% for i in purchases %}
-                                <tr class="purchase_bills" onclick="window.location.href='/view_purchase_bill/{{i.bill_no}}'">
+                                {% for i in sales %}
+                                <tr class="purchase_bills" onclick="window.location.href='/view_sales_bill/{{i.bill_no}}'">
                                     <td class="itm_id" hidden>{{i.bill_no}}</td>
                                     <td scope="col" class="col-8"><span>Bill:</span><br> BILL - {{i.bill_no}}</td>
                                     <td scope="col" class="col-4"><span>Total:</span><br><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
@@ -211,19 +215,22 @@
             <div class="purchase_bill_view">
                 <div class="purchase_bill px-1 py-2 border rounded-1">
                     <div class="top d-flex justify-content-start px-2 py-3">
-                        <div class="purchs_head">
+                        <div class="sl_head">
                             <h3>BILL - {{bill.bill_no}}</h3>
                         </div>
                     </div>
                     <div class="row px-2">
                         <div class="col-md-12 d-flex justify-content-between">
                             <div class="template_switch">
-                                <button class="btn btn-sm tmplt_swtch" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
+                                <button id="template_btn" class="btn btn-sm switch_btn_active" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
+                                <button id="slip_btn" class="btn btn-sm" title="SLIP"><i class="fas fa-receipt me-1"></i></button>
                             </div>
                             <div class="action_btns">
-                                <a href="{% url 'editPurchaseBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
+                                <a href="{% url 'editSalesBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
                                 <a href="{% url 'deletePurchaseBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
-                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-print fs-5 me-1"></i>PRINT</button>
+                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-print me-1"></i>PRINT</button>
+                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-file-pdf me-1"></i>PDF</button>
+                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
                             </div>
                         </div>
                     </div>
@@ -234,7 +241,7 @@
                                     <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
                                     </div>
                                     <div class="col-md-4 d-flex justify-content-center bill_header">
-                                        <center class="h4 text-white"><b>PURCHASE BILL</b></center>
+                                        <center class="h4 text-white"><b>SALES BILL</b></center>
                                     </div>  
                                     <div class="col-md-4 d-flex justify-content-end">
                                         <div class="text-white">
@@ -353,7 +360,7 @@
         
         for(var i = 0; i < nav_links.length; i++){
             $(nav_links[i]).removeClass('active')
-            if($(nav_links[i]).hasClass('nav-purchase')){
+            if($(nav_links[i]).hasClass('nav-sales')){
                 $(nav_links[i]).addClass('active');
                 break;
             }

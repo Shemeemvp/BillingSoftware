@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db import connection
 # import requests
+from decimal import Decimal
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -711,18 +712,18 @@ def updatePurchaseBill(request,id):
 
             bill.date = request.POST['date']
             if 'party' in request.POST:
-                bill.party_name = request.POST['party_name'],
-                bill.phone_number = request.POST['party_phone'],
-                bill.gstin = request.POST['party_gstin'],
+                bill.party_name = request.POST['party_name']
+                bill.phone_number = request.POST['party_phone']
+                bill.gstin = request.POST['party_gstin']
             else:
-                bill.party_name = "",
-                bill.phone_number = "",
-                bill.gstin = "",
+                bill.party_name = ""
+                bill.phone_number = ""
+                bill.gstin = ""
             
-            bill.subtotal = float(request.POST['subtotal']),
-            bill.tax = float(request.POST['tax']),
-            bill.adjustment = float(request.POST['adjustment']),
-            bill.total_amount = float(request.POST['grand_total']),
+            bill.subtotal = request.POST['subtotal']
+            bill.tax = request.POST['tax']
+            bill.adjustment = request.POST['adjustment']
+            bill.total_amount = request.POST['grand_total']
 
             bill.save()
 
@@ -751,11 +752,11 @@ def updatePurchaseBill(request,id):
                     for ele in mapped:
                         if int(len(item))>int(count):
                             if ele[6] == 0:
-                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],price=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp)
+                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp)
                             else:
-                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],price=ele[3],tax=ele[4],total=ele[5])
+                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
                         else:
-                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],price=ele[3],tax=ele[4],total=ele[5])
+                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
                             
                 except Exception as e:
                         print(e)
@@ -763,7 +764,7 @@ def updatePurchaseBill(request,id):
                         mapped=list(mapped)
                         
                         for ele in mapped:
-                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],price=ele[3],tax=ele[4],total=ele[5])
+                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
 
 
 
@@ -772,6 +773,25 @@ def updatePurchaseBill(request,id):
             print(e)
             return redirect(editPurchaseBill, id)
     return redirect('/')
+
+
+
+@login_required(login_url="login")
+def deletePurchaseBill(request, id):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user = request.user.id)
+            bill = Purchases.objects.get(cid = cmp, bill_no = id)
+            items = Purchase_items.objects.filter(cid = cmp, pid = bill).delete()
+            bill.delete()
+            # items.delete()
+            return redirect(goPurchases)
+        except Exception as e:
+            print(e)
+            return redirect(viewPurchaseBill, id)
+    return redirect('/')
+
+
 
 
 # SALES
@@ -884,4 +904,137 @@ def salesInBetween(request):
         except Exception as e:
             print(e)
             return redirect(goSales)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def viewSalesBill(request,id):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            sales = Sales.objects.filter(cid = cmp)
+            bill = Sales.objects.get(cid = cmp, bill_no = id)
+            items = Sales_items.objects.filter(cid = cmp, sid = bill)
+            context = {
+                'cmp': cmp,
+                'sales':sales,
+                'bill': bill,
+                'items':items,
+            }
+            return render(request, 'sales_bill.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(goSales)
+    return redirect('/')
+
+
+@login_required(login_url="login")
+def editSalesBill(request,id):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            bill = Sales.objects.get(cid = cmp, bill_no = id)
+            s_items = Sales_items.objects.filter(cid = cmp, sid = bill)
+            items = Items.objects.filter(cid = cmp)
+            context = {
+                'cmp': cmp,
+                'bill': bill,
+                'items':items,
+                'sales_items':s_items,
+            }
+
+            return render(request, 'edit_sale.html',context)
+        except Exception as e:
+            print(e)
+            return redirect(viewSalesBill, id)
+    return redirect('/')
+
+
+
+@login_required(login_url="login")
+def updateSaleBill(request,id):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user=request.user.id)
+            bill = Sales.objects.get(cid = cmp, bill_no = id)
+
+            bill.date = request.POST['date']
+            if 'party' in request.POST:
+                bill.party_name = request.POST['party_name']
+                bill.phone_number = request.POST['party_phone']
+                bill.gstin = request.POST['party_gstin']
+            else:
+                bill.party_name = ""
+                bill.phone_number = ""
+                bill.gstin = ""
+            
+            bill.subtotal = request.POST['subtotal']
+            bill.tax = request.POST['tax']
+            bill.adjustment = request.POST['adjustment']
+            bill.total_amount = request.POST['grand_total']
+
+            bill.save()
+
+            item = request.POST.getlist("item[]")
+            hsn  = request.POST.getlist("hsn[]")
+            qty = request.POST.getlist("qty[]")
+            price = request.POST.getlist("price[]")
+            tax = request.POST.getlist("tax[]")
+            total = request.POST.getlist("total[]")
+            sales_item_ids = request.POST.getlist("id[]")
+            item_ids = [int(id) for id in sales_item_ids]
+
+            
+            prchs_item = Purchase_items.objects.filter(pid = bill)
+            object_ids = [obj.id for obj in prchs_item]
+
+            ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
+            Purchase_items.objects.filter(id__in=ids_to_delete).delete()
+            
+            count = Purchase_items.objects.filter(pid = bill, cid = cmp).count()
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total):
+                try:
+                    mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                    mapped=list(mapped)
+                    
+                    for ele in mapped:
+                        if int(len(item))>int(count):
+                            if ele[6] == 0:
+                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp)
+                            else:
+                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                        else:
+                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                            
+                except Exception as e:
+                        print(e)
+                        mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                        mapped=list(mapped)
+                        
+                        for ele in mapped:
+                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+
+
+
+            return redirect(viewSalesBill,id)
+        except Exception as e:
+            print(e)
+            return redirect(editSalesBill, id)
+    return redirect('/')
+
+
+
+@login_required(login_url="login")
+def deleteSaleBill(request, id):
+    if request.user:
+        try:
+            cmp = Company.objects.get(user = request.user.id)
+            bill = Sales.objects.get(cid = cmp, bill_no = id)
+            items = Sales_items.objects.filter(cid = cmp, sid = bill).delete()
+            bill.delete()
+            # items.delete()
+            return redirect(goSales)
+        except Exception as e:
+            print(e)
+            return redirect(viewSalesBill, id)
     return redirect('/')
