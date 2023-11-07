@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Add New Sale{% endblock %}
 {% block content %}
+
 <style>
     main{
         padding: 2rem 1rem;
@@ -166,20 +167,26 @@
                                     <tr id='addr01'>
                                         <td class="item_sl_num">1</td>
                                         <td>
-                                            <div class="d-flex">
+                                            <div class="w-100">
+                                                <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
+                                                    <input type="text" id="item1" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items..">
+                                                    <ul class="dropdown-menu w-100 items-available position-absolute" id="menu1"  style="overflow-y: auto;height: 200px;"> 
+                                                      {% for i in items %}
+                                                      <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),`{{i.name}}`)">{{i.name}}</li>
+                                                      {% endfor %}
+                                                    </ul>
+                                                    
+                                                </div>
+                                             </div>
+
+                                            <!-- <div class="d-flex">
                                                 <select required name='item[]' id="item1" class="form-control item">
                                                     <option value="">Select Item</option>
                                                     {% for i in items %}
                                                         <option value="{{ i.name  }}">{{i.name}}</option>
                                                     {% endfor %}
                                             </select>
-                    
-                                                <!-- <a href="#">
-                                                    <button type="button" class="btn btn-outline-secondary ml-1" 
-                                                    data-target="#newitem" data-toggle="modal">+</button>
-                                                </a> -->
-                                                <!-- <button class="btn btn-outline-secondary ml-1" data-bs-target="#newitem" data-bs-toggle="modal">+</button> -->
-                                            </div>
+                                            </div> -->
                                         
                                         
                                         </td>
@@ -270,8 +277,6 @@
 </div>
 
 
-
-
 <script>
     $(document).ready(()=>{
         var nav_links = $(".nav-item.nav-link");
@@ -284,6 +289,47 @@
             }
         }
     })
+
+    
+    function filterFunction(id){
+        var options = $('#'+ $("#"+id).next().attr('id')).children();
+        var search_text = $("#"+id).val().toLowerCase();
+        options.each(function(){
+            if($(this).text().toLowerCase().includes(search_text)){
+                $(this).show()
+            }else{
+                $(this).hide()
+            }
+        })
+    }
+    // $(document).ready(function(){
+    //     $("#dropdown-menu li").click(function(){
+    //         $(this).parent().prev().val($(this).html())
+    //     })
+    // })
+    
+    function getItemDetails(inpId, value){
+        $('#'+inpId).val(value);
+
+        var n = inpId.slice(4);
+        $.ajax({
+        url: "{% url 'getItemData' %}",
+        type : 'GET',
+        data:{
+            id : value,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+        
+        success: function(response) {
+            if (response.status){
+                document.getElementById('hsn'+n).value = response.hsn;
+                document.getElementById('price'+n).value = response.sale_rate;
+                document.getElementById('tax'+n).value = response.tax;
+            }
+        },
+        });
+
+    }
 
     $('#check_party').change(()=>{
         $('#check_party').is(":checked") ? $('#party_details').css('display','flex') : $('#party_details').css('display','none');
@@ -307,6 +353,8 @@
         clonedRow.attr('id', 'addr0' +(roinc+1));
 
         clonedRow.find('.item_sl_num').text(roinc+1);
+        clonedRow.find('.item-display').attr('id', 'item'+(roinc+1));
+        clonedRow.find('.items-available').attr('id', 'menu'+(roinc+1));
 
         // clonedRow.find('.clone_row').attr('id',roinc+1);
 
@@ -316,7 +364,6 @@
             console.log(newId)
             $(this).attr('id', newId );
         });
-
         clonedRow.find('.item').each(function() {
             $(this).val(originalRow.find('.item').val());
         });
@@ -325,7 +372,6 @@
         });
 
         originalRow.after(clonedRow);
-        
         calc();
         
     });
@@ -337,22 +383,16 @@
                 `<tr id='addr0${roinc}'>
                     <td class="item_sl_num">${roinc}</td>
                     <td>
-                        <div class="d-flex">
-                            <select required name='item[]' id="item${roinc}" class="form-control item">
-                                <option value="">Select Item</option>
-                                {% for i in items %}
-                                    <option value="{{ i.name  }}">{{i.name}}</option>
-                                {% endfor %}
-                        </select>
-
-                            <!-- <a href="#">
-                                <button type="button" class="btn btn-outline-secondary ml-1" 
-                                data-target="#newitem" data-toggle="modal">+</button>
-                            </a> -->
-                            <!-- <button class="btn btn-outline-secondary ml-1" data-bs-target="#newitem" data-bs-toggle="modal">+</button> -->
+                        <div class="w-100">
+                            <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
+                                <input type="text" id="item${roinc}" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items..">
+                                <ul class="dropdown-menu w-100 items-available position-absolute" id="menu${roinc}"  style="overflow-y: auto;height: 200px;"> 
+                                    {% for i in items %}
+                                    <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),$(this).html())">{{i.name}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                    
-                    
                     </td>
                     <td><input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/></td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
@@ -448,6 +488,5 @@
             $('#grand_total').val((parseFloat(subtot)+parseFloat(tax)+parseFloat(ad)).toFixed(2));
         }
     });
-
 </script>
 {% endblock %}

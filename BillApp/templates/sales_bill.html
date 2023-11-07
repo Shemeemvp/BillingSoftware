@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load social_share %}
 {% block title %}Sale Bill | B - {{bill.bill_no}}{% endblock %}
 {% block content %}
 <style>
@@ -31,6 +32,13 @@
     .add_new_btn, .fltr_btn, .tmplt_swtch, .action_btn, .switch_btn_active{
         background: #0d533ae6 !important;
         font-weight: 600;
+        cursor: pointer;
+        color: white;
+    }
+    #template_btn{
+        background: #0d533ae6;
+        font-weight: 600;
+        cursor: pointer;
         color: white;
     }
     .add_new_btn:hover, .tmplt_swtch:hover, .action_btn:hover, .switch_btn_active:hover, .template_switch button:hover{
@@ -109,14 +117,11 @@
     .adjsutstock_btn:hover{
         background: #C6AA58;
     }
-    .trns_table_menu {
+    .share-dropdown {
     position: relative;
     display: inline-block;
     }
-    .dropdown-button {
-        cursor: pointer;
-    }
-    .trans-dropdown-menu {
+    .share-dropdown-menu {
         position: absolute;
         list-style: none;
         padding: 0;
@@ -132,22 +137,23 @@
         display: block;
     } */
 
-    .trans-dropdown-menu li {
+    .share-dropdown-menu li {
         padding: 5px 25px;
         display: flex;
         border-bottom: 1px solid khaki;
         justify-content: left;
     }
 
-    .trans-dropdown-menu li a{
+    .share-dropdown-menu li a{
         color: black;
+        font-weight: 500;
         text-decoration: none;
     }
 
-    .trans-dropdown-menu li:hover {
+    .share-dropdown-menu li:hover {
         background-color: #f0f0f0;
     }
-    .trns_table_menu i{
+    .share-dropdown i{
         z-index: 5;
     }
     #purchases_search_box{
@@ -165,6 +171,42 @@
     .purchases_table td {
         padding: 1.3rem 0.5rem;
     }
+    
+    
+    /* SLIP VIEW STYLINGS */
+    .slip h5{
+        font-family: serif;
+    }
+    p {
+        font-size: 1.2em;
+    }
+    /* .receipt-item {
+        text-align: left;
+        margin-top: 10px;
+    } */
+    .address{
+        display: flex;
+        flex-direction: column;
+    }
+    .address p,.footer p{
+        font-size: 1rem;
+        margin: 0;
+    }
+    .slip-container{
+        width: 80mm;
+        margin: 2rem auto;
+        padding: 2rem;
+        box-shadow: rgba(60, 64, 67, 0.5) 0px 1px 2px 0px, rgba(60, 64, 67, 0.35) 0px 2px 6px 2px;
+    }
+    .divider{
+        margin: 1rem 0;
+        border-bottom: 3px dotted black;
+    }
+    .trns-id p,.datetime p{
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
 
 </style>
 <div class="container-fluid">
@@ -186,7 +228,7 @@
                     <div class="row px-2">
                         <div class="col-md-12 d-flex justify-content-start">
                             <input type="text" id="purchases_search_box" placeholder="Search..." class="form-control" autocomplete="off">
-                            <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewPurchase' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
+                            <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewSale' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
                         </div>
                     </div>
                     <div class="purchases_table_section">
@@ -222,20 +264,30 @@
                     <div class="row px-2">
                         <div class="col-md-12 d-flex justify-content-between">
                             <div class="template_switch">
-                                <button id="template_btn" class="btn btn-sm switch_btn_active" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
+                                <button id="template_btn" class="btn btn-sm" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
                                 <button id="slip_btn" class="btn btn-sm" title="SLIP"><i class="fas fa-receipt me-1"></i></button>
                             </div>
                             <div class="action_btns">
                                 <a href="{% url 'editSalesBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
-                                <a href="{% url 'deletePurchaseBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
-                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-print me-1"></i>PRINT</button>
-                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-file-pdf me-1"></i>PDF</button>
-                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
+                                <a href="{% url 'deleteSaleBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
+                                
+                                <button class="btn btn-sm action_btn" id="templatePrintButton" onclick="printSection('printBill')"><i class="fas fa-print me-1"></i>PRINT</button>
+                                <a href="{% url 'salesBillPdf' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fas fa-file-pdf me-1"></i>PDF</button></a>
+                                <div class="share-dropdown">
+                                    <button class="btn btn-sm action_btn"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
+                                    <ul class="share-dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li>{% post_to_whatsapp object_or_url "WhatsApp" %}</li>
+                                        <li>{% send_email object.title "New: {{object.title}}. Check it out!" object_or_url "Email" %}</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="bill_template_section">
-                        <div  id="whatToPrint" class="printTemplates template1">
+                        
+                        <!-- Bill view -->
+                        
+                        <div  id="printBill" class="printTemplates template1" style="display: block;">
                             <div class="page bg-light px-3 py-2" >
                                 <div class="row px-3 py-4" style="background-color: #433f42;">
                                     <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
@@ -341,6 +393,99 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Bill Slip view -->
+
+                        <div class="saleBillSlip" id="printSlip" style="display: none;">
+                            <div class="slip-container bg-light" id="slip_container">
+                                <div class="slip">
+                                    <h5 class="fw-bold text-center">{{cmp.company_name}}</h5>
+                                    <div class="address text-center">
+                                        <p>{{cmp.address}}</p>
+                                        <p>{{cmp.state}}, {{cmp.country}}</p>
+                                        <p>{{cmp.phone_number}}</p>
+                                        <p>GSTIN: {{cmp.gst_number}}</p>
+                                    </div>
+                                    <div class="divider">
+                                    </div>
+                                    <!-- {% for i in items %}
+                                    <div class="receipt-item">
+                                        <span>{{i.name}}</span>
+                                        <span style="float: right;">${{i.total}}</span>
+                                    </div>
+                                    {% endfor %} -->
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-start" style="border-bottom-width: 0px !important;">Item</th>
+                                                <!-- <th class="text-center">Rate</th>
+                                                <th class="text-center">Quantity</th> -->
+                                                <th class="text-end" style="border-bottom-width: 0px !important;">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for itm in items %}
+                                                <tr>
+                                                    <td style="border-bottom-width: 0px !important;" class="text-start">{{ itm.name }}</td>
+                                                    <!-- <td class="text-center">{{ itm.rate  }}</td>
+                                                    <td class="text-center">{{ itm.quantity }}</td> -->
+                                                    <td style="border-bottom-width: 0px !important;" class="text-end"><span>&#8377; </span>{{ itm.total }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                    
+                    
+                    
+                                    <div class="subtot mt-5">
+                                        <div class="subtot-item d-flex justify-content-between">
+                                            <span>Subtotal</span>
+                                            <span><span>&#8377; </span>{{bill.subtotal}}</span>
+                                        </div>
+                                        <div class="subtot-item d-flex justify-content-between">
+                                            <span>Tax</span>
+                                            <span><span>&#8377; </span>{{bill.tax}}</span>
+                                        </div>
+                                        {% if bill.adjustment != 0.0 %}
+                                        <div class="subtot-item d-flex justify-content-between">
+                                            <span>Adjustment</span>
+                                            <span><span>&#8377; </span>{{bill.adjustment}}</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="grandtot fw-bold d-flex justify-content-between">
+                                        <span><strong>TOTAL</strong></span>
+                                        <span><strong><span>&#8377; </span>{{bill.total_amount}}</strong></span>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="paid-by mb-4 d-flex justify-content-between">
+                                        <span>Paid By:</span>
+                                        <span>Credit</span>
+                                    </div>
+                                    <div class="datetime d-flex justify-content-start">
+                                        <p class="">{% now "d/m/Y g:i A" %}</p>
+                                    </div>
+                                    <div class="trns-id d-flex flex-column">
+                                        <div>
+                                            <p class="float-start">
+                                                <span>Transaction ID:</span>
+                                                <span>XXXXXXXXX</span>
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p class="float-start">
+                                                <span>Vendor ID:</span>
+                                                <span>XXXXXXXXXX</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="footer mt-4 text-center">
+                                        <p>Thank you for supporting Local business!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -367,8 +512,35 @@
         }
     });
     
+    $(document).ready(()=>{
+        $('#slip_btn').click(()=>{
+            $('#slip_btn').css('background','#0d533ae6');
+            $('#template_btn').css('background','darkkhaki');
+            $('#printBill').css('display','none');
+            $('#printSlip').css('display','block');
+            $("#templatePrintButton").attr("onclick","printSection('printSlip')");
+        })
 
+        $('#template_btn').click(()=>{
+            $('#template_btn').css('background','#0d533ae6');
+            $('#slip_btn').css('background','darkkhaki');
+            $('#printSlip').css('display','none');
+            $('#printBill').css('display','block');
+            $("#templatePrintButton").attr("onclick","printSection('printBill')");
+        })
+    })
 
+    $(document).ready(function(){
+        $(".share-dropdown").click(function(){
+            $(this).find(".share-dropdown-menu").slideToggle("fast");
+        });
+    });
+    $(document).on("click", function(event){
+        var $trigger = $(".share-dropdown");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $(".share-dropdown-menu").slideUp("fast");
+        }
+    });
 
     $(document).ready(function() {
         var $rows = $('.purchases_table tbody tr');

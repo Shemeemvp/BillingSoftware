@@ -42,6 +42,7 @@ urlpatterns = [
     path('edit_sales_bill/<int:id>',views.editSalesBill, name='editSalesBill'),
     path('update_sale_bill/<int:id>',views.updateSaleBill, name='updateSaleBill'),
     path('delete_sale_bill/<int:id>',views.deleteSaleBill, name='deleteSaleBill'),
+    path('sales_bill_pdf/<int:id>',views.salesBillPdf, name='salesBillPdf'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),
@@ -58,6 +59,6 @@ urlpatterns = [
     path('edit_transaction_data/<int:id>',views.editTransactionData, name='editTransactionData'),
     path('delete_transaction/<int:id>',views.deleteTransaction, name='deleteTransaction'),
     
-
+    path('s',views.s,name = 's'),
 
 ]

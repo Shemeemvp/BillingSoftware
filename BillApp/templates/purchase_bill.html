@@ -223,7 +223,7 @@
                             <div class="action_btns">
                                 <a href="{% url 'editPurchaseBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
                                 <a href="{% url 'deletePurchaseBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
-                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-print fs-5 me-1"></i>PRINT</button>
+                                <button class="btn btn-sm action_btn" onclick="printSection('whatToPrint')"><i class="fas fa-print me-1"></i>PRINT</button>
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,10 @@ from django.conf import settings
 from django.db import connection
 # import requests
 from decimal import Decimal
-from django.http import JsonResponse
+from num2words import num2words
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -954,7 +957,7 @@ def editSalesBill(request,id):
 @login_required(login_url="login")
 def updateSaleBill(request,id):
     if request.user:
-        try:
+        # try:
             cmp = Company.objects.get(user=request.user.id)
             bill = Sales.objects.get(cid = cmp, bill_no = id)
 
@@ -983,15 +986,16 @@ def updateSaleBill(request,id):
             total = request.POST.getlist("total[]")
             sales_item_ids = request.POST.getlist("id[]")
             item_ids = [int(id) for id in sales_item_ids]
+            print('item ids=====',item_ids)
 
             
-            prchs_item = Purchase_items.objects.filter(pid = bill)
-            object_ids = [obj.id for obj in prchs_item]
+            sales_item = Sales_items.objects.filter(sid = bill)
+            object_ids = [obj.id for obj in sales_item]
 
             ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
-            Purchase_items.objects.filter(id__in=ids_to_delete).delete()
+            Sales_items.objects.filter(id__in=ids_to_delete).delete()
             
-            count = Purchase_items.objects.filter(pid = bill, cid = cmp).count()
+            count = Sales_items.objects.filter(sid = bill, cid = cmp).count()
             if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total):
                 try:
                     mapped=zip(item,hsn,qty,price,tax,total,item_ids)
@@ -1000,11 +1004,11 @@ def updateSaleBill(request,id):
                     for ele in mapped:
                         if int(len(item))>int(count):
                             if ele[6] == 0:
-                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp)
+                                itemAdd= Sales_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,sid = bill ,cid = cmp)
                             else:
-                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                                itemAdd = Sales_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
                         else:
-                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                            itemAdd = Sales_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
                             
                 except Exception as e:
                         print(e)
@@ -1012,14 +1016,15 @@ def updateSaleBill(request,id):
                         mapped=list(mapped)
                         
                         for ele in mapped:
-                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                            created =Sales_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
 
 
 
             return redirect(viewSalesBill,id)
-        except Exception as e:
-            print(e)
-            return redirect(editSalesBill, id)
+        # except Exception as e:
+        #     print(e)
+        #     return redirect(editSalesBill, id)
+        
     return redirect('/')
 
 
@@ -1038,3 +1043,39 @@ def deleteSaleBill(request, id):
             print(e)
             return redirect(viewSalesBill, id)
     return redirect('/')
+
+
+
+@login_required(login_url="login")
+def salesBillPdf(request,id):
+    if request.user:
+        cmp = Company.objects.get( user = request.user.id)
+        bill = Sales.objects.get(cid = cmp, bill_no = id)
+        items = Sales_items.objects.filter(cid = cmp, sid = bill)
+    
+        total = bill.total_amount
+        words_total = num2words(total)
+    
+    context = {'bill': bill, 'cmp': cmp,'items':items, 'total':words_total}
+    
+    template_path = 'sales_bill_pdf.html'
+    fname = 'Bill_'+str(bill.bill_no)
+    # return render(request, 'sales_bill_pdf.html',context)
+    # Create a Django response object, and specify content_type as pdftemp_creditnote
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] =f'attachment; filename = sales_bill_{fname}.pdf'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def s(request):
+    return render(request, 'serch.html')
