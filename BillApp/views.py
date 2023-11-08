@@ -1075,7 +1075,3 @@ def salesBillPdf(request,id):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-
-
-def s(request):
-    return render(request, 'serch.html')

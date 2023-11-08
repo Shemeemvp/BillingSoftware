@@ -169,8 +169,8 @@
                                         <td>
                                             <div class="w-100">
                                                 <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
-                                                    <input type="text" id="item1" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items..">
-                                                    <ul class="dropdown-menu w-100 items-available position-absolute" id="menu1"  style="overflow-y: auto;height: 200px;"> 
+                                                    <input type="text" id="item1" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items.." autocomplete="off">
+                                                    <ul class="dropdown-menu w-100 items-available position-absolute" id="menu1"  style="overflow-y: auto; height: 270px;"> 
                                                       {% for i in items %}
                                                       <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),`{{i.name}}`)">{{i.name}}</li>
                                                       {% endfor %}
@@ -240,7 +240,7 @@
                                             <label>ADJUSTMENT</label>
                                         </div>
                                         <div class="val">
-                                            <input type="number" placeholder="0.00" value="0.00" class="form-control" name="adjustment" id="adjustment">
+                                            <input type="number" placeholder="0.00" value="0.00" class="form-control" step="any" name="adjustment" id="adjustment">
                                         </div>
                                     </div>
 
@@ -385,8 +385,8 @@
                     <td>
                         <div class="w-100">
                             <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
-                                <input type="text" id="item${roinc}" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items..">
-                                <ul class="dropdown-menu w-100 items-available position-absolute" id="menu${roinc}"  style="overflow-y: auto;height: 200px;"> 
+                                <input type="text" id="item${roinc}" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items.." autocomplete="off">
+                                <ul class="dropdown-menu w-100 items-available position-absolute" id="menu${roinc}"  style="overflow-y: auto;height: 270px;"> 
                                     {% for i in items %}
                                     <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),$(this).html())">{{i.name}}</li>
                                     {% endfor %}

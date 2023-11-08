@@ -161,7 +161,12 @@
     .purchases_table td {
         padding: 1.3rem 0.5rem;
     }
-
+    .table-responsive {
+        max-height:100vh;
+    }
+    .table-responsive::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 <div class="container-fluid">
 <style>
@@ -185,8 +190,8 @@
                             <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewPurchase' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
                         </div>
                     </div>
-                    <div class="purchases_table_section">
-                        <table class="table table-responsive-md table-hover mt-2 purchases_table" id="purchases_table">
+                    <div class="purchases_table_section table-responsive">
+                        <table class="table table-hover mt-2 purchases_table" id="purchases_table">
                             <!-- <thead>
                             <tr>
                                 <th scope="col" class="col-2">BILL NO.</th>

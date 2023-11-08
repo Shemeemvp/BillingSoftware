@@ -206,7 +206,12 @@
         font-size: 0.85rem;
         margin: 0;
     }
-
+    .table-responsive {
+        max-height:100vh;
+    }
+    .table-responsive::-webkit-scrollbar {
+        display: none;
+    }
 
 </style>
 <div class="container-fluid">
@@ -231,8 +236,8 @@
                             <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewSale' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
                         </div>
                     </div>
-                    <div class="purchases_table_section">
-                        <table class="table table-responsive-md table-hover mt-2 purchases_table" id="purchases_table">
+                    <div class="purchases_table_section table-responsive">
+                        <table class="table table-hover mt-2 purchases_table" id="purchases_table">
                             <!-- <thead>
                             <tr>
                                 <th scope="col" class="col-2">BILL NO.</th>
@@ -292,7 +297,7 @@
                                 <div class="row px-3 py-4" style="background-color: #433f42;">
                                     <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
                                     </div>
-                                    <div class="col-md-4 d-flex justify-content-center bill_header">
+                                    <div class="col-md-4 d-flex justify-content-center align-items-center bill_header">
                                         <center class="h4 text-white"><b>SALES BILL</b></center>
                                     </div>  
                                     <div class="col-md-4 d-flex justify-content-end">

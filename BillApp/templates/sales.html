@@ -149,6 +149,12 @@
     table tr{
         cursor: pointer;
     }
+    .table-responsive {
+        max-height:65vh;
+    }
+    .table-responsive::-webkit-scrollbar {
+        display: none;
+    }
 </style>
 <div class="container-fluid">
 {% if not sales %}
@@ -194,15 +200,15 @@
                     </div>
                     <div class="row px-2">
                         <div class="col-md-6 d-flex justify-content-start">
-                            <input type="text" id="sales_search_box" placeholder="Search..." class="form-control w-25" autocomplete="off">
+                            <input type="text" id="sales_search_box" placeholder="Search..." class="form-control w-50" autocomplete="off">
                             <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewSale' %}`"><i class="fa fa-plus me-2"></i>SALE</button>
                         </div>
                         <div class="col-md-6 d-flex justify-content-end">
                             <button class="btn print_btn btn-sm ms-2" onclick="printSection('print_sales_table')"><i class="fas fa-print me-2"></i>PRINT</button>
                         </div>
                     </div>
-                    <div class="sales_table_section">
-                        <table class="table table-responsive-md mt-2 table-hover sales_table" id="sales_table">
+                    <div class="sales_table_section table-responsive">
+                        <table class="table mt-2 table-hover sales_table" id="sales_table">
                             <thead>
                             <tr>
                                 <th scope="col" class="col-1">#</th>
