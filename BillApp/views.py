@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from random import randint
 from django.core.mail import send_mail
+from django.db import transaction
 from django.conf import settings
 from django.db import connection
 # import requests
@@ -552,19 +553,44 @@ def goPurchases(request):
 @login_required(login_url="login")
 def addNewPurchase(request):
     if request.user:
+        cmp = Company.objects.get(user = request.user.id)
         try:
-            model_meta = Purchases._meta
-            pk_name = model_meta.pk.name
-            table_name = model_meta.db_table
-            with connection.cursor() as cursor:
-                cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
-                next_id = cursor.fetchone()[0]
+            
+            # Fetching last bill and assigning upcoming bill no as current + 1
+            # Also check for if any bill is deleted and bill no is continuos w r t the deleted bill
+            latest_bill = Purchases.objects.filter(cid = cmp).order_by('-bill_number').first()
 
-            cmp = Company.objects.get(user=request.user.id)
+            if latest_bill:
+                last_number = int(latest_bill.bill_number)
+                new_number = last_number + 1
+            else:
+                new_number = 1
+
+            if DeletedPurchases.objects.filter(cid = cmp).exists():
+                deleted = DeletedPurchases.objects.get(cid = cmp)
+                
+                if deleted:
+                    while int(deleted.bill_number) >= new_number:
+                        new_number+=1
+
+
+            # while Purchases.objects.filter(deleted_bill_no__bill_number = new_number).exists():
+            #     new_number += 1
+
+                # model_meta = Purchases._meta
+                # pk_name = model_meta.pk.name
+                # table_name = model_meta.db_table
+                # with connection.cursor() as cursor:
+                #     cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
+                #     next_id = cursor.fetchone()[0]
+
+                # cmp = Company.objects.get(user=request.user.id)
+
+
             items = Items.objects.filter( cid = cmp)
             context = {
                 'cmp': cmp,
-                'bill_no':next_id,
+                'bill_no':new_number,
                 'items': items,
 
             }
@@ -601,6 +627,7 @@ def createNewPurchase(request):
             if request.method == 'POST':
                 purchase = Purchases(
                     cid = cmp,
+                    bill_number = request.POST['bill_no'],
                     date = request.POST['date'],
                     party_name = request.POST['party_name'],
                     phone_number = request.POST['party_phone'],
@@ -712,6 +739,7 @@ def updatePurchaseBill(request,id):
         try:
             cmp = Company.objects.get(user=request.user.id)
             bill = Purchases.objects.get(cid = cmp, bill_no = id)
+            bill.bill_number = request.POST['bill_no']
 
             bill.date = request.POST['date']
             if 'party' in request.POST:
@@ -785,9 +813,24 @@ def deletePurchaseBill(request, id):
         try:
             cmp = Company.objects.get(user = request.user.id)
             bill = Purchases.objects.get(cid = cmp, bill_no = id)
-            items = Purchase_items.objects.filter(cid = cmp, pid = bill).delete()
+
+            Purchase_items.objects.filter(cid = cmp, pid = bill).delete()
+
+            # Storing bill number to deleted table
+            # if entry exists and lesser than the current, update and save => Only one entry per company
+            if DeletedPurchases.objects.filter(cid = cmp).exists():
+                deleted = DeletedPurchases.objects.get(cid = cmp)
+                if deleted:
+                    if bill.bill_number > deleted.bill_number:
+                        deleted.bill_number = bill.bill_number
+                        deleted.save()
+                
+            else:
+                deleted = DeletedPurchases(cid = cmp, bill_number = bill.bill_number)
+                deleted.save()
+
             bill.delete()
-            # items.delete()
+            
             return redirect(goPurchases)
         except Exception as e:
             print(e)
@@ -818,19 +861,38 @@ def goSales(request):
 @login_required(login_url="login")
 def addNewSale(request):
     if request.user:
+        cmp = Company.objects.get(user=request.user.id)
         try:
-            model_meta = Sales._meta
-            pk_name = model_meta.pk.name
-            table_name = model_meta.db_table
-            with connection.cursor() as cursor:
-                cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
-                next_id = cursor.fetchone()[0]
 
-            cmp = Company.objects.get(user=request.user.id)
+            # Fetching last bill and assigning upcoming bill no as current + 1
+            # Also check for if any bill is deleted and bill no is continuos w r t the deleted bill
+            latest_bill = Sales.objects.filter(cid = cmp).order_by('-bill_number').first()
+
+            if latest_bill:
+                last_number = int(latest_bill.bill_number)
+                new_number = last_number + 1
+            else:
+                new_number = 1
+
+            if DeletedSales.objects.filter(cid = cmp).exists():
+                deleted = DeletedSales.objects.get(cid = cmp)
+                
+                if deleted:
+                    while int(deleted.bill_number) >= new_number:
+                        new_number+=1
+
+            # model_meta = Sales._meta
+            # pk_name = model_meta.pk.name
+            # table_name = model_meta.db_table
+            # with connection.cursor() as cursor:
+            #     cursor.execute(f"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = %s", [table_name])
+            #     next_id = cursor.fetchone()[0]
+
+            
             items = Items.objects.filter( cid = cmp)
             context = {
                 'cmp': cmp,
-                'bill_no':next_id,
+                'bill_no':new_number,
                 'items': items,
 
             }
@@ -850,6 +912,7 @@ def createNewSale(request):
                 sale = Sales(
                     cid = cmp,
                     date = request.POST['date'],
+                    bill_number = request.POST['bill_no'],
                     party_name = request.POST['party_name'],
                     phone_number = request.POST['party_phone'],
                     gstin = request.POST['party_gstin'],
@@ -960,6 +1023,7 @@ def updateSaleBill(request,id):
         # try:
             cmp = Company.objects.get(user=request.user.id)
             bill = Sales.objects.get(cid = cmp, bill_no = id)
+            bill.bill_number = request.POST['bill_no']
 
             bill.date = request.POST['date']
             if 'party' in request.POST:
@@ -1036,6 +1100,21 @@ def deleteSaleBill(request, id):
             cmp = Company.objects.get(user = request.user.id)
             bill = Sales.objects.get(cid = cmp, bill_no = id)
             items = Sales_items.objects.filter(cid = cmp, sid = bill).delete()
+            
+            # Storing bill number to deleted table
+            # if entry exists and lesser than the current, update and save => Only one entry per company
+
+            if DeletedSales.objects.filter(cid = cmp).exists():
+                deleted = DeletedSales.objects.get(cid = cmp)
+                if deleted:
+                    if bill.bill_number > deleted.bill_number:
+                        deleted.bill_number = bill.bill_number
+                        deleted.save()
+                
+            else:
+                deleted = DeletedSales(cid = cmp, bill_number = bill.bill_number)
+                deleted.save()
+
             bill.delete()
             # items.delete()
             return redirect(goSales)
