@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Edit Purchase Bill | BILL - {{bill.bill_no}}{% endblock %}
+{% block title %}Edit Purchase Bill | BILL - {{bill.bill_number}}{% endblock %}
 {% block content %}
 <style>
     main{
@@ -123,7 +123,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="item_hsn">Bill No.</label>
-                                    <input type="number" name="bill_no" id="bill_no" value="{{bill.bill_no}}" class="form-control" readonly />
+                                    <input type="number" name="bill_no" id="bill_no" value="{{bill.bill_number}}" class="form-control" readonly />
                                 </div>
                             </div>
                         </div>

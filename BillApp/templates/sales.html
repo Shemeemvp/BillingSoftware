@@ -224,7 +224,7 @@
                                 <tr class="sales_bills" onclick="window.location.href='/view_sales_bill/{{i.bill_no}}'">                                  
                                     <td>{{forloop.counter}}</td>
                                     <td>{{i.date}}</td>
-                                    <td>{{i.bill_no}}</td>
+                                    <td>{{i.bill_number}}</td>
                                     {% if i.party_name != "" %}<td>{{i.party_name}}</td>{% else %}<td>Nill</td>{% endif %}
                                     <td>{{i.tax}}</td>
                                     <td>{{i.total_amount}}</td>
@@ -262,7 +262,7 @@
             <tr class="">                                  
                 <td>{{forloop.counter}}</td>
                 <td>{{i.date}}</td>
-                <td>{{i.bill_no}}</td>
+                <td>{{i.bill_number}}</td>
                 {% if i.party_name != "" %}<td>{{i.party_name}}</td>{% else %}<td>Nill</td>{% endif %}
                 <td>{{i.tax}}</td>
                 <td>{{i.total_amount}}</td>

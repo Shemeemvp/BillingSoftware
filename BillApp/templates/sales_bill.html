@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load social_share %}
-{% block title %}Sale Bill | B - {{bill.bill_no}}{% endblock %}
+{% block title %}Sale Bill | B - {{bill.bill_number}}{% endblock %}
 {% block content %}
 <style>
     main{
@@ -247,8 +247,8 @@
                             <tbody>
                                 {% for i in sales %}
                                 <tr class="purchase_bills" onclick="window.location.href='/view_sales_bill/{{i.bill_no}}'">
-                                    <td class="itm_id" hidden>{{i.bill_no}}</td>
-                                    <td scope="col" class="col-8"><span>Bill:</span><br> BILL - {{i.bill_no}}</td>
+                                    <td class="itm_id" hidden>{{i.bill_number}}</td>
+                                    <td scope="col" class="col-8"><span>Bill:</span><br> BILL - {{i.bill_number}}</td>
                                     <td scope="col" class="col-4"><span>Total:</span><br><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
                                 </tr>
                                 {% endfor %}
@@ -263,7 +263,7 @@
                 <div class="purchase_bill px-1 py-2 border rounded-1">
                     <div class="top d-flex justify-content-start px-2 py-3">
                         <div class="sl_head">
-                            <h3>BILL - {{bill.bill_no}}</h3>
+                            <h3>BILL - {{bill.bill_number}}</h3>
                         </div>
                     </div>
                     <div class="row px-2">
@@ -274,7 +274,7 @@
                             </div>
                             <div class="action_btns">
                                 <a href="{% url 'editSalesBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
-                                <a href="{% url 'deleteSaleBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_no}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
+                                <a href="{% url 'deleteSaleBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_number}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
                                 
                                 <button class="btn btn-sm action_btn" id="templatePrintButton" onclick="printSection('printBill')"><i class="fas fa-print me-1"></i>PRINT</button>
                                 <a href="{% url 'salesBillPdf' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fas fa-file-pdf me-1"></i>PDF</button></a>
@@ -302,7 +302,7 @@
                                     </div>  
                                     <div class="col-md-4 d-flex justify-content-end">
                                         <div class="text-white">
-                                            <p class="mb-0">BILL # <b>{{bill.bill_no }}</b></p>
+                                            <p class="mb-0">BILL # <b>{{bill.bill_number }}</b></p>
                                             <p class="mb-0">Date: <b>{{ bill.date | date:'d-m-Y' }}</b></p>
                                         </div>
                                     </div>
@@ -574,7 +574,7 @@
         
         for(var i = 0; i < rows.length; i++){
             $(rows[i]).removeClass('table-active')
-            if($(rows[i]).children('td.itm_id').text() == `{{bill.bill_no}}`){
+            if($(rows[i]).children('td.itm_id').text() == `{{bill.bill_number}}`){
                 $(rows[i]).addClass('table-active');
                 break;
             }

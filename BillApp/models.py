@@ -40,6 +40,7 @@ class Item_transactions(models.Model):
 class Purchases(models.Model):
     bill_no = models.AutoField(('bill_no'),primary_key=True)
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    bill_number = models.CharField(max_length=20, null=True)
     date = models.DateField(null=True, blank=True)
     party_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=15)
@@ -48,6 +49,12 @@ class Purchases(models.Model):
     tax = models.DecimalField(max_digits=10,decimal_places=2)
     adjustment = models.DecimalField(max_digits=10, decimal_places=2)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    # deleted_bill_no = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='deleted_bills')
+
+class DeletedPurchases(models.Model):
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    bill_number = models.CharField(max_length=50)
+
 
 class Purchase_items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -63,6 +70,7 @@ class Purchase_items(models.Model):
 class Sales(models.Model):
     bill_no = models.AutoField(('bill_no'),primary_key=True)
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    bill_number = models.CharField(max_length=20, null=True)
     date = models.DateField(null=True, blank=True)
     party_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=15)
@@ -82,3 +90,7 @@ class Sales_items(models.Model):
     rate = models.FloatField()
     tax = models.CharField(max_length=10)
     total = models.FloatField()
+
+class DeletedSales(models.Model):
+    cid = models.ForeignKey(Company, on_delete=models.CASCADE)
+    bill_number = models.CharField(max_length=50)
