@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.db import transaction
 from django.conf import settings
 from django.db import connection
+from datetime import datetime, date, timedelta
 # import requests
 from decimal import Decimal
 from num2words import num2words
@@ -22,11 +23,41 @@ def login(request):
     return render(request, "login.html")
 
 
+# Conversion long num to String mode
+def human_format(num):
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num /= 1000.0
+    return "%.2f%s" % (num, ["", "K", "M", "G", "T", "P"][magnitude])
+
+
 @login_required(login_url="login")
 def goDashboard(request):
     cmp = Company.objects.get(user=request.user.id)
+    sales = Sales.objects.filter(cid = cmp)
+    purchases = Purchases.objects.filter(cid = cmp)
+    todSale = 0
+    totSale = 0
+    todPurchase=0
+    totPurchase = 0
+    for i in sales:
+        totSale += i.total_amount
+        if i.date == date.today():
+            todSale += i.total_amount
+
+    for i in purchases:
+        totPurchase += i.total_amount
+        if i.date == date.today():
+            todPurchase += i.total_amount
+
     context = {
         "cmp": cmp,
+        "todSale": human_format(float(todSale)),
+        "totSale": human_format(float(totSale)),
+        "todPurchase": human_format(float(todPurchase)),
+        "totPurchase": human_format(float(totPurchase)),
+        
     }
     return render(request, "dashboard.html", context)
 
@@ -612,7 +643,7 @@ def getItemData(request):
             pur_rate = item.purchase_price
             sale_rate = item.sale_price
             tax = item.tax
-            return JsonResponse({"status":True,'hsn':hsn,'pur_rate':pur_rate,'sale_rate':sale_rate, 'tax':tax})
+            return JsonResponse({"status":True,'id':item.id,'hsn':hsn,'pur_rate':pur_rate,'sale_rate':sale_rate, 'tax':tax})
         except Exception as e:
             print(e)
             return JsonResponse({"status":False})
@@ -638,7 +669,7 @@ def createNewPurchase(request):
                     total_amount = request.POST['grand_total'],
                 )
                 purchase.save()
-
+                ids = request.POST.getlist("pItems[]")
                 item = request.POST.getlist("item[]")
                 hsn  = request.POST.getlist("hsn[]")
                 qty = request.POST.getlist("qty[]")
@@ -653,6 +684,16 @@ def createNewPurchase(request):
                     mapped = list(mapped)
                     for ele in mapped:
                         pItems = Purchase_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],pid = pid, cid=cmp)
+
+                # Add purchase details in items transactions
+                if len(ids) == len(qty) and ids and qty:
+                    itms = zip(ids,qty)
+                    trns = list(itms)
+                    for itm in trns:
+                        tItem = Items.objects.get(id = itm[0], cid = cmp)
+                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Purchase', date = purchase.date, quantity = itm[1])
+                        tItem.stock += int(itm[1])
+                        tItem.save()
 
 
                 if 'new_purchase' in request.POST:
@@ -922,7 +963,8 @@ def createNewSale(request):
                     total_amount = request.POST['grand_total'],
                 )
                 sale.save()
-
+                
+                ids = request.POST.getlist('sItems[]')
                 item = request.POST.getlist("item[]")
                 hsn  = request.POST.getlist("hsn[]")
                 qty = request.POST.getlist("qty[]")
@@ -938,6 +980,16 @@ def createNewSale(request):
                     for ele in mapped:
                         sItems = Sales_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],sid = sid, cid=cmp)
 
+                
+                # Add sales details in items transactions
+                if len(ids) == len(qty) and ids and qty:
+                    itms = zip(ids,qty)
+                    trns = list(itms)
+                    for itm in trns:
+                        tItem = Items.objects.get(id = itm[0], cid = cmp)
+                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Sale', date = sale.date, quantity = itm[1])
+                        tItem.stock -= int(itm[1])
+                        tItem.save()
 
                 if 'new_sale' in request.POST:
                     return redirect(addNewSale)
@@ -1020,7 +1072,7 @@ def editSalesBill(request,id):
 @login_required(login_url="login")
 def updateSaleBill(request,id):
     if request.user:
-        # try:
+        try:
             cmp = Company.objects.get(user=request.user.id)
             bill = Sales.objects.get(cid = cmp, bill_no = id)
             bill.bill_number = request.POST['bill_no']
@@ -1085,9 +1137,9 @@ def updateSaleBill(request,id):
 
 
             return redirect(viewSalesBill,id)
-        # except Exception as e:
-        #     print(e)
-        #     return redirect(editSalesBill, id)
+        except Exception as e:
+            print(e)
+            return redirect(editSalesBill, id)
         
     return redirect('/')
 
@@ -1150,7 +1202,46 @@ def salesBillPdf(request,id):
     # create a pdf
     pisa_status = pisa.CreatePDF(
        html, dest=response)
-    # if error then show some funy view
+    # if error then show some funny view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+
+@login_required(login_url='login')
+def goStockReports(request):
+    if request.user:
+         cmp = Company.objects.get(user = request.user.id)
+         try:
+            stockList = []
+            items = Items.objects.filter(cid = cmp)
+            
+            for item in items:
+                stockIn = 0
+                stockOut = 0
+                for i in Item_transactions.objects.filter(cid = cmp, item = item.id).filter(type = 'Purchase'):
+                    stockIn += i.quantity
+
+                for i in Item_transactions.objects.filter(cid = cmp, item = item.id).filter(type = 'Sale'):
+                    stockOut += i.quantity
+
+                dict = {
+                    'name':item.name,
+                    'stockIn':stockIn,
+                    'stockOut':stockOut,
+                    'balance':item.stock
+                }
+                
+                stockList.append(dict)
+
+            context = {
+                'cmp':cmp,
+                'items':items,
+                'stock':stockList,
+            }
+            return render(request, 'stock_report.html',context)
+         except Exception as e:
+             print(e)
+             return redirect(goDashboard)
+    return redirect('/')

@@ -178,19 +178,11 @@
                                                     
                                                 </div>
                                              </div>
-
-                                            <!-- <div class="d-flex">
-                                                <select required name='item[]' id="item1" class="form-control item">
-                                                    <option value="">Select Item</option>
-                                                    {% for i in items %}
-                                                        <option value="{{ i.name  }}">{{i.name}}</option>
-                                                    {% endfor %}
-                                            </select>
-                                            </div> -->
-                                        
-                                        
                                         </td>
-                                        <td><input type="number" name='hsn[]' id="hsn1" placeholder='HSN Code' class="form-control"/></td>
+                                        <td>
+                                            <input type="number" name='hsn[]' id="hsn1" placeholder='HSN Code' class="form-control"/>
+                                            <input type="text" name="sItems[]" id="sitem1" hidden>
+                                        </td>
                                         <td><input type="number" name='qty[]'placeholder='Quantity' id="qty1" value="" class="form-control qty" min="1" required/></td>
                                         <td><input type="number" name='price[]' id="price1" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                                         <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax1"></td>
@@ -325,6 +317,7 @@
                 document.getElementById('hsn'+n).value = response.hsn;
                 document.getElementById('price'+n).value = response.sale_rate;
                 document.getElementById('tax'+n).value = response.tax;
+                document.getElementById('sitem'+n).value = response.id;
             }
         },
         });
@@ -394,7 +387,10 @@
                             </div>
                         </div>
                     </td>
-                    <td><input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/></td>
+                    <td>
+                        <input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/>
+                        <input type="text" name="sItems[]" id="sitem${roinc}" hidden>
+                    </td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
                     <td><input type="number" name='price[]' id="price${roinc}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                     <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax${roinc}"></td>

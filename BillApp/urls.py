@@ -59,4 +59,6 @@ urlpatterns = [
     path('edit_transaction_data/<int:id>',views.editTransactionData, name='editTransactionData'),
     path('delete_transaction/<int:id>',views.deleteTransaction, name='deleteTransaction'),
 
+    path('stock_reports',views.goStockReports, name='goStockReports'),
+
 ]

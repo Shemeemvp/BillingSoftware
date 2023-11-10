@@ -85,7 +85,7 @@
                     <li onclick="window.location.href=`{% url 'goItems' %}`" class="nav-item nav-link nav-items"><i class="bx bxs-package me-2"></i>Items<a href="{% url 'addNewItem' %}"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
                     <li onclick="window.location.href=`{% url 'goSales' %}`" class="nav-item nav-link nav-sales"><i class="fa fa-shopping-bag me-2"></i>Sales<a href="{% url 'addNewSale' %}"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
                     <li onclick="window.location.href=`{% url 'goPurchases' %}`" class="nav-item nav-link nav-purchase"><i class="fa fa-store me-2"></i>Purchase<a href="{% url 'addNewPurchase' %}"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
-                    <li onclick="window.location.href=``" class="nav-item nav-link nav-stockreports"><i class="fas fa-chart-pie me-2"></i>Stock Reports<a href="#"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
+                    <li onclick="window.location.href=`{% url 'goStockReports' %}`" class="nav-item nav-link nav-stockreports"><i class="fas fa-chart-pie me-2"></i>Stock Reports<a href="#"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
                 </div>
             </nav>
         </div>

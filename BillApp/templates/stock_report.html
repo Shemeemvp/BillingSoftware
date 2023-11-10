@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load social_share %}
+{% block title %}Stock Reports{% endblock %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+<style>
+    main{
+        background: #ddddbeed;
+    }
+    .btn:focus{
+        box-shadow: none;
+    }
+    .add_newpurchase_btn{
+        border: 1px solid lightgoldenrodyellow;
+        padding: 0.5rem 2rem;
+        border-radius: 7px;
+        background: #c6aa58d9;
+        color: white;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+    .add_newpurchase_btn:hover {
+        background: #b19542d9;
+    }
+    .action_btns{
+        background: #0d533ae6;
+        font-weight: 500;
+        color: white;
+        height: 2.5rem;
+        width: 6rem;
+    }
+    .action_btns:hover{
+        background: #1d8d68;
+        color: white;
+    }
+    .all_stock_reports{
+        background: #eae9c4;
+    }
+
+    table tr {
+        cursor: pointer;
+    }
+    .table-responsive {
+        max-height:100vh;
+    }
+    .table-responsive::-webkit-scrollbar {
+        display: none;
+    }
+
+    .share-dropdown {
+    position: relative;
+    display: inline-block;
+    }
+    .share-dropdown-menu {
+        position: absolute;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        display: none;
+        z-index: 10;
+    }
+
+    /* .trns_table_menu:hover .trans-dropdown-menu {
+        display: block;
+    } */
+
+    .share-dropdown-menu li {
+        padding: 5px 25px;
+        display: flex;
+        border-bottom: 1px solid khaki;
+        justify-content: left;
+    }
+
+    .share-dropdown-menu li a{
+        color: black;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .share-dropdown-menu li:hover {
+        background-color: #f0f0f0;
+    }
+    .share-dropdown i{
+        z-index: 5;
+    }
+
+</style>
+<div class="container-fluid">
+    <div class="stock_reports_section py-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="all_stock_reports">
+                    <div class="all_stock_reports_table px-1 py-2 border rounded-1">
+                        <div class="top d-flex justify-content-start px-2 py-3">
+                            <div class="stk_rpts_head">
+                                <h4>Stock Reports</h4>
+                            </div>
+                        </div>
+                        <div class="row px-2">
+                            <div class="col-md-6 d-flex justify-content-start">
+                                <select name="item" id="item_dropdown" class="form-control w-50">
+                                    <option value="" >Search Items..</option>
+                                {% for i in items %}
+                                <option value="{{i.id}}" >{{i.name}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end">
+                                <button class="btn action_btns ms-2" onclick="printSection('print_stock_reports')"><i class="fas fa-print me-2"></i>PRINT</button>
+                                <button class="btn action_btns ms-2" onclick="ExportToExcel('xlsx')"><i class="fas fa-print me-2"></i>EXCEL</button>
+                                <div class="share-dropdown">
+                                    <button class="btn action_btns ms-2"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
+                                    <ul class="share-dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li>{% post_to_whatsapp object_or_url "WhatsApp" %}</li>
+                                        <li>{% send_email object.title "New: {{object.title}}. Check it out!" object_or_url "Email" %}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stock_reports_table_section table-responsive">
+                            <table class="table table-responsive-md mt-2 table-hover stock_reports_table" id="stock_reports_table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ITEM</th>
+                                    <th>STOCK IN</th>
+                                    <th>STOCK OUT</th>
+                                    <th>BALANCE</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in stock %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{i.name}}</td>
+                                        <td>{{i.stockIn}}</td>
+                                        <td>{{i.stockOut}}</td>
+                                        <td>{{i.balance}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="stock_rp_table_print" id="print_stock_reports" style="display: none;">
+    <div>
+        <h4>STOCK REPORTS</h4>
+    </div>
+    <table class="table table-bordered mt-2" id="stk_rprt_table_print">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>ITEM</th>
+                <th>STOCK IN</th>
+                <th>STOCK OUT</th>
+                <th>BALANCE</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for i in stock %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.name}}</td>
+                    <td>{{i.stockIn}}</td>
+                    <td>{{i.stockOut}}</td>
+                    <td>{{i.balance}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-stockreports')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    });
+    
+
+    function ExportToExcel(type, fn, dl) {
+        var elt = document.getElementById('stock_reports_table');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ? XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) : XLSX.writeFile(wb, fn || ('Stock_Reports.' + (type || 'xlsx')));
+    }
+
+
+    function printSection(sectionId) {
+        var printContents = document.getElementById(sectionId).innerHTML;
+        var originalContents = document.body.innerHTML;
+    
+        document.body.innerHTML = printContents;
+    
+        window.print();
+    
+        document.body.innerHTML = originalContents;
+    }
+
+    $(document).ready(function () {
+        $('#item_dropdown').selectize({
+            sortField: 'text'
+        });
+    });
+
+    $(document).ready(function(){
+        $(".share-dropdown").click(function(){
+            $(this).find(".share-dropdown-menu").slideToggle("fast");
+        });
+    });
+    $(document).on("click", function(event){
+        var $trigger = $(".share-dropdown");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $(".share-dropdown-menu").slideUp("fast");
+        }
+    });
+</script>
+{% endblock %}

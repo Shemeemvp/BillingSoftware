@@ -181,7 +181,10 @@
                                                 </div>
                                              </div>
                                         </td>
-                                        <td><input type="number" name='hsn[]' id="hsn1" placeholder='HSN Code' class="form-control"/></td>
+                                        <td>
+                                            <input type="number" name='hsn[]' id="hsn1" placeholder='HSN Code' class="form-control"/>
+                                            <input type="text" name="pItems[]" id="pitem1" hidden>
+                                        </td>
                                         <td><input type="number" name='qty[]'placeholder='Quantity' id="qty1" value="" class="form-control qty" min="1" required/></td>
                                         <td><input type="number" name='price[]' id="price1" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                                         <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax1"></td>
@@ -311,6 +314,7 @@
                 document.getElementById('hsn'+n).value = response.hsn;
                 document.getElementById('price'+n).value = response.pur_rate;
                 document.getElementById('tax'+n).value = response.tax;
+                document.getElementById('pitem'+n).value = response.id;
             }
         },
         });
@@ -375,7 +379,7 @@
                     <td>
                         <div class="w-100">
                             <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
-                                <input type="text" id="item${roinc}" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items.." autocomplete="off>
+                                <input type="text" id="item${roinc}" value="" name="item[]" class="dropdown-toggle form-control item-display" onkeyup="filterFunction($(this).attr('id'))"  data-bs-toggle="dropdown" aria-expanded="false" placeholder="Items.." autocomplete="off">
                                 <ul class="dropdown-menu w-100 items-available position-absolute" id="menu${roinc}"  style="overflow-y: auto;height: 270px;"> 
                                     {% for i in items %}
                                     <li class="dropdown-item items-options" onclick="getItemDetails($(this).parent().prev().attr('id'),$(this).html())">{{i.name}}</li>
@@ -384,7 +388,10 @@
                             </div>
                         </div>
                     </td>
-                    <td><input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/></td>
+                    <td>
+                        <input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/>
+                        <input type="text" name="pItems[]" id="pitem${roinc}" hidden>
+                    </td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
                     <td><input type="number" name='price[]' id="price${roinc}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                     <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax${roinc}"></td>
