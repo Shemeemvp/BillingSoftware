@@ -34,32 +34,111 @@ def human_format(num):
 
 @login_required(login_url="login")
 def goDashboard(request):
-    cmp = Company.objects.get(user=request.user.id)
-    sales = Sales.objects.filter(cid = cmp)
-    purchases = Purchases.objects.filter(cid = cmp)
-    todSale = 0
-    totSale = 0
-    todPurchase=0
-    totPurchase = 0
-    for i in sales:
-        totSale += i.total_amount
-        if i.date == date.today():
-            todSale += i.total_amount
+    if request.user:
+        cmp = Company.objects.get(user=request.user.id)
+        try:
+            sales = Sales.objects.filter(cid = cmp)
+            purchases = Purchases.objects.filter(cid = cmp)
+            items = Items.objects.filter(cid = cmp)
+            todSale = 0
+            totSale = 0
+            todPurchase=0
+            totPurchase = 0
+            for i in sales:
+                totSale += i.total_amount
+                if i.date == date.today():
+                    todSale += i.total_amount
 
-    for i in purchases:
-        totPurchase += i.total_amount
-        if i.date == date.today():
-            todPurchase += i.total_amount
+            for i in purchases:
+                totPurchase += i.total_amount
+                if i.date == date.today():
+                    todPurchase += i.total_amount
 
-    context = {
-        "cmp": cmp,
-        "todSale": human_format(float(todSale)),
-        "totSale": human_format(float(totSale)),
-        "todPurchase": human_format(float(todPurchase)),
-        "totPurchase": human_format(float(totPurchase)),
-        
-    }
-    return render(request, "dashboard.html", context)
+
+            # Chart data 
+
+            data1 = []
+            data2 = []
+            data3 = []
+            data4 = []
+            data5 = []
+            label = []
+            
+            for yr in range((date.today().year)-4, (date.today().year)+1):
+                label.append(yr)
+                salesAmount = 0
+                purchaseAmount = 0
+                for i in sales:
+                    if i.date.year == yr:
+                        salesAmount+= i.total_amount
+
+                for i in purchases:
+                    if i.date.year == yr:
+                        purchaseAmount += i.total_amount
+
+                data1.append(float(salesAmount))
+                data2.append(float(purchaseAmount))
+
+                stockIn = 0
+                stockOut = 0
+                stockBalance = 0
+                for i in Item_transactions.objects.filter(cid = cmp).filter(type = 'Purchase'):
+                    if i.date.year == yr:
+                        stockIn += i.quantity
+
+                for i in Item_transactions.objects.filter(cid = cmp).filter(type = 'Sale'):
+                    if i.date.year == yr:
+                        stockOut += i.quantity
+
+                for i in Item_transactions.objects.filter(cid = cmp):
+                    if i.date.year == yr and (i.type == "Opening Stock" or i.type == 'Add Stock' or i.type == 'Purchase'):
+                            stockBalance += i.quantity
+                    
+                    if i.date.year == yr and (i.type == "Reduce Stock" or i.type == 'Sale'):
+                            stockBalance -= i.quantity
+                            
+                data3.append(stockIn)
+                data4.append(stockOut)
+                data5.append(stockBalance)
+
+            context = {
+                "cmp": cmp,
+                "todSale": todSale,
+                "totSale": totSale,
+                "todPurchase": todPurchase,
+                "totPurchase": totPurchase,
+                'salesData':data1,
+                'purchaseData':data2,
+                'stockIn':data3,
+                'stockOut':data4,
+                'stockBalance':data5,
+                'label':label,
+
+            }
+            return render(request, "dashboard.html", context)
+        except Exception as e:
+            print(e)
+            return redirect('/')
+    
+
+
+def redirectPage(request):
+    try:
+        search = str(request.GET['url']).lower()
+        if search in ('sale','sales','add sales','sales add','create sales','sales create', 'new sale', 'sale new'):
+            return redirect(addNewSale)
+        elif search in ('purchase','add purchase','purchase add','create purchase','purchase create', 'new purchase', 'purchase new'):
+            return redirect(addNewPurchase)
+        elif search in ('stock','stock reports','reports'):
+            return redirect(goStockReports)
+        elif search in ('item','add item','new item', 'item add'):
+            return redirect(addNewItem)
+        else:
+            messages.error(request, "Not Found.!")
+            return redirect(goDashboard)
+    except Exception as e:
+        print(e)
+        return redirect(goDashboard)
 
 
 def registerUser(request):
@@ -679,11 +758,11 @@ def createNewPurchase(request):
 
                 pid = Purchases.objects.get( bill_no = purchase.bill_no)
 
-                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total) and item and hsn and qty and price and tax and total:
-                    mapped = zip(item,hsn,qty,price,tax,total)
+                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total)==len(ids) and ids and item and hsn and qty and price and tax and total:
+                    mapped = zip(item,hsn,qty,price,tax,total,ids)
                     mapped = list(mapped)
                     for ele in mapped:
-                        pItems = Purchase_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],pid = pid, cid=cmp)
+                        pItems = Purchase_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],pid = pid, cid=cmp, item = Items.objects.get(cid = cmp, id = ele[6]))
 
                 # Add purchase details in items transactions
                 if len(ids) == len(qty) and ids and qty:
@@ -691,7 +770,7 @@ def createNewPurchase(request):
                     trns = list(itms)
                     for itm in trns:
                         tItem = Items.objects.get(id = itm[0], cid = cmp)
-                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Purchase', date = purchase.date, quantity = itm[1])
+                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Purchase', date = purchase.date, quantity = itm[1], bill_number = purchase.bill_number)
                         tItem.stock += int(itm[1])
                         tItem.save()
 
@@ -799,6 +878,7 @@ def updatePurchaseBill(request,id):
 
             bill.save()
 
+            ids = request.POST.getlist("pItems[]")
             item = request.POST.getlist("item[]")
             hsn  = request.POST.getlist("hsn[]")
             qty = request.POST.getlist("qty[]")
@@ -813,32 +893,71 @@ def updatePurchaseBill(request,id):
             object_ids = [obj.id for obj in prchs_item]
 
             ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
+            for id in ids_to_delete:
+                purItem = Purchase_items.objects.get(cid = cmp, id = id)
+                itm = Items.objects.get(cid = cmp, id = purItem.item.id)
+                itm.stock -= purItem.quantity
+                itm.save()
+                Item_transactions.objects.filter(cid = cmp, bill_number = bill.bill_number, type = 'Purchase', item = itm).delete()
+
             Purchase_items.objects.filter(id__in=ids_to_delete).delete()
             
             count = Purchase_items.objects.filter(pid = bill, cid = cmp).count()
-            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total):
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total)==len(ids):
                 try:
-                    mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                    mapped=zip(item,hsn,qty,price,tax,total,item_ids,ids)
                     mapped=list(mapped)
                     
                     for ele in mapped:
                         if int(len(item))>int(count):
                             if ele[6] == 0:
-                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp)
+                                itemAdd= Purchase_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,pid = bill ,cid = cmp, item = Items.objects.get(cid = cmp, id = ele[7]))
+                                tItem = Items.objects.get(id = ele[7], cid = cmp)
+                                transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Purchase', date = bill.date, quantity = ele[2], bill_number = bill.bill_number)
+                                tItem.stock += int(ele[2])
+                                tItem.save()
                             else:
-                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                                itemAdd = Purchase_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                                tItem = Items.objects.get(id = ele[7], cid = cmp)
+                                transaction = Item_transactions.objects.get(cid =cmp, type = 'Purchase',bill_number = bill.bill_number,item = ele[7])
+                                crQty = int(transaction.quantity)
+                                if crQty < int(ele[2]):
+                                    tItem.stock +=  abs(crQty - int(ele[2]))
+                                elif crQty > int(ele[2]):
+                                    tItem.stock -= abs(crQty - int(ele[2]))
+                                tItem.save()
+                                transaction.quantity = int(ele[2])
+                                transaction.save()
                         else:
-                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                            itemAdd = Purchase_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                            tItem = Items.objects.get(id = ele[7], cid = cmp)
+                            transaction = Item_transactions.objects.get(cid =cmp, type = 'Purchase',bill_number = bill.bill_number,item = ele[7])
+                            crQty = int(transaction.quantity)
+                            if crQty < int(ele[2]):
+                                tItem.stock +=  abs(crQty - int(ele[2]))
+                            elif crQty > int(ele[2]):
+                                tItem.stock -= abs(crQty - int(ele[2]))
+                            tItem.save()
+                            transaction.quantity = int(ele[2])
+                            transaction.save()
                             
                 except Exception as e:
                         print(e)
-                        mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                        mapped=zip(item,hsn,qty,price,tax,total,item_ids,ids)
                         mapped=list(mapped)
                         
                         for ele in mapped:
-                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
-
-
+                            created =Purchase_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                            tItem = Items.objects.get(id = ele[7], cid = cmp)
+                            transaction = Item_transactions.objects.get(cid =cmp, type = 'Purchase',bill_number = bill.bill_number,item = ele[7])
+                            crQty = int(transaction.quantity)
+                            if crQty < int(ele[2]):
+                                tItem.stock +=  abs(crQty - int(ele[2]))
+                            elif crQty > int(ele[2]):
+                                tItem.stock -= abs(crQty - int(ele[2]))
+                            tItem.save()
+                            transaction.quantity = int(ele[2])
+                            transaction.save()
 
             return redirect(viewPurchaseBill,id)
         except Exception as e:
@@ -854,6 +973,13 @@ def deletePurchaseBill(request, id):
         try:
             cmp = Company.objects.get(user = request.user.id)
             bill = Purchases.objects.get(cid = cmp, bill_no = id)
+            items = Purchase_items.objects.filter(cid = cmp, pid = bill)
+            for i in items:
+                purItem = Purchase_items.objects.get(cid = cmp, id = i.id)
+                itm = Items.objects.get(cid = cmp, id = purItem.item.id)
+                itm.stock -= purItem.quantity
+                itm.save()
+                Item_transactions.objects.filter(cid = cmp, bill_number = bill.bill_number, type = 'Purchase', item = itm).delete()
 
             Purchase_items.objects.filter(cid = cmp, pid = bill).delete()
 
@@ -974,12 +1100,11 @@ def createNewSale(request):
 
                 sid = Sales.objects.get( bill_no = sale.bill_no)
 
-                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total) and item and hsn and qty and price and tax and total:
-                    mapped = zip(item,hsn,qty,price,tax,total)
+                if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total)==len(ids) and ids and item and hsn and qty and price and tax and total:
+                    mapped = zip(item,hsn,qty,price,tax,total,ids)
                     mapped = list(mapped)
                     for ele in mapped:
-                        sItems = Sales_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],sid = sid, cid=cmp)
-
+                        sItems = Sales_items.objects.create(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5],sid = sid, cid=cmp, item = Items.objects.get(cid = cmp, id = ele[6]))
                 
                 # Add sales details in items transactions
                 if len(ids) == len(qty) and ids and qty:
@@ -987,7 +1112,7 @@ def createNewSale(request):
                     trns = list(itms)
                     for itm in trns:
                         tItem = Items.objects.get(id = itm[0], cid = cmp)
-                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Sale', date = sale.date, quantity = itm[1])
+                        transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Sale', date = sale.date, quantity = itm[1], bill_number = sale.bill_number)
                         tItem.stock -= int(itm[1])
                         tItem.save()
 
@@ -1094,6 +1219,7 @@ def updateSaleBill(request,id):
 
             bill.save()
 
+            ids = request.POST.getlist('sItems[]')
             item = request.POST.getlist("item[]")
             hsn  = request.POST.getlist("hsn[]")
             qty = request.POST.getlist("qty[]")
@@ -1102,38 +1228,76 @@ def updateSaleBill(request,id):
             total = request.POST.getlist("total[]")
             sales_item_ids = request.POST.getlist("id[]")
             item_ids = [int(id) for id in sales_item_ids]
-            print('item ids=====',item_ids)
 
             
             sales_item = Sales_items.objects.filter(sid = bill)
             object_ids = [obj.id for obj in sales_item]
 
             ids_to_delete = [obj_id for obj_id in object_ids if obj_id not in item_ids]
+            for id in ids_to_delete:
+                saleItem = Sales_items.objects.get(cid = cmp, id = id)
+                itm = Items.objects.get(cid = cmp, id = saleItem.item.id)
+                itm.stock += saleItem.quantity
+                itm.save()
+                Item_transactions.objects.filter(cid = cmp, bill_number = bill.bill_number, type = 'Sale', item = itm).delete()
+
             Sales_items.objects.filter(id__in=ids_to_delete).delete()
             
             count = Sales_items.objects.filter(sid = bill, cid = cmp).count()
-            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total):
+            if len(item)==len(hsn)==len(qty)==len(price)==len(tax)==len(total)==len(ids):
                 try:
-                    mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                    mapped=zip(item,hsn,qty,price,tax,total,item_ids,ids)
                     mapped=list(mapped)
                     
                     for ele in mapped:
                         if int(len(item))>int(count):
                             if ele[6] == 0:
-                                itemAdd= Sales_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,sid = bill ,cid = cmp)
+                                itemAdd= Sales_items.objects.create(name = ele[0], hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5] ,sid = bill ,cid = cmp, item = Items.objects.get(cid = cmp, id = ele[7]))
+                                tItem = Items.objects.get(id = ele[7], cid = cmp)
+                                transaction = Item_transactions.objects.create(cid = cmp, item = tItem, type = 'Sale', date = bill.date, quantity = ele[2], bill_number = bill.bill_number)
+                                tItem.stock -= int(ele[2])
+                                tItem.save()
                             else:
-                                itemAdd = Sales_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
+                                itemAdd = Sales_items.objects.filter( id = ele[6],cid = cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                                tItem = Items.objects.get(id = ele[7], cid = cmp)
+                                transaction = Item_transactions.objects.get(cid =cmp, type = 'Sale',bill_number = bill.bill_number,item = ele[7])
+                                crQty = int(transaction.quantity)
+                                if crQty < int(ele[2]):
+                                    tItem.stock -=  abs(crQty - int(ele[2]))
+                                elif crQty > int(ele[2]):
+                                    tItem.stock += abs(crQty - int(ele[2]))
+                                tItem.save()
+                                transaction.quantity = int(ele[2])
+                                transaction.save()
                         else:
-                            itemAdd = Sales_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
-                            
+                            itemAdd = Sales_items.objects.filter( id = ele[6],cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                            tItem = Items.objects.get(id = ele[7], cid = cmp)
+                            transaction = Item_transactions.objects.get(cid =cmp, type = 'Sale',bill_number = bill.bill_number,item = ele[7])
+                            crQty = int(transaction.quantity)
+                            if crQty < int(ele[2]):
+                                tItem.stock -=  abs(crQty - int(ele[2]))
+                            elif crQty > int(ele[2]):
+                                tItem.stock += abs(crQty - int(ele[2]))
+                            tItem.save()
+                            transaction.quantity = int(ele[2])
+                            transaction.save()
                 except Exception as e:
                         print(e)
-                        mapped=zip(item,hsn,qty,price,tax,total,item_ids)
+                        mapped=zip(item,hsn,qty,price,tax,total,item_ids,ids)
                         mapped=list(mapped)
                         
                         for ele in mapped:
-                            created =Sales_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5])
-
+                            created =Sales_items.objects.filter(id=ele[6] ,cid=cmp).update(name = ele[0],hsn=ele[1],quantity=ele[2],rate=ele[3],tax=ele[4],total=ele[5], item = Items.objects.get(cid = cmp, id = ele[7]))
+                            tItem = Items.objects.get(id = ele[7], cid = cmp)
+                            transaction = Item_transactions.objects.get(cid =cmp, type = 'Sale',bill_number = bill.bill_number,item = ele[7])
+                            crQty = int(transaction.quantity)
+                            if crQty < int(ele[2]):
+                                tItem.stock -=  abs(crQty - int(ele[2]))
+                            elif crQty > int(ele[2]):
+                                tItem.stock += abs(crQty - int(ele[2]))
+                            tItem.save()
+                            transaction.quantity = int(ele[2])
+                            transaction.save()
 
 
             return redirect(viewSalesBill,id)
@@ -1151,7 +1315,14 @@ def deleteSaleBill(request, id):
         try:
             cmp = Company.objects.get(user = request.user.id)
             bill = Sales.objects.get(cid = cmp, bill_no = id)
-            items = Sales_items.objects.filter(cid = cmp, sid = bill).delete()
+            items = Sales_items.objects.filter(cid = cmp, sid = bill)
+            for i in items:
+                saleItem = Sales_items.objects.get(cid = cmp, id = i.id)
+                itm = Items.objects.get(cid = cmp, id = saleItem.item.id)
+                itm.stock += saleItem.quantity
+                itm.save()
+                Item_transactions.objects.filter(cid = cmp, bill_number = bill.bill_number, type = 'Sale', item = itm).delete()
+            Sales_items.objects.filter(cid = cmp, sid = bill).delete()
             
             # Storing bill number to deleted table
             # if entry exists and lesser than the current, update and save => Only one entry per company
@@ -1244,4 +1415,41 @@ def goStockReports(request):
          except Exception as e:
              print(e)
              return redirect(goDashboard)
+    return redirect('/')
+
+
+def itemStockReport(request,id):
+    if request.user:
+        cmp = Company.objects.get(user = request.user.id)
+        try:
+            stockList = []
+            item = Items.objects.get(cid = cmp, id = id)
+            
+            stockIn = 0
+            stockOut = 0
+            for i in Item_transactions.objects.filter(cid = cmp, item = item).filter(type = 'Purchase'):
+                stockIn += i.quantity
+
+            for i in Item_transactions.objects.filter(cid = cmp, item = item).filter(type = 'Sale'):
+                stockOut += i.quantity
+
+            dict = {
+                'name':item.name,
+                'stockIn':stockIn,
+                'stockOut':stockOut,
+                'balance':item.stock
+            }
+            
+            stockList.append(dict)
+
+            context = {
+                'cmp':cmp,
+                'items':Items.objects.filter(cid = cmp),
+                'stock':stockList,
+                'balance':item.stock,
+            }
+            return render(request, 'stock_report.html',context)
+        except Exception as e:
+             print(e)
+             return redirect(goStockReports)
     return redirect('/')

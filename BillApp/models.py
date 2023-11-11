@@ -34,8 +34,9 @@ class Item_transactions(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
     item = models.ForeignKey(Items, on_delete=models.CASCADE)
     type = models.CharField(max_length=100)
-    date = models.DateField(auto_now_add=True, auto_now=False, blank=True, null= True)
+    date = models.DateField(blank=True, null= True)
     quantity = models.IntegerField()
+    bill_number = models.CharField(max_length=50, null=True , blank=True)
 
 class Purchases(models.Model):
     bill_no = models.AutoField(('bill_no'),primary_key=True)
@@ -59,7 +60,7 @@ class DeletedPurchases(models.Model):
 class Purchase_items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
     pid = models.ForeignKey(Purchases, on_delete=models.CASCADE)
-    # item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
+    item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
     name = models.CharField(max_length=200)
     hsn = models.CharField(max_length=15)
     quantity = models.IntegerField()
@@ -83,7 +84,7 @@ class Sales(models.Model):
 class Sales_items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
     sid = models.ForeignKey(Sales, on_delete=models.CASCADE)
-    # item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
+    item = models.ForeignKey(Items, on_delete=models.CASCADE,null=True, blank=True)
     name = models.CharField(max_length=200)
     hsn = models.CharField(max_length=15)
     quantity = models.IntegerField()

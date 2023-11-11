@@ -104,11 +104,12 @@
                         </div>
                         <div class="row px-2">
                             <div class="col-md-6 d-flex justify-content-start">
-                                <select name="item" id="item_dropdown" class="form-control w-50">
-                                    <option value="" >Search Items..</option>
-                                {% for i in items %}
-                                <option value="{{i.id}}" >{{i.name}}</option>
-                                {% endfor %}
+                                <select name="item" id="item_dropdown" class="form-control w-50" onchange="window.location.href='/item_stock_report/'+$(this).val()">
+                                    <option value="" selected>Search Items..</option>
+                                    <option value="0">All Items</option>
+                                    {% for i in items %}
+                                        <option value="{{i.id}}" >{{i.name}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end">
@@ -147,6 +148,11 @@
                                 </tbody>
                             </table>
                         </div>
+                        {% if balance %}
+                        <div class="balance_stock_section">
+                            <h5>Stock Remaining: <span class="fs-2 text-success">{{balance}}</span></h5>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -199,6 +205,10 @@
         }
     });
     
+    // $(document).on('change', '#item_dropdown',function(){
+    //     var id = $(this).val()
+        
+    // });
 
     function ExportToExcel(type, fn, dl) {
         var elt = document.getElementById('stock_reports_table');

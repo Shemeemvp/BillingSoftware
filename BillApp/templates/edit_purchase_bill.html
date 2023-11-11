@@ -181,23 +181,11 @@
                                                     
                                                 </div>
                                             </div>
-
-                                            <!-- <div class="d-flex">
-                                                <select required name='item[]' id="item{{forloop.counter}}" class="form-control item">
-                                                    <option value="">Select Item</option>
-                                                    {% for i in items %}
-                                                    {% if i.name == p.name %}
-                                                        <option selected value="{{i.name}}">{{i.name}}</option>
-                                                    {% else %}
-                                                    <option value="{{i.name}}">{{i.name}}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                            </select>
-                                            </div> -->
-                                        
-                                        
                                         </td>
-                                        <td><input type="number" name='hsn[]' id="hsn{{forloop.counter}}" placeholder='HSN Code' value="{{p.hsn}}" class="form-control"/></td>
+                                        <td>
+                                            <input type="number" name='hsn[]' id="hsn{{forloop.counter}}" placeholder='HSN Code' value="{{p.hsn}}" class="form-control"/>
+                                            <input type="text" name="pItems[]" id="pitem1" value="{{p.item.id}}" hidden>
+                                        </td>
                                         <td><input type="number" name='qty[]'placeholder='Quantity' id="qty{{forloop.counter}}" value="{{p.quantity}}" class="form-control qty" min="1" required/></td>
                                         <td><input type="number" name='price[]' id="price{{forloop.counter}}" placeholder='Unit Price' value="{{p.rate}}" class="form-control price" step="0.00" min="0" /></td>
                                         <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" value="{{p.tax}}" id="tax{{forloop.counter}}"></td>
@@ -333,6 +321,7 @@
                 document.getElementById('hsn'+n).value = response.hsn;
                 document.getElementById('price'+n).value = response.pur_rate;
                 document.getElementById('tax'+n).value = response.tax;
+                document.getElementById('pitem'+n).value = response.id;
             }
         },
         });
@@ -408,7 +397,10 @@
                             </div>
                         </div>
                     </td>
-                    <td><input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/></td>
+                    <td>
+                        <input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/>
+                        <input type="text" name="pItems[]" id="pitem${roinc}" hidden>
+                    </td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
                     <td><input type="number" name='price[]' id="price${roinc}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                     <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax${roinc}"></td>

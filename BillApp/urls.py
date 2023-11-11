@@ -17,6 +17,7 @@ urlpatterns = [
 
 
     path('go_dashboard', views.goDashboard, name='goDashboard'),
+    path('redirect_page',views.redirectPage, name='redirectPage'),
 
     path('show_items',views.goItems, name='goItems'),
     path('show_item_details/<int:id>',views.showItemData, name= 'showItemData'),
@@ -60,5 +61,6 @@ urlpatterns = [
     path('delete_transaction/<int:id>',views.deleteTransaction, name='deleteTransaction'),
 
     path('stock_reports',views.goStockReports, name='goStockReports'),
+    path('item_stock_report/<int:id>',views.itemStockReport, name='itemStockReport'),
 
 ]

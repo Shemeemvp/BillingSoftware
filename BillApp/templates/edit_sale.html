@@ -179,7 +179,10 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><input type="number" name='hsn[]' value="{{p.hsn}}" id="hsn{{forloop.counter}}" placeholder='HSN Code' class="form-control"/></td>
+                                        <td>
+                                            <input type="number" name='hsn[]' value="{{p.hsn}}" id="hsn{{forloop.counter}}" placeholder='HSN Code' class="form-control"/>
+                                            <input type="text" name="sItems[]" id="sitem1" value="{{p.item.id}}" hidden>
+                                        </td>
                                         <td><input type="number" name='qty[]' value="{{p.quantity}}" placeholder='Quantity' id="qty{{forloop.counter}}" value="" class="form-control qty" min="1" required/></td>
                                         <td><input type="number" name='price[]' value="{{p.rate}}" id="price{{forloop.counter}}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                                         <td><input type="text" name="tax[]" value="{{p.tax}}" class="form-control tax" placeholder="VAT %" id="tax1"></td>
@@ -315,6 +318,7 @@
                 document.getElementById('hsn'+n).value = response.hsn;
                 document.getElementById('price'+n).value = response.sale_rate;
                 document.getElementById('tax'+n).value = response.tax;
+                document.getElementById('sitem'+n).value = response.id;
             }
         },
         });
@@ -387,7 +391,10 @@
                             </div>
                         </div>
                     </td>
-                    <td><input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/></td>
+                    <td>
+                        <input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/>
+                        <input type="text" name="sItems[]" id="sitem${roinc}" hidden>
+                    </td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
                     <td><input type="number" name='price[]' id="price${roinc}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
                     <td><input type="text" name="tax[]" class="form-control tax" placeholder="VAT %" id="tax${roinc}"></td>

@@ -260,11 +260,12 @@
                                     <td class="three_dot_menu">
                                         <div class="trns_table_menu">
                                             <i class="fa-solid fa-ellipsis-vertical dropdown-button"></i>
+                                            {% if i.type != 'Sale' and i.type != 'Purchase' %}
                                             <ul class="trans-dropdown-menu">
                                                 <li><a href="{% url 'editTransaction' i.id %}">Edit</a></li>
                                                 <li><a href="{% url 'deleteTransaction' i.id %}" onclick="return confirm('Are you sure you want to delete this transaction.?')">Delete</a></li>
-                                                <!-- <li><a href="#">Duplicate</a></li> -->
                                             </ul>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>

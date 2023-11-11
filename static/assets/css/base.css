@@ -34,6 +34,9 @@ main{
     opacity: 1;
 }
 
+.nav_search_bar{
+    width: 40%;
+}
 
 /*** Button ***/
 .btn {

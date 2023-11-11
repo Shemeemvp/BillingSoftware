@@ -82,18 +82,20 @@
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h6 class="mb-0">Stock In hand Reports</h6>
-                    <a href="">Show All</a>
+                    <!-- <a href="">Show All</a> -->
                 </div>
-                <canvas id="worldwide-sales"></canvas>
+                <canvas id="stockinhand-reports"></canvas>
+                <span>Last 5 Years</span>
             </div>
         </div>
         <div class="col-sm-12 col-xl-6">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h6 class="mb-0">Sale & Purchase</h6>
-                    <a href="">Show All</a>
+                    <!-- <a href="">Show All</a> -->
                 </div>
-                <canvas id="salse-revenue"></canvas>
+                <canvas id="sales-purchase"></canvas>
+                <span>Last 5 Years</span>
             </div>
         </div>
     </div>
@@ -307,5 +309,78 @@
             }
         }
     });
+</script>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    (function ($) {
+    "use strict";
+
+    // Chart Global Color
+    // Chart.defaults.color = "#6C7293";
+    Chart.defaults.color = "#003e27";
+    Chart.defaults.borderColor = "#000000";
+
+    // Sales & Purchase Chart
+        var ctx2 = $("#sales-purchase").get(0).getContext("2d");
+        var myChart2 = new Chart(ctx2, {
+            type: "line",
+            data: {
+                labels: JSON.parse(`{{label}}`),
+                datasets: [{
+                        label: "Purchase",
+                        data: JSON.parse(`{{purchaseData}}`),
+                        backgroundColor: "#003e27",
+                        fill: true
+                    },
+                    {
+                        label: "Sales",
+                        data: JSON.parse(`{{salesData}}`),
+                        backgroundColor: "#218560",
+                        fill: true
+                    }
+                ]
+                },
+            options: {
+                responsive: true
+            }
+        });
+
+    // Stock in hand reports
+    var ctx1 = $("#stockinhand-reports").get(0).getContext("2d");
+    var myChart1 = new Chart(ctx1, {
+        type: "bar",
+        data: {
+            labels: JSON.parse(`{{label}}`),
+            datasets: [{
+                    label: "Stock In",
+                    data: JSON.parse(`{{stockIn}}`),
+                    backgroundColor: "#003e27"
+                },
+                {
+                    label: "Stock Out",
+                    data: JSON.parse(`{{stockOut}}`),
+                    backgroundColor: "#09593c"
+                },
+                {
+                    label: "Balance",
+                    data: JSON.parse(`{{stockBalance}}`),
+                    backgroundColor: "#218560"
+                }
+            ]
+            },
+        options: {
+            responsive: true
+        }
+    });
+
+
+    
+
+    
+})(jQuery);
+
+
 </script>
 {% endblock %}
