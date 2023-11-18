@@ -103,10 +103,10 @@ def goDashboard(request):
 
             context = {
                 "cmp": cmp,
-                "todSale": todSale,
-                "totSale": totSale,
-                "todPurchase": todPurchase,
-                "totPurchase": totPurchase,
+                "todSale": f"{todSale:.2f}",
+                "totSale": f"{totSale:.2f}",
+                "todPurchase": f"{todPurchase:.2f}",
+                "totPurchase": f"{totPurchase:.2f}",
                 'salesData':data1,
                 'purchaseData':data2,
                 'stockIn':data3,
@@ -399,7 +399,7 @@ def createNewItem(request):
 
                 # Opening stock transaction
                 transaction = Item_transactions(
-                    cid=cmp, item=item, type="Opening Stock", quantity=item.stock
+                    cid=cmp, item=item, type="Opening Stock",date = item.date, quantity=item.stock
                 )
                 transaction.save()
 
@@ -668,7 +668,7 @@ def addNewPurchase(request):
             
             # Fetching last bill and assigning upcoming bill no as current + 1
             # Also check for if any bill is deleted and bill no is continuos w r t the deleted bill
-            latest_bill = Purchases.objects.filter(cid = cmp).order_by('-bill_number').first()
+            latest_bill = Purchases.objects.filter(cid = cmp).order_by('-bill_no').first()
 
             if latest_bill:
                 last_number = int(latest_bill.bill_number)
@@ -988,7 +988,7 @@ def deletePurchaseBill(request, id):
             if DeletedPurchases.objects.filter(cid = cmp).exists():
                 deleted = DeletedPurchases.objects.get(cid = cmp)
                 if deleted:
-                    if bill.bill_number > deleted.bill_number:
+                    if int(bill.bill_number) > int(deleted.bill_number):
                         deleted.bill_number = bill.bill_number
                         deleted.save()
                 
@@ -1033,7 +1033,7 @@ def addNewSale(request):
 
             # Fetching last bill and assigning upcoming bill no as current + 1
             # Also check for if any bill is deleted and bill no is continuos w r t the deleted bill
-            latest_bill = Sales.objects.filter(cid = cmp).order_by('-bill_number').first()
+            latest_bill = Sales.objects.filter(cid = cmp).order_by('-bill_no').first()
 
             if latest_bill:
                 last_number = int(latest_bill.bill_number)
@@ -1330,7 +1330,7 @@ def deleteSaleBill(request, id):
             if DeletedSales.objects.filter(cid = cmp).exists():
                 deleted = DeletedSales.objects.get(cid = cmp)
                 if deleted:
-                    if bill.bill_number > deleted.bill_number:
+                    if int(bill.bill_number) > int(deleted.bill_number):
                         deleted.bill_number = bill.bill_number
                         deleted.save()
                 

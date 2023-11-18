@@ -20,8 +20,8 @@ class Items(models.Model):
     hsn = models.IntegerField()
     unit = models.CharField(max_length=100)
     tax = models.CharField(max_length=50)
-    sale_price = models.DecimalField(decimal_places=2,max_digits=8)
-    purchase_price = models.DecimalField(decimal_places=2,max_digits=8)
+    sale_price = models.FloatField(null=True, blank= True)
+    purchase_price = models.FloatField(null=True, blank= True)
     stock = models.IntegerField()
     date = models.DateField(auto_now_add=True, auto_now=False, null=True, blank= True)
 
@@ -46,10 +46,10 @@ class Purchases(models.Model):
     party_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=15)
     gstin = models.CharField(max_length=15)
-    subtotal = models.DecimalField(max_digits=10,decimal_places=2)
-    tax = models.DecimalField(max_digits=10,decimal_places=2)
-    adjustment = models.DecimalField(max_digits=10, decimal_places=2)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.FloatField(null=True, blank= True)
+    tax = models.FloatField(null=True, blank= True)
+    adjustment = models.FloatField(null=True, blank= True)
+    total_amount = models.FloatField(null=True, blank= True)
     # deleted_bill_no = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='deleted_bills')
 
 class DeletedPurchases(models.Model):
@@ -76,10 +76,10 @@ class Sales(models.Model):
     party_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=15)
     gstin = models.CharField(max_length=15)
-    subtotal = models.DecimalField(max_digits=10,decimal_places=2)
-    tax = models.DecimalField(max_digits=10,decimal_places=2)
-    adjustment = models.DecimalField(max_digits=10, decimal_places=2)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.FloatField(null=True, blank= True)
+    tax = models.FloatField(null=True, blank= True)
+    adjustment = models.FloatField(null=True, blank= True)
+    total_amount = models.FloatField(null=True, blank= True)
 
 class Sales_items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
