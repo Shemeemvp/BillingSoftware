@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from random import randint
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
+from io import BytesIO
 from django.db import transaction
 from django.conf import settings
 from django.db import connection
@@ -271,10 +272,10 @@ def forgotPassword(request):
             user.save()
 
             # SEND MAIL CODE
-            # subject = "Forgot Password"
-            # message = f"Dear user,\nYour Password has been reset as you requested. You can login with the password given below\n\nPassword:{password}"
-            # recipient = user.email
-            # send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
+            subject = "Forgot Password"
+            message = f"Dear user,\nYour Password has been reset as you requested. You can login with the password given below\n\nPassword:{password}"
+            recipient = user.email
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
 
 
             return JsonResponse({'message':'success'})
@@ -1453,3 +1454,44 @@ def itemStockReport(request,id):
              print(e)
              return redirect(goStockReports)
     return redirect('/')
+
+
+def shareSalesBillToEmail(request,id):
+    if request.user:
+        try:
+            if request.method == 'POST':
+                emails_string = request.POST['email_ids']
+
+                # Split the string by commas and remove any leading or trailing whitespace
+                emails_list = [email.strip() for email in emails_string.split(',')]
+                email_message = request.POST['email_message']
+                # print(emails_list)
+
+                cmp = Company.objects.get( user = request.user.id)
+                bill = Sales.objects.get(cid = cmp, bill_no = id)
+                items = Sales_items.objects.filter(cid = cmp, sid = bill)
+            
+                total = bill.total_amount
+                words_total = num2words(total)
+            
+                context = {'bill': bill, 'cmp': cmp,'items':items, 'total':words_total}
+                template_path = 'sales_bill_pdf.html'
+                template = get_template(template_path)
+
+                html  = template.render(context)
+                result = BytesIO()
+                pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)#, link_callback=fetch_resources)
+                pdf = result.getvalue()
+                filename = f'Sales Bill - {bill.bill_number}.pdf'
+                # to_emails = ['shemeemmuhamed132@gmail.com']
+                subject = f"SALES BILL - {bill.bill_number}"
+                email = EmailMessage(subject, f"Hi,\nPlease find the attached SALES BILL - Bill-{bill.bill_number}. \n{email_message}\n\n--\nRegards,\n{cmp.company_name}\n{cmp.address}\n{cmp.state} - {cmp.country}\n{cmp.phone_number}", from_email=settings.EMAIL_HOST_USER, to=emails_list)
+                email.attach(filename, pdf, "application/pdf")
+                email.send(fail_silently=False)
+
+                messages.success(request, 'Bill has been share via email successfully..!')
+                return redirect(viewSalesBill,id)
+        except Exception as e:
+            print(e)
+            messages.error(request, f'{e}')
+            return redirect(viewSalesBill, id)

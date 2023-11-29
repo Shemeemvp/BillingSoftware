@@ -44,6 +44,7 @@ urlpatterns = [
     path('update_sale_bill/<int:id>',views.updateSaleBill, name='updateSaleBill'),
     path('delete_sale_bill/<int:id>',views.deleteSaleBill, name='deleteSaleBill'),
     path('sales_bill_pdf/<int:id>',views.salesBillPdf, name='salesBillPdf'),
+    path('share_sales_bill_to_email/<int:id>',views.shareSalesBillToEmail, name= 'shareSalesBillToEmail'),
 
 
     path('add_new_item',views.addNewItem, name='addNewItem'),

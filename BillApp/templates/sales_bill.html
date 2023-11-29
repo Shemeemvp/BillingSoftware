@@ -209,274 +209,288 @@
         display: none;
     }
 
+    .submitShareEmailBtn {
+        background: #c6aa589e;
+        border: 1px solid white;
+        border-radius: 4px;
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+    .submitShareEmailBtn:hover{
+        background: #C6AA58;
+    }
+
 </style>
 <div class="container-fluid">
-<style>
-    main{
-        background: #fff;
-    }
-</style>
-<div class="purchases_section py-4">
-    <div class="row">
-        <div class="col-md-4 col-sm-12">
-            <div class="all_purchases">
-                <div class="all_purchases_table px-1 py-2 border rounded-1">
-                    <div class="top d-flex justify-content-start px-2 py-3">
-                        <div class="sales_head">
-                            <h4>All Sales</h4>
+    <style>
+        main{
+            background: #fff;
+        }
+    </style>
+    <div class="purchases_section py-4">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="all_purchases">
+                    <div class="all_purchases_table px-1 py-2 border rounded-1">
+                        <div class="top d-flex justify-content-start px-2 py-3">
+                            <div class="sales_head">
+                                <h4>All Sales</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row px-2">
-                        <div class="col-md-12 d-flex justify-content-start">
-                            <input type="text" id="purchases_search_box" placeholder="Search..." class="form-control" autocomplete="off">
-                            <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewSale' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
+                        <div class="row px-2">
+                            <div class="col-md-12 d-flex justify-content-start">
+                                <input type="text" id="purchases_search_box" placeholder="Search..." class="form-control" autocomplete="off">
+                                <button class="btn add_new_btn ms-2" onclick="window.location.href=`{% url 'addNewSale' %}`"><i class="fa fa-plus me-2"></i>ADD</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="purchases_table_section table-responsive">
-                        <table class="table table-hover mt-2 purchases_table" id="purchases_table">
-                            <!-- <thead>
-                            <tr>
-                                <th scope="col" class="col-2">BILL NO.</th>
-                                <th scope="col" class="col-2">TOTAL</th>
-                            </tr>
-                            </thead> -->
-                            <tbody>
-                                {% for i in sales %}
-                                <tr class="purchase_bills" onclick="window.location.href='/view_sales_bill/{{i.bill_no}}'">
-                                    <td class="itm_id" hidden>{{i.bill_number}}</td>
-                                    <td scope="col" class="col-8"><span>Bill:</span><br> BILL - {{i.bill_number}}</td>
-                                    <td scope="col" class="col-4"><span>Total:</span><br><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
+                        <div class="purchases_table_section table-responsive">
+                            <table class="table table-hover mt-2 purchases_table" id="purchases_table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="col-8">BILL NO.</th>
+                                    <th scope="col" class="col-2">TOTAL</th>
                                 </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for i in sales %}
+                                    <tr class="purchase_bills" onclick="window.location.href='/view_sales_bill/{{i.bill_no}}'">
+                                        <td class="itm_id" hidden>{{i.bill_number}}</td>
+                                        <td scope="col" class="col-8">BILL - {{i.bill_number}}</td>
+                                        <td scope="col" class="col-4"><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-8 col-sm-12">
-            <div class="purchase_bill_view">
-                <div class="purchase_bill px-1 py-2 border rounded-1">
-                    <div class="top d-flex justify-content-start px-2 py-3">
-                        <div class="sl_head">
-                            <h3>BILL - {{bill.bill_number}}</h3>
-                        </div>
-                    </div>
-                    <div class="row px-2">
-                        <div class="col-md-12 d-flex justify-content-between">
-                            <div class="template_switch">
-                                <button id="template_btn" class="btn btn-sm" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
-                                <button id="slip_btn" class="btn btn-sm" title="SLIP"><i class="fas fa-receipt me-1"></i></button>
-                            </div>
-                            <div class="action_btns">
-                                <a href="{% url 'editSalesBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
-                                <a href="{% url 'deleteSaleBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_number}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
-                                
-                                <button class="btn btn-sm action_btn" id="templatePrintButton" onclick="printSection('printBill')"><i class="fas fa-print me-1"></i>PRINT</button>
-                                <a href="{% url 'salesBillPdf' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fas fa-file-pdf me-1"></i>PDF</button></a>
-                                <div class="share-dropdown">
-                                    <button class="btn btn-sm action_btn"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
-                                    <ul class="share-dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li>{% post_to_whatsapp object_or_url "WhatsApp" %}</li>
-                                        <li>{% send_email object.title "New: {{object.title}}. Check it out!" object_or_url "Email" %}</li>
-                                    </ul>
-                                </div>
+            <div class="col-md-8 col-sm-12">
+                <div class="purchase_bill_view">
+                    <div class="purchase_bill px-1 py-2 border rounded-1">
+                        <div class="top d-flex justify-content-start px-2 py-3">
+                            <div class="sl_head">
+                                <h3>BILL - {{bill.bill_number}}</h3>
                             </div>
                         </div>
-                    </div>
-                    <div class="bill_template_section">
-                        
-                        <!-- Bill view -->
-                        
-                        <div  id="printBill" class="printTemplates template1" style="display: block;">
-                            <div class="page bg-light px-3 py-2" >
-                                <div class="row px-3 py-4" style="background-color: #433f42;">
-                                    <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
-                                    </div>
-                                    <div class="col-md-4 d-flex justify-content-center align-items-center bill_header">
-                                        <center class="h4 text-white"><b>SALES BILL</b></center>
-                                    </div>  
-                                    <div class="col-md-4 d-flex justify-content-end">
-                                        <div class="text-white">
-                                            <p class="mb-0">BILL # <b>{{bill.bill_number }}</b></p>
-                                            <p class="mb-0">Date: <b>{{ bill.date | date:'d-m-Y' }}</b></p>
-                                        </div>
+                        <div class="row px-2">
+                            <div class="col-md-12 d-flex justify-content-between">
+                                <div class="template_switch">
+                                    <button id="template_btn" class="btn btn-sm" title="TEMPLATE"><i class="fas fa-file-alt me-1"></i></button>
+                                    <button id="slip_btn" class="btn btn-sm" title="SLIP"><i class="fas fa-receipt me-1"></i></button>
+                                </div>
+                                <div class="action_btns">
+                                    <a href="{% url 'editSalesBill' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fa-solid fa-pen-to-square me-1"></i>EDIT</button></a>
+                                    <a href="{% url 'deleteSaleBill' bill.bill_no %}"><button onclick="return confirm(`Are You Sure you want to delete BILL - '{{bill.bill_number}}'?\nAll related data will get deleted permanently.!`)" class="btn btn-sm action_btn"><i class="fa-solid fa-trash me-1"></i>DELETE</button></a>
+                                    
+                                    <button class="btn btn-sm action_btn" id="templatePrintButton" onclick="printSection('printBill')"><i class="fas fa-print me-1"></i>PRINT</button>
+                                    <a href="{% url 'salesBillPdf' bill.bill_no %}"><button class="btn btn-sm action_btn"><i class="fas fa-file-pdf me-1"></i>PDF</button></a>
+                                    <div class="share-dropdown">
+                                        <button class="btn btn-sm action_btn"><i class="fas fa-share-nodes me-1"></i>SHARE</button>
+                                        <ul class="share-dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li>{% post_to_whatsapp object_or_url "WhatsApp" %}</li>
+                                            <!-- <li>{% send_email object.title "New: {{object.title}}. Check it out!" object_or_url "Email" %}</li> -->
+                                            <li><a href="#shareBillEmail" data-bs-toggle="modal">Email</a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="row mt-5 px-2 bg-light">
-                                    <div class="col-md-6">
-                                        <h5 class="text-secondary" style="font-weight: bold;">{{cmp.company_name }}</h5>
-                                        <p class="address" style="font-weight: normal; color: #000;"> {{cmp.address}}<br>
-                                            {{cmp.state}} - {{cmp.country}}<br>
-                                            {{cmp.user.email}}<br>
-                                            {{cmp.phone_number}}<br>
-                                        </p> 
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div>
-                                            <p class="text-muted mt-2 mb-0" style="color: #000;">Party Name: <span style="float: right;"><b>{{bill.party_name}}</b></span></p>
-                                            <p class="text-muted mb-0" style="color: #000;">Contact: <span style="float: right;"><b>{{bill.phone_number}}</b></span></p>
-                                            <p class="text-muted mb-0" style="color: #000;">GSTIN: <span style="float: right;"><b>{{bill.gstin}}</b></span></p>
+                            </div>
+                        </div>
+                        <div class="bill_template_section">
+                            
+                            <!-- Bill view -->
+                            
+                            <div  id="printBill" class="printTemplates template1" style="display: block;">
+                                <div class="page bg-light px-3 py-2" >
+                                    <div class="row px-3 py-4" style="background-color: #433f42;">
+                                        <div id="ember2512" class="col-md-4 d-flex justify-content-start tooltip-container ember-view ribbon text-ellipsis">
+                                        </div>
+                                        <div class="col-md-4 d-flex justify-content-center align-items-center bill_header">
+                                            <center class="h4 text-white"><b>SALES BILL</b></center>
+                                        </div>  
+                                        <div class="col-md-4 d-flex justify-content-end">
+                                            <div class="text-white">
+                                                <p class="mb-0">BILL # <b>{{bill.bill_number }}</b></p>
+                                                <p class="mb-0">Date: <b>{{ bill.date | date:'d-m-Y' }}</b></p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="row mt-5 px-2 bg-light">
+                                        <div class="col-md-6">
+                                            <h5 class="text-secondary" style="font-weight: bold;">{{cmp.company_name }}</h5>
+                                            <p class="address" style="font-weight: normal; color: #000;"> {{cmp.address}}<br>
+                                                {{cmp.state}} - {{cmp.country}}<br>
+                                                {{cmp.user.email}}<br>
+                                                {{cmp.phone_number}}<br>
+                                            </p> 
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                {% if bill.party_name|default:"" != "" %}<p class="text-muted mt-2 mb-0" style="color: #000;">Party Name: <span style="float: right;"><b>{{bill.party_name}}</b></span></p>{% endif %}
+                                                {% if bill.phone_number|default:"" != "" %}<p class="text-muted mb-0" style="color: #000;">Party Contact: <span style="float: right;"><b>{{bill.phone_number}}</b></span></p>{% endif %}
+                                                {% if bill.gstin|default:"" != "" %}<p class="text-muted mb-0" style="color: #000;">Party GSTIN: <span style="float: right;"><b>{{bill.gstin}}</b></span></p>{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <table class="table table-hover table-bordered border-dark table-secondary">
+                                                <thead class="table-dark">
+                                                    <tr class="templatetablehead">
+                                                        <th class="text-center">Items</th>
+                                                        <th class="text-center">HSN Code</th>
+                                                        <th class="text-center">Quantity</th>
+                                                        <th class="text-center">Rate</th>
+                                                        <th class="text-center">Tax</th>
+                                                        <th class="text-center">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for itm in items %}
+                                                        <tr>
+                                                            <td class="text-center">{{ itm.name }}</td>
+                                                            <td class="text-center">{{ itm.hsn }}</td>
+                                                            <td class="text-center">{{ itm.quantity }}</td>
+                                                            <td class="text-center">{{ itm.rate  }}</td>
+                                                            <td class="text-center">{{ itm.tax  }}</td>
+                                                            <td class="text-center">{{ itm.total }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-4"></div>
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr >
+                                                        <td style="color: #000;">Sub Total</td>
+                                                        <td style="color: #000;">:</td>
+                                                        <td class="text-center" style="color: #000;">{{bill.subtotal}}</td>
+                                                    </tr>
+                                                    <tr >
+                                                        <td style="color: #000;">Tax</td>
+                                                        <td style="color: #000;">:</td>
+                                                        <td class="text-center" style="color: #000;">{{bill.tax}}</td>
+                                                    </tr>
+                                                    {% if bill.adjustment != 0.0 %}
+                                                    <tr >
+                                                        <td style="color: #000;">Adjustment</td>
+                                                        <td style="color: #000;">:</td>
+                                                        <td class="text-center" style="color: #000;">{{bill.adjustment}}</td>
+                                                    </tr>
+                                                    {%endif%}
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr >
+                                                        <th style="color: #000;">Grand Total</th>
+                                                        <th style="color: #000;">:</th>
+                                                        <th class="text-center" style="color: #000;">{{bill.total_amount}}</th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> 
+                                    </div>
+                                    <div class="row container-fluid  px-4 mb-5">
+                                        <div class="col-sm-4 m-0 p-0"><label style="color: #000;"><b>Authorized Signature</b></label></div>
+                                        <div class="col-sm-4 m-0 p-0 text-dark">________________________</div>
+                                        <div class="col-sm-4 m-0 p-0"></div>
+                                    </div>
                                 </div>
-                        
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <table class="table table-hover table-bordered border-dark table-secondary">
-                                            <thead class="table-dark">
-                                                <tr class="templatetablehead">
-                                                    <th class="text-center">Items</th>
-                                                    <th class="text-center">HSN Code</th>
-                                                    <th class="text-center">Quantity</th>
-                                                    <th class="text-center">Rate</th>
-                                                    <th class="text-center">Tax</th>
-                                                    <th class="text-center">Total</th>
+                            </div>
+
+                            <!-- Bill Slip view -->
+
+                            <div class="saleBillSlip" id="printSlip" style="display: none;">
+                                <div class="slip-container bg-light" id="slip_container">
+                                    <div class="slip">
+                                        <h5 class="fw-bold text-center">{{cmp.company_name}}</h5>
+                                        <div class="address text-center">
+                                            <p>{{cmp.address}}</p>
+                                            <p>{{cmp.state}}, {{cmp.country}}</p>
+                                            <p>{{cmp.phone_number}}</p>
+                                            <p>GSTIN: {{cmp.gst_number}}</p>
+                                        </div>
+                                        <div class="divider">
+                                        </div>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-start" style="border-bottom-width: 0px !important;">Item</th>
+                                                    <!-- <th class="text-center">Rate</th>
+                                                    <th class="text-center">Quantity</th> -->
+                                                    <th class="text-end" style="border-bottom-width: 0px !important;">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {% for itm in items %}
                                                     <tr>
-                                                        <td class="text-center">{{ itm.name }}</td>
-                                                        <td class="text-center">{{ itm.hsn }}</td>
-                                                        <td class="text-center">{{ itm.quantity }}</td>
-                                                        <td class="text-center">{{ itm.rate  }}</td>
-                                                        <td class="text-center">{{ itm.tax  }}</td>
-                                                        <td class="text-center">{{ itm.total }}</td>
+                                                        <td style="border-bottom-width: 0px !important;" class="text-start">{{ itm.name }}</td>
+                                                        <!-- <td class="text-center">{{ itm.rate  }}</td>
+                                                        <td class="text-center">{{ itm.quantity }}</td> -->
+                                                        <td style="border-bottom-width: 0px !important;" class="text-end"><span>&#8377; </span>{{ itm.total }}</td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-3">
-                                    <div class="col-4"></div>
-                                    <div class="col-4"></div>
-                                    <div class="col-4">
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr >
-                                                    <td style="color: #000;">Sub Total</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <td class="text-center" style="color: #000;">{{bill.subtotal}}</td>
-                                                </tr>
-                                                <tr >
-                                                    <td style="color: #000;">Tax</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <td class="text-center" style="color: #000;">{{bill.tax}}</td>
-                                                </tr>
-                                                {% if bill.adjustment != 0.0 %}
-                                                <tr >
-                                                    <td style="color: #000;">Adjustment</td>
-                                                    <td style="color: #000;">:</td>
-                                                    <td class="text-center" style="color: #000;">{{bill.adjustment}}</td>
-                                                </tr>
-                                                {%endif%}
-                                            </tbody>
-                                        </table>
-                                        <hr>
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                                <tr >
-                                                    <th style="color: #000;">Grand Total</th>
-                                                    <th style="color: #000;">:</th>
-                                                    <th class="text-center" style="color: #000;">{{bill.total_amount}}</th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div> 
-                                </div>
-                                <div class="row container-fluid  px-4 mb-5">
-                                    <div class="col-sm-4 m-0 p-0"><label style="color: #000;"><b>Authorized Signature</b></label></div>
-                                    <div class="col-sm-4 m-0 p-0 text-dark">________________________</div>
-                                    <div class="col-sm-4 m-0 p-0"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bill Slip view -->
-
-                        <div class="saleBillSlip" id="printSlip" style="display: none;">
-                            <div class="slip-container bg-light" id="slip_container">
-                                <div class="slip">
-                                    <h5 class="fw-bold text-center">{{cmp.company_name}}</h5>
-                                    <div class="address text-center">
-                                        <p>{{cmp.address}}</p>
-                                        <p>{{cmp.state}}, {{cmp.country}}</p>
-                                        <p>{{cmp.phone_number}}</p>
-                                        <p>GSTIN: {{cmp.gst_number}}</p>
-                                    </div>
-                                    <div class="divider">
-                                    </div>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-start" style="border-bottom-width: 0px !important;">Item</th>
-                                                <!-- <th class="text-center">Rate</th>
-                                                <th class="text-center">Quantity</th> -->
-                                                <th class="text-end" style="border-bottom-width: 0px !important;">Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for itm in items %}
-                                                <tr>
-                                                    <td style="border-bottom-width: 0px !important;" class="text-start">{{ itm.name }}</td>
-                                                    <!-- <td class="text-center">{{ itm.rate  }}</td>
-                                                    <td class="text-center">{{ itm.quantity }}</td> -->
-                                                    <td style="border-bottom-width: 0px !important;" class="text-end"><span>&#8377; </span>{{ itm.total }}</td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                    
-                    
-                    
-                                    <div class="subtot mt-5">
-                                        <div class="subtot-item d-flex justify-content-between">
-                                            <span>Subtotal</span>
-                                            <span><span>&#8377; </span>{{bill.subtotal}}</span>
+                        
+                        
+                        
+                                        <div class="subtot mt-5">
+                                            <div class="subtot-item d-flex justify-content-between">
+                                                <span>Subtotal</span>
+                                                <span><span>&#8377; </span>{{bill.subtotal}}</span>
+                                            </div>
+                                            <div class="subtot-item d-flex justify-content-between">
+                                                <span>Tax</span>
+                                                <span><span>&#8377; </span>{{bill.tax}}</span>
+                                            </div>
+                                            {% if bill.adjustment != 0.0 %}
+                                            <div class="subtot-item d-flex justify-content-between">
+                                                <span>Adjustment</span>
+                                                <span><span>&#8377; </span>{{bill.adjustment}}</span>
+                                            </div>
+                                            {% endif %}
                                         </div>
-                                        <div class="subtot-item d-flex justify-content-between">
-                                            <span>Tax</span>
-                                            <span><span>&#8377; </span>{{bill.tax}}</span>
+                                        <div class="divider"></div>
+                                        <div class="grandtot fw-bold d-flex justify-content-between">
+                                            <span><strong>TOTAL</strong></span>
+                                            <span><strong><span>&#8377; </span>{{bill.total_amount}}</strong></span>
                                         </div>
-                                        {% if bill.adjustment != 0.0 %}
-                                        <div class="subtot-item d-flex justify-content-between">
-                                            <span>Adjustment</span>
-                                            <span><span>&#8377; </span>{{bill.adjustment}}</span>
+                                        <div class="divider"></div>
+                                        <div class="paid-by mb-4 d-flex justify-content-between">
+                                            <span>Paid By:</span>
+                                            <span>Credit</span>
                                         </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="grandtot fw-bold d-flex justify-content-between">
-                                        <span><strong>TOTAL</strong></span>
-                                        <span><strong><span>&#8377; </span>{{bill.total_amount}}</strong></span>
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="paid-by mb-4 d-flex justify-content-between">
-                                        <span>Paid By:</span>
-                                        <span>Credit</span>
-                                    </div>
-                                    <div class="datetime d-flex justify-content-start">
-                                        <p class="">{% now "d/m/Y g:i A" %}</p>
-                                    </div>
-                                    <div class="trns-id d-flex flex-column">
-                                        <div>
-                                            <p class="float-start">
-                                                <span>Transaction ID:</span>
-                                                <span>XXXXXXXXX</span>
-                                            </p>
+                                        <div class="datetime d-flex justify-content-start">
+                                            <p class="">{% now "d/m/Y g:i A" %}</p>
                                         </div>
-                                        <div>
-                                            <p class="float-start">
-                                                <span>Vendor ID:</span>
-                                                <span>XXXXXXXXXX</span>
-                                            </p>
+                                        <div class="trns-id d-flex flex-column">
+                                            <div>
+                                                <p class="float-start">
+                                                    <span>Transaction ID:</span>
+                                                    <span>XXXXXXXXX</span>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p class="float-start">
+                                                    <span>Vendor ID:</span>
+                                                    <span>XXXXXXXXXX</span>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="footer mt-4 text-center">
-                                        <p>Thank you for supporting Local business!</p>
+                                        <div class="footer mt-4 text-center">
+                                            <p>Thank you for supporting Local business!</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -487,14 +501,75 @@
         </div>
     </div>
 </div>
-</div>
 
+
+<!-- Unit Create Modal -->
+<div class="modal fade" id="shareBillEmail" tabindex="-1" aria-labelledby="shareBillEmailLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background: #ddddbe;">
+        <div class="modal-header" style="border-bottom: 1px solid #ffffff;">
+          <h5 class="modal-title text-dark" id="shareBillEmailLabel">Share Bill Via Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'shareSalesBillToEmail' bill.bill_no %}" method="post" class="needs-validation" id="share_to_email_form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="emailIds">Email IDs</label>
+                <textarea class="form-control" name="email_ids" id="emailIds" rows="3" placeholder="Multiple emails can be added by separating with a comma(,)." required></textarea>
+            </div>
+            <div class="form-group mt-2">
+                <label for="item_unitname">Message(optional)</label>
+                <textarea name="email_message" id="email_message" class="form-control" cols="" rows="4" placeholder="This message will be sent along with Bill details."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: 1px solid #ffffff;">
+          <button type="submit" id="share_with_email" class="submitShareEmailBtn w-50 text-uppercase">SEND MAIL</button>
+        </div>
+      </div>
+    </div>
+</div>
 
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 <script>
+    $(document).ready(function(){
+        $('#share_with_email').on('click',function(){
+            var emailsInput = document.getElementById('emailIds');
+            var emailsString = emailsInput.value.trim();
+
+            var emails = emailsString.split(',').map(function(email) {
+                return email.trim();
+            });
+
+            var emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+            var invalidEmails = []
+            if(emailsString == ""){
+                alert('Enter valid email addresses..')
+            }
+            else{
+                for (var i = 0; i < emails.length; i++) {
+                    var currentEmail = emails[i];
+
+                    if (currentEmail!="" && !emailRegex.test(currentEmail)) {
+                        console.log(currentEmail + ' is invalid!');
+                        invalidEmails.push(currentEmail)
+                    }
+                }
+                
+                if(invalidEmails.length > 0){
+                    alert('Invalid emails..Please check!\n'+invalidEmails)
+                    // alert(invalidEmails)
+                }else{
+                    $('#share_to_email_form').submit();
+                }
+            }
+        })
+    })
     $(document).ready(()=>{
         var nav_links = $(".nav-item.nav-link");
         

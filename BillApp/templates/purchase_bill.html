@@ -192,18 +192,18 @@
                     </div>
                     <div class="purchases_table_section table-responsive">
                         <table class="table table-hover mt-2 purchases_table" id="purchases_table">
-                            <!-- <thead>
+                            <thead>
                             <tr>
-                                <th scope="col" class="col-2">BILL NO.</th>
+                                <th scope="col" class="col-8">BILL NO.</th>
                                 <th scope="col" class="col-2">TOTAL</th>
                             </tr>
-                            </thead> -->
+                            </thead>
                             <tbody>
                                 {% for i in purchases %}
                                 <tr class="purchase_bills" onclick="window.location.href='/view_purchase_bill/{{i.bill_no}}'">
                                     <td class="itm_id" hidden>{{i.bill_number}}</td>
-                                    <td scope="col" class="col-8"><span>Bill:</span><br> BILL - {{i.bill_number}}</td>
-                                    <td scope="col" class="col-4"><span>Total:</span><br><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
+                                    <td scope="col" class="col-8">BILL - {{i.bill_number}}</td>
+                                    <td scope="col" class="col-4"><span class="me-1">&#x20B9;</span>{{i.total_amount}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -259,9 +259,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div>
-                                            <p class="text-muted mt-2 mb-0" style="color: #000;">Party Name: <span style="float: right;"><b>{{bill.party_name}}</b></span></p>
-                                            <p class="text-muted mb-0" style="color: #000;">Contact: <span style="float: right;"><b>{{bill.phone_number}}</b></span></p>
-                                            <p class="text-muted mb-0" style="color: #000;">GSTIN: <span style="float: right;"><b>{{bill.gstin}}</b></span></p>
+                                            {% if bill.party_name|default:"" != "" %}<p class="text-muted mt-2 mb-0" style="color: #000;">Party Name: <span style="float: right;"><b>{{bill.party_name}}</b></span></p>{% endif %}
+                                            {% if bill.phone_number|default:"" != "" %}<p class="text-muted mb-0" style="color: #000;">Party Contact: <span style="float: right;"><b>{{bill.phone_number}}</b></span></p>{% endif %}
+                                            {% if bill.gstin|default:"" != "" %}<p class="text-muted mb-0" style="color: #000;">Party GSTIN: <span style="float: right;"><b>{{bill.gstin}}</b></span></p>{% endif %}
                                         </div>
                                     </div>
                                 </div>

@@ -286,7 +286,7 @@
     })
 
     $(document).ready(()=>{
-        if (`{{bill.party_name}}` != "Nill"){
+        if (`{{bill.party_name}}` != "Nill" && `{{bill.party_name}}` != ""){
             $('#check_party').attr('checked',true);
             $('#party_details').show();
         }
