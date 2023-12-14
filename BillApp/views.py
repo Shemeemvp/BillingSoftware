@@ -16,6 +16,8 @@ from xhtml2pdf import pisa
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import *
+from openpyxl import load_workbook, Workbook
+from openpyxl.styles import Font, Protection, Alignment
 
 # Create your views here.
 
@@ -1483,15 +1485,104 @@ def shareSalesBillToEmail(request,id):
                 pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)#, link_callback=fetch_resources)
                 pdf = result.getvalue()
                 filename = f'Sales Bill - {bill.bill_number}.pdf'
-                # to_emails = ['shemeemmuhamed132@gmail.com']
                 subject = f"SALES BILL - {bill.bill_number}"
                 email = EmailMessage(subject, f"Hi,\nPlease find the attached SALES BILL - Bill-{bill.bill_number}. \n{email_message}\n\n--\nRegards,\n{cmp.company_name}\n{cmp.address}\n{cmp.state} - {cmp.country}\n{cmp.phone_number}", from_email=settings.EMAIL_HOST_USER, to=emails_list)
                 email.attach(filename, pdf, "application/pdf")
                 email.send(fail_silently=False)
 
-                messages.success(request, 'Bill has been share via email successfully..!')
+                messages.success(request, 'Bill has been shared via email successfully..!')
                 return redirect(viewSalesBill,id)
         except Exception as e:
             print(e)
             messages.error(request, f'{e}')
             return redirect(viewSalesBill, id)
+        
+
+def shareStockReportsToEmail(request):
+    if request.user:
+        try:
+            if request.method == 'POST':
+                emails_string = request.POST['email_ids']
+
+                # Split the string by commas and remove any leading or trailing whitespace
+                emails_list = [email.strip() for email in emails_string.split(',')]
+                email_message = request.POST['email_message']
+                # print(emails_list)
+
+                cmp = Company.objects.get( user = request.user.id)
+
+                excelfile = BytesIO()
+                workbook = Workbook()
+                workbook.remove(workbook.active)
+                worksheet = workbook.create_sheet(title='Stock Reports', index=1)
+
+                stockList = []
+                items = Items.objects.filter(cid = cmp)
+                
+                for item in items:
+                    stockIn = 0
+                    stockOut = 0
+                    for i in Item_transactions.objects.filter(cid = cmp, item = item.id).filter(type = 'Purchase'):
+                        stockIn += i.quantity
+
+                    for i in Item_transactions.objects.filter(cid = cmp, item = item.id).filter(type = 'Sale'):
+                        stockOut += i.quantity
+
+                    dict = {
+                        'name':item.name,
+                        'stockIn':stockIn,
+                        'stockOut':stockOut,
+                        'balance':item.stock
+                    }
+                    stockList.append(dict)
+
+                columns = ['#', 'Item', 'Stock In', 'Stock Out', 'Balance']
+                row_num = 1
+
+                # Assign the titles for each cell of the header
+                for col_num, column_title in enumerate(columns, 1):
+                    cell = worksheet.cell(row=row_num, column=col_num)
+                    cell.value = column_title
+                    cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=False)
+                    cell.font = Font(bold=True)
+                
+                # Iterate through all coins
+                print('stock===', stockList)
+                sl_no = 0
+                for _, bill in enumerate(stockList, 1):
+                    print('bill====',bill)
+                    row_num += 1
+                    sl_no+=1
+                    # Define the data for each cell in the row
+                    name,stockin,stockout,bal = (bill.get(key) for key in ['name', 'stockIn', 'stockOut', 'balance'])
+                    row = [
+                        sl_no,
+                        name,
+                        stockin,
+                        stockout,
+                        bal,
+                    ]
+
+                    print('ROW=========')
+                    print(row)
+
+                    # Assign the data for each cell of the row
+                    for col_num, cell_value in enumerate(row, 1):
+                        cell = worksheet.cell(row=row_num, column=col_num)
+                        cell.value = cell_value
+                        cell.protection = Protection(locked=True)
+                workbook.save(excelfile)
+                mail_subject = f'Stock Reports - {date.today()}'
+                message = f"Hi,\nPlease find the STOCK REPORTS file attached. \n{email_message}\n\n--\nRegards,\n{cmp.company_name}\n{cmp.address}\n{cmp.state} - {cmp.country}\n{cmp.phone_number}"
+                to_email = "shemeemvp123@gmail.com"
+                fromEmail = 'niyavijayan@gmail.com'
+                # message = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, emails_list)
+                message = EmailMessage(mail_subject, message, fromEmail, [to_email])
+                message.attach(f'Stock Reports-{date.today()}.xlsx', excelfile.getvalue(), 'application/vnd.ms-excel')
+                message.send(fail_silently=False)
+
+                messages.success(request, 'Stock Report has been shared via email successfully..!')
+                return redirect(goStockReports)
+        except Exception as e:
+            print(e)
+            return redirect(goStockReports)

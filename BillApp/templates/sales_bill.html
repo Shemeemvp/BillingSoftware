@@ -471,9 +471,9 @@
                                             <span>Paid By:</span>
                                             <span>Credit</span>
                                         </div>
-                                        <div class="datetime d-flex justify-content-start">
+                                        <!-- <div class="datetime d-flex justify-content-start">
                                             <p class="">{% now "d/m/Y g:i A" %}</p>
-                                        </div>
+                                        </div> -->
                                         <div class="trns-id d-flex flex-column">
                                             <div>
                                                 <p class="float-start">
@@ -503,7 +503,7 @@
 </div>
 
 
-<!-- Unit Create Modal -->
+<!-- Share bill Modal -->
 <div class="modal fade" id="shareBillEmail" tabindex="-1" aria-labelledby="shareBillEmailLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content" style="background: #ddddbe;">
@@ -569,7 +569,9 @@
                 }
             }
         })
-    })
+    });
+
+    
     $(document).ready(()=>{
         var nav_links = $(".nav-item.nav-link");
         

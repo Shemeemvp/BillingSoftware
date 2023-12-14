@@ -63,5 +63,6 @@ urlpatterns = [
 
     path('stock_reports',views.goStockReports, name='goStockReports'),
     path('item_stock_report/<int:id>',views.itemStockReport, name='itemStockReport'),
+    path('share_stock_report_to_email',views.shareStockReportsToEmail, name='shareStockReportsToEmail'),
 
 ]
