@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Edit Sale Bill | BILL - {{bill.number}}{% endblock %}
 {% block content %}
 <style>
     main{
@@ -165,7 +164,7 @@
                                 <tbody id="sale-items-table-body">
                                     {% for p in sales_items %}
                                     <tr id='addr0{{forloop.counter}}'>
-                                        <td class="item_sl_num">{{forloop.counter}}<input type="text"  name='id[]' value="{{ p.id }}" hidden></td>
+                                        <td class="item_sl_num">{{forloop.counter}}</td>
                                         <td>
                                             <div class="w-100">
                                                 <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
@@ -181,13 +180,14 @@
                                         </td>
                                         <td>
                                             <input type="number" name='hsn[]' value="{{p.hsn}}" id="hsn{{forloop.counter}}" placeholder='HSN Code' class="form-control"/>
-                                            <input type="text" name="sItems[]" id="sitem1" value="{{p.item.id}}" hidden>
+                                            <input type="text" name="sItems[]" id="sitem{{forloop.counter}}" value="{{p.item.id}}" hidden>
+                                            <input type="text" id="saleEntryId{{forloop.counter}}" name='id[]' value="{{ p.id }}" hidden>
                                         </td>
                                         <td><input type="number" name='qty[]' value="{{p.quantity}}" placeholder='Quantity' id="qty{{forloop.counter}}" value="" class="form-control qty" min="1" required/></td>
                                         <td><input type="number" name='price[]' value="{{p.rate}}" id="price{{forloop.counter}}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
-                                        <td><input type="text" name="tax[]" value="{{p.tax}}" class="form-control tax" placeholder="VAT %" id="tax1"></td>
+                                        <td><input type="text" name="tax[]" value="{{p.tax}}" class="form-control tax" placeholder="VAT %" id="tax{{forloop.counter}}"></td>
                                         <td><input type="number" name='total[]' value="{{p.total}}" id="total{{forloop.counter}}" class="form-control total" value="0" step="any" readonly /></td>
-                                        <td style="display: none;"><input type="number" step="any" name='taxamount{{forloop.counter}}' id="taxamount1" class="form-control taxamount"/></td></td>
+                                        <td style="display: none;"><input type="number" step="any" name='taxamount{{forloop.counter}}' id="taxamount{{forloop.counter}}" class="form-control taxamount"/></td></td>
                                         <td>
                                             <button type="button" id="{{forloop.counter}}" class="btn clone_row btn-outline-secondary mb-1 w-100" title="Clone Row">+</button><br>
                                             <button type="button" id="{{forloop.counter}}" class="btn remove_row btn-outline-secondary w-100" title="Remove Row">-</button>
@@ -315,11 +315,15 @@
         
         success: function(response) {
             if (response.status){
+                console.log('getItemData',response);
                 document.getElementById('hsn'+n).value = response.hsn;
                 document.getElementById('price'+n).value = response.sale_rate;
                 document.getElementById('tax'+n).value = response.tax;
                 document.getElementById('sitem'+n).value = response.id;
+                document.getElementById('saleEntryId'+n).value = 0;
+                
             }
+            calc();
         },
         });
 
@@ -329,12 +333,21 @@
         $('#check_party').is(":checked") ? $('#party_details').css('display','flex') : $('#party_details').css('display','none');
     })
 
+    function refreshIndex(){
+        var slNo = 1;
+        var $rows = $("#sale-items-table-body tr");
+
+        for (var i = 0; i < $rows.length; i++) {
+            $rows.eq(i).find('.item_sl_num').text(slNo);
+            slNo++;
+        }
+    }
+
     // table row clone and remove.
     $(document).on('click','.remove_row',function(){
         var row_id = $(this).attr("id");
-        console.log(row_id);
-        $('#addr0'+row_id+'').remove();
-        
+        $('#addr0'+row_id).remove();
+        refreshIndex();
         calc();
     });
 
@@ -346,7 +359,8 @@
 
         clonedRow.attr('id', 'addr0' +(roinc+1));
 
-        clonedRow.find('.item_sl_num').html(roinc+1+`<input type="text"  name='id[]' value=0 hidden>`);
+        // clonedRow.find('.item_sl_num').html(roinc+1+`<input type="text" name='id[]' value=0 hidden>`);
+        // clonedRow.find('.item_sl_num').html(roinc+1);
         clonedRow.find('.item-display').attr('id', 'item'+(roinc+1));
         clonedRow.find('.items-available').attr('id', 'menu'+(roinc+1));
 
@@ -355,7 +369,6 @@
         clonedRow.find('[id]').each(function() {
             var oldId = $(this).attr('id');
             var newId = oldId.replace(/\d+/, roinc+1);
-            console.log(newId)
             $(this).attr('id', newId );
         });
 
@@ -367,7 +380,7 @@
         });
 
         originalRow.after(clonedRow);
-        
+        refreshIndex();
         calc();
         
     });
@@ -377,7 +390,7 @@
             roinc++;
             $('#sale-items-table-body').append(
                 `<tr id='addr0${roinc}'>
-                    <td class="item_sl_num">${roinc}<input type="text"  name='id[]' value=0 hidden></td>
+                    <td class="item_sl_num">${roinc}</td>
                     <td>
                         <div class="w-100">
                             <div class="p-0 border-0 bg-none position-relative drop-box" style="display: block;">
@@ -394,6 +407,7 @@
                     <td>
                         <input type="number" name='hsn[]' id="hsn${roinc}" placeholder='HSN Code' class="form-control"/>
                         <input type="text" name="sItems[]" id="sitem${roinc}" hidden>
+                        <input type="text" id="saleEntryId${roinc}" name='id[]' value=0 hidden>
                     </td>
                     <td><input type="number" name='qty[]'placeholder='Quantity' id="qty${roinc}" value="" class="form-control qty" min="1" required/></td>
                     <td><input type="number" name='price[]' id="price${roinc}" placeholder='Unit Price' class="form-control price" step="0.00" min="0" /></td>
@@ -417,29 +431,29 @@
     //     calc();
     // });
 
-    $(document).on('change', '.item',function(){ 
+    // $(document).on('change', '.item',function(){ 
                 
-        var n = $(this).attr("id").slice(4);
-        console.log(n)
-        $.ajax({
-        url: "{% url 'getItemData' %}",
-        type : 'GET',
-        data:{
-            id : $(this).val(),
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
+    //     var n = $(this).attr("id").slice(4);
+    //     
+    //     $.ajax({
+    //     url: "{% url 'getItemData' %}",
+    //     type : 'GET',
+    //     data:{
+    //         id : $(this).val(),
+    //         csrfmiddlewaretoken: '{{ csrf_token }}'
+    //         },
         
-        success: function(response) {
-            if (response.status){
-                document.getElementById('hsn'+n).value = response.hsn;
-                document.getElementById('price'+n).value = response.sale_rate;
-                document.getElementById('tax'+n).value = response.tax;
-            }
-        },
-        });
+    //     success: function(response) {
+    //         if (response.status){
+    //             document.getElementById('hsn'+n).value = response.hsn;
+    //             document.getElementById('price'+n).value = response.sale_rate;
+    //             document.getElementById('tax'+n).value = response.tax;
+    //         }
+    //     },
+    //     });
         
 
-    });
+    // });
 
     function calc() {
         $('#items_table tbody tr').each(function () {
@@ -454,7 +468,7 @@
                 else{
                     var tax = 0;
                 }
-
+                console.log(qty,price,tax);
                 $(this).find('.total').val(parseFloat(qty) * parseFloat(price));
                 $(this).find('.taxamount').val((qty * price) * (tax / 100));
                 console.log('tax==',(qty * price) * (tax / 100));

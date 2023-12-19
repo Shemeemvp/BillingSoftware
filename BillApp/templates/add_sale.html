@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Add New Sale{% endblock %}
 {% block content %}
 
 <style>
@@ -318,6 +317,7 @@
                 document.getElementById('price'+n).value = response.sale_rate;
                 document.getElementById('tax'+n).value = response.tax;
                 document.getElementById('sitem'+n).value = response.id;
+                calc();
             }
         },
         });
@@ -333,19 +333,23 @@
         var row_id = $(this).attr("id");
         console.log(row_id);
         $('#addr0'+row_id+'').remove();
-        
+        refreshIndex();
         calc();
     });
 
 
     $(document).on('click','.clone_row',function(){
+        
         var roinc = $("#sale-items-table-body tr").length;
         var originalRow = $(this).closest('#sale-items-table-body tr'); 
         var clonedRow = originalRow.clone();
 
         clonedRow.attr('id', 'addr0' +(roinc+1));
 
-        clonedRow.find('.item_sl_num').text(roinc+1);
+        // clonedRow.find('.item_sl_num').text(roinc+1);
+        
+       
+
         clonedRow.find('.item-display').attr('id', 'item'+(roinc+1));
         clonedRow.find('.items-available').attr('id', 'menu'+(roinc+1));
 
@@ -365,9 +369,23 @@
         });
 
         originalRow.after(clonedRow);
+        refreshIndex();
         calc();
         
     });
+
+    function refreshIndex(){
+        var slNo = 1;
+        var $rows = $("#sale-items-table-body tr");
+
+        for (var i = 0; i < $rows.length; i++) {
+            $rows.eq(i).find('.item_sl_num').text(slNo);
+            console.log($rows);
+            console.log(slNo);
+            slNo++;
+        }
+    }
+
     $(document).ready(function(){
         $('#add_row_btn').click(function(){
             var roinc = $("#sale-items-table-body tr").length;

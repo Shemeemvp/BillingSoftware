@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Add New Item{% endblock %}
 {% block content %}
 <style>
     main{
@@ -99,13 +98,14 @@
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-12">
-                   <form action="{% url 'createNewItem' %}" method="post" class="needs-validation">
+                   <form action="{% url 'createNewItem' %}" method="post" class="needs-validation" id="itemForm" onsubmit="return validateForm()">
                     {% csrf_token %}
                         <div class="row mt-3">
                             <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <label for="item_name">Name</label>
                                     <input type="text" name="name" id="item_name" class="form-control" autocomplete="off" required />
+                                    <span id="nameErr" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6 col-lg-6">
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <label for="item_name" class="mb-2">Tax Reference</label>
+                            <label for="" class="mb-2">Tax Reference</label>
                             <div class="col-md-6 col-lg-6">
                                 <div class="form-group">
                                     <div class="d-block">
@@ -312,6 +312,34 @@
             }
         });
     }
+
+    $(document).ready(()=>{
+        $('#item_name').on('input',function(){
+            var name = $(this).val();
+            if (name != ""){
+                $.ajax({
+                    url: "{% url 'checkItemName' %}",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        'itemName' : name,
+                    },
+
+                    success: function(data) {
+                        if(data.isExists){
+                            $('#nameErr').text(data.message);
+                        }
+                        else{
+                            $('#nameErr').text('');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    }
+                });
+            }
+        })
+    })
 
 </script>
 {% endblock %}

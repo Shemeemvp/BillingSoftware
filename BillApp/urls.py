@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('show_items',views.goItems, name='goItems'),
     path('show_item_details/<int:id>',views.showItemData, name= 'showItemData'),
+    path('check_item_name',views.checkItemName, name='checkItemName'),
 
 
     path('show_purchases',views.goPurchases, name='goPurchases'),

@@ -1,9 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load social_share %}
-{% block title %}Sale Bill | B - {{bill.bill_number}}{% endblock %}
 {% block content %}
 <style>
+
+    @media print {
+        body{
+            visibility: hidden !important;
+        }
+
+        .printContainer {
+            visibility: visible !important;
+            position: absolute;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: medium;
+        }
+    }
+    
     main{
         background: #ddddbeed;
     }
@@ -651,13 +668,21 @@
 
     function printSection(sectionId) {
         var printContents = document.getElementById(sectionId).innerHTML;
-        var originalContents = document.body.innerHTML;
+        // var originalContents = document.body.innerHTML;
+
+        var $printerDiv = $('<div class="printContainer"></div>'); // create the div that will contain the stuff to be printed
+        $printerDiv.html(printContents); // add the content to be printed
+        $('body').append($printerDiv).addClass("printingContent"); // add the div to body, and make the body aware of printing (we apply a set of css styles to the body to hide its contents)
+
+        window.print(); // call print
+        $printerDiv.remove(); // remove the div
+        $('body').removeClass("printingContent");
     
-        document.body.innerHTML = printContents;
+        // document.body.innerHTML = printContents;
     
-        window.print();
+        // window.print();
     
-        document.body.innerHTML = originalContents;
+        // document.body.innerHTML = originalContents;
     }
 </script>
 {% endblock %}

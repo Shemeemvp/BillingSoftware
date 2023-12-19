@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Sales{% endblock %}
 {% block content %}
 <style>
     main{
@@ -215,7 +214,7 @@
                                 <th scope="col" class="col-2">DATE</th>
                                 <th scope="col" class="col-2">BILL NO.</th>
                                 <th scope="col" class="col-3">PARTY NAME</th>
-                                <th scope="col" class="col-2">TAX</th>
+                                <th scope="col" class="col-2">TAX AMOUNT</th>
                                 <th scope="col" class="col-2">TOTAL</th>
                             </tr>
                             </thead>
@@ -253,7 +252,7 @@
             <th scope="col" class="col-2">DATE</th>
             <th scope="col" class="col-2">BILL NO.</th>
             <th scope="col" class="col-3">PARTY NAME</th>
-            <th scope="col" class="col-2">TAX</th>
+            <th scope="col" class="col-2">TAX AMOUNT</th>
             <th scope="col" class="col-2">TOTAL</th>
         </tr>
         </thead>
@@ -415,5 +414,21 @@
     
         document.body.innerHTML = originalContents;
     }
+
+    $(document).ready(function(){
+        var date1 = "";
+        $('#from-date').on('change',function(){
+            date1 = $(this).val()
+            $('#to-date').prop('min',date1)
+        })
+    });
+
+    $(document).ready(function(){
+        var date2 = "";
+        $('#to-date').on('change',function(){
+            date2 = $(this).val()
+            $('#from-date').prop('max',date2)
+        })
+    });
 </script>
 {% endblock %}
