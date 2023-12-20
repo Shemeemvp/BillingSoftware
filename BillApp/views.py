@@ -823,7 +823,8 @@ def purchasesInBetween(request):
                 purchases = Purchases.objects.filter(cid = cmp).filter(date__gte = start_date, date__lte = end_date)
                 if not purchases:
                     messages.warning(request, f'No purchases found in between {start_date} to {end_date}')
-                    purchases = Purchases.objects.filter(cid = cmp)
+                    # purchases = Purchases.objects.filter(cid = cmp)
+                    return redirect(goPurchases)
                 context = {
                     'cmp': cmp,
                     'purchases': purchases,
@@ -1163,7 +1164,8 @@ def salesInBetween(request):
                 sales = Sales.objects.filter(cid = cmp).filter(date__gte = start_date, date__lte = end_date)
                 if not sales:
                     messages.warning(request, f'No sales found in between {start_date} to {end_date}')
-                    sales = Sales.objects.filter(cid = cmp)
+                    # sales = Sales.objects.filter(cid = cmp)
+                    return redirect(goSales)
                 context = {
                     'cmp': cmp,
                     'sales': sales,

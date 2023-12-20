@@ -165,7 +165,7 @@
                                   </tr>
                                 </thead>
                                 <tbody id="pur-items-table-body">
-                                    <tr id='addr01'>
+                                    <tr id='addr1'>
                                         <td class="item_sl_num">1</td>
                                         <td>
                                             <div class="w-100">
@@ -331,9 +331,14 @@
         var $rows = $("#pur-items-table-body tr");
 
         for (var i = 0; i < $rows.length; i++) {
+            $rows.eq(i).attr('id', 'addr'+slNo)
+            $rows.eq(i).find('[id]').each(function() {
+                var oldId = $(this).attr('id');
+                var newId = oldId.replace(/\d+/, slNo);
+                $(this).attr('id', newId );
+            });
+
             $rows.eq(i).find('.item_sl_num').text(slNo);
-            console.log($rows);
-            console.log(slNo);
             slNo++;
         }
     }
@@ -342,7 +347,7 @@
     $(document).on('click','.remove_row',function(){
         var row_id = $(this).attr("id");
         console.log(row_id);
-        $('#addr0'+row_id+'').remove();
+        $('#addr'+row_id+'').remove();
         refreshIndex();
         calc();
     });
@@ -353,7 +358,7 @@
         var originalRow = $(this).closest('#pur-items-table-body tr'); 
         var clonedRow = originalRow.clone();
 
-        clonedRow.attr('id', 'addr0' +(roinc+1));
+        clonedRow.attr('id', 'addr' +(roinc+1));
 
         // clonedRow.find('.item_sl_num').text(roinc+1);
         clonedRow.find('.item-display').attr('id', 'item'+(roinc+1));
@@ -386,7 +391,7 @@
             var roinc = $("#pur-items-table-body tr").length;
             roinc++;
             $('#pur-items-table-body').append(
-                `<tr id='addr0${roinc}'>
+                `<tr id='addr${roinc}'>
                     <td class="item_sl_num">${roinc}</td>
                     <td>
                         <div class="w-100">
