@@ -13,6 +13,16 @@ class Company(models.Model):
     country = models.CharField(max_length=150,null=True,blank=True)
     logo = models.ImageField(upload_to='logo/',null=True)
 
+class ClientTrials(models.Model):
+    user = models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
+    company =  models.ForeignKey(Company,on_delete=models.SET_NULL, null=True)
+    start_date = models.DateField(null = True, blank=True)
+    end_date = models.DateField(null = True, blank=True)
+    trial_status = models.BooleanField(null = True, default = True)
+    purchase_start_date = models.DateField(null = True)
+    purchase_end_date = models.DateField(null = True)
+    purchase_status = models.CharField(max_length = 15,null = True, default = 'false')
+    subscribe_status = models.CharField(max_length = 50, null = True, default = 'null')
 
 class Items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)

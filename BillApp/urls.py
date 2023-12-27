@@ -9,6 +9,8 @@ urlpatterns = [
     path('logout',views.userLogout, name='userLogout'),
     path('validate_email',views.validateEmail, name='validateEmail'),
     path('validate_username',views.validateUsername, name='validateUsername'),
+    path('validate_phone_number',views.validatePhone, name='validatePhone'),
+    path('validate_company_name',views.validateCompany, name='validateCompany'),
     path('forgot_password',views.forgotPassword, name='forgotPassword'),
     path('show_profile',views.showProfile, name='showProfile'),
     path('update_user_profile',views.updateUserProfile, name='updateUserProfile'),
@@ -65,5 +67,9 @@ urlpatterns = [
     path('stock_reports',views.goStockReports, name='goStockReports'),
     path('item_stock_report/<int:id>',views.itemStockReport, name='itemStockReport'),
     path('share_stock_report_to_email',views.shareStockReportsToEmail, name='shareStockReportsToEmail'),
+
+    
+    #ADMIN PANEL -- URLS
+    path('go_admin_panel',views.goAdminPanel, name='goAdminPanel'),
 
 ]

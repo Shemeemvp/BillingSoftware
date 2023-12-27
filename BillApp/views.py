@@ -14,13 +14,39 @@ from num2words import num2words
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import *
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import Font, Protection, Alignment
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
+#Admin Panel
+
+def is_admin(user):
+    return user.groups.filter(name="ADMIN").exists()
+
+# @login_required(login_url='/')
+# @user_passes_test(is_admin, login_url='/')
+# def goAdminPanel(request):
+#     try:
+#         return render(request, 'admin/admin_index.html')
+#     except PermissionDenied:
+#         messages.error(request, 'You are not allowed to access this page!')
+#         return redirect('/')
+#     except Exception as e:
+#         print(e)
+#         messages.error(request, 'An error occurred while processing your request.')
+#         return redirect('/')
+
+def goAdminPanel(request):
+    try:
+        return render(request, 'admin/admin_index.html')
+    except Exception as e:
+        print(e)
+        messages.error(request, 'An error occurred while processing your request.')
+        return redirect('/')
 
 def login(request):
     return render(request, "login.html")
@@ -166,6 +192,12 @@ def registerUser(request):
             elif User.objects.filter(email=eml).exists():
                 messages.info(request, f"`{eml}` already exists!! Please try another..")
                 return redirect(login)
+            elif Company.objects.filter(phone_number = phn).exists():
+                messages.info(request, f"Phone number already exists!! Please try another..")
+                return redirect(login)
+            elif Company.objects.filter(company_name__iexact=cmpny.lower()).exists():
+                messages.info(request, f"Company Name `{cmpny}` already exists!! Please try another..")
+                return redirect(login)
             else:
                 if pswrd == cpswrd:
                     userInfo = User.objects.create_user(
@@ -186,10 +218,26 @@ def registerUser(request):
                         country = cntry,
                     )
                     cmpnyData.save()
-                    # messages.info(request, 'Registration Successful..')
+                    
+                    #storing trail data
+                    start = date.today()
+                    end = start + timedelta(days=30)
+                    trail = ClientTrials(
+                        user = cData,
+                        company = cmpnyData,
+                        start_date = start,
+                        end_date = end,
+                        trial_status = True,
+                        purchase_start_date = None,
+                        purchase_end_date = None,
+                        purchase_status = False
+                    )
+                    trail.save()
+
+                    messages.info(request, 'Registration Successful..')
                     return redirect(login)
                 else:
-                    # messages.warning(request, "Passwords doesn't match..Please try again.")
+                    messages.warning(request, "Passwords doesn't match..Please try again.")
                     # return HttpResponse('please! verify your passwords')
                     return redirect(login)
         else:
@@ -206,8 +254,23 @@ def userLogin(request):
 
         user = auth.authenticate(username=uName, password=password)
         if user is not None:
-            auth.login(request, user)
-            return redirect(goDashboard)
+            if user.is_staff:
+                return redirect(goAdminPanel)
+            else:
+                status = ClientTrials.objects.get(user = user.id)
+                if status.purchase_status == 'valid':
+                    auth.login(request, user)
+                    return redirect(goDashboard)
+                elif status.purchase_status == 'expired':
+                    messages.warning(request, "Your Subscription has been expired.! Contact Admin.")
+                    return redirect(login)
+                else:
+                    if status.trial_status:
+                        auth.login(request, user)
+                        return redirect(goDashboard)
+                    else:
+                        messages.warning(request, "Your Trial period has been expired.! Contact Admin.")
+                        return redirect(login)
         else:
             messages.info(request, "Incorrect Username or Password..Please try again")
             return redirect(login)
@@ -337,6 +400,21 @@ def validateUsername(request):
     uName = request.GET["username"]
 
     if User.objects.filter(username=uName).exists():
+        return JsonResponse({"is_taken": True})
+    JsonResponse({"is_taken": False})
+
+def validatePhone(request):
+    number = request.GET["phone"]
+
+    if Company.objects.filter(phone_number=number).exists():
+        return JsonResponse({"is_taken": True})
+    JsonResponse({"is_taken": False})
+
+
+def validateCompany(request):
+    cmp = request.GET["company"]
+
+    if Company.objects.filter(company_name__iexact=cmp.lower()).exists():
         return JsonResponse({"is_taken": True})
     JsonResponse({"is_taken": False})
 

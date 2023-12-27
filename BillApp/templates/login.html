@@ -403,7 +403,7 @@
                             </div>
                             <div class="input-field">
                                 <i class="fa fa-pencil"></i>
-                                <input type="text" placeholder="GST Number" name="gstnum" id="gstin" title="Ex: 22AAAAA0000A1Z5" required/>
+                                <input type="text" placeholder="GST Number" name="gstnum" id="gstin" title="Ex: 22AAAAA0000A1Z5"/>
                                 <div class="text-danger" style="font-size: 0.85rem; width: max-content;font-weight: 600;" id="gstErr"></div>
                             </div>
                             <div class="input-field textarea">
@@ -576,10 +576,13 @@
             return false;
         }
 
-        if(! gstinPattern.test(gstinput)){
-            alert('Invalid GST Number..\n Ex: 22AAAAA0000A1Z5')
-            return false;
+        if(gstin != ""){
+            if(! gstinPattern.test(gstinput)){
+                alert('Invalid GST Number..\n Ex: 22AAAAA0000A1Z5')
+                return false;
+            }
         }
+        
 
         // if (gstin !="" && !gstregex.test(gstin)){
         //     document.getElementById('gstErr').innerHTML = "Invalid..! Ex: '22AAAAA0000A1Z5'"
@@ -630,27 +633,67 @@ $(document).ready(function(){
   });
 });
 $(document).ready(function(){
-    
-        $("#user").blur(function () {
-            if($('#register-form').hasClass('form_active')){
-                var user = $(this).val();
-                $.ajax({
-                    url: "{% url 'validateUsername' %}",
-                    data: {
-                    'username': user
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                    if (data.is_taken) {
-                        alert("User name already exists.");
-                    }
-                    }
-                });   
+    $("#user").blur(function () {
+        if($('#register-form').hasClass('form_active')){
+            var user = $(this).val();
+            $.ajax({
+                url: "{% url 'validateUsername' %}",
+                data: {
+                'username': user
+                },
+                dataType: 'json',
+                success: function (data) {
+                if (data.is_taken) {
+                    alert("User name already exists.");
+                }
+                }
+            });   
+        }
+    });
+});
+
+
+$(document).ready(function(){
+    $("#phone").blur(function () {
+        var phone = $(this).val();
+        if($(this).val()!=""){
+            $.ajax({
+            method:'GET',
+            url: "{% url 'validatePhone' %}",
+            data: {
+                'phone': phone
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.is_taken) {
+                alert("Phone Number already exists.!");
+                }
             }
-        });
-  });
+            });
+        }
+    });
+});
 
-
+$(document).ready(function(){
+    $("#company").blur(function () {
+        var company = $(this).val();
+        if($(this).val()!=""){
+            $.ajax({
+            method:'GET',
+            url: "{% url 'validateCompany' %}",
+            data: {
+                'company': company
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.is_taken) {
+                alert("Company Name already exists.!");
+                }
+            }
+            });
+        }
+    });
+});
 </script>
 
 {%if messages%} {%for message in messages%} {%if message.tags == "success"%}
