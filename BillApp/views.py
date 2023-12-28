@@ -22,7 +22,7 @@ from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 
-#Admin Panel
+
 
 def is_admin(user):
     return user.groups.filter(name="ADMIN").exists()
@@ -40,13 +40,80 @@ def is_admin(user):
 #         messages.error(request, 'An error occurred while processing your request.')
 #         return redirect('/')
 
-def goAdminPanel(request):
-    try:
-        return render(request, 'admin/admin_index.html')
-    except Exception as e:
-        print(e)
-        messages.error(request, 'An error occurred while processing your request.')
+# def goAdminPanel(request):
+#     try:
+#         return render(request, 'admin/admin_index.html')
+#     except Exception as e:
+#         print(e)
+#         messages.error(request, 'An error occurred while processing your request.')
+#         return redirect('/')
+
+#Admin Panel
+def goRegisteredClients(request):
+    context = {
+        'clients' : Company.objects.all()
+    }
+    return render(request, 'admin/reg_clients.html',context)
+
+
+def goDemoClients(request):
+    context = {
+        'clients' : ClientTrials.objects.filter(trial_status = True)
+    }
+    return render(request, 'admin/demo_clients.html',context)
+
+
+def goPurchasedClients(request):
+    context = {
+        'clients' : ClientTrials.objects.exclude(purchase_status = 'null')
+    }
+    return render(request, 'admin/purchased_clients.html',context)
+
+
+def cancelSubscription(request,id):
+    if request.user.is_staff:
+        status = ClientTrials.objects.get(id = id)
+        status.purchase_status = 'cancelled'
+        status.save()
+        messages.success(request, 'Subscription Cancelled.!')
+        return redirect(goPurchasedClients)
+    return redirect('/')
+
+def goPaymentTerms(request):
+    if request.user.is_staff:
+        terms = PaymentTerms.objects.all()
+        return render(request, 'admin/payment_terms.html',{'terms':terms})
+    return redirect('/')
+
+def addNewPaymentTerm(request):
+    if request.user.is_staff:
+        return render(request, 'admin/add_payment_term.html')
+    else:
         return redirect('/')
+    
+def createPaymentTerm(request):
+    if request.user.is_staff:
+        if request.method == 'POST':
+            dur = request.POST['duration']
+            term = request.POST['term']
+            dys = int(dur) if term == 'Days' else int(dur) * 30
+
+            PaymentTerms.objects.create(duration = dur, term = term, days = dys)
+            messages.success(request, 'Success.!')
+            
+            if 'next_term' in request.POST:
+                return redirect(addNewPaymentTerm)
+            else:
+                return redirect(goPaymentTerms)
+    else:
+        return redirect('/')
+
+def deletePaymentTerm(request, id):
+    if request.user.is_staff:
+        term = PaymentTerms.objects.get(id = id)
+        term.delete()
+        return redirect(goPaymentTerms)
+    return redirect('/')
 
 def login(request):
     return render(request, "login.html")
@@ -230,7 +297,7 @@ def registerUser(request):
                         trial_status = True,
                         purchase_start_date = None,
                         purchase_end_date = None,
-                        purchase_status = False
+                        purchase_status = "null"
                     )
                     trail.save()
 
@@ -255,7 +322,8 @@ def userLogin(request):
         user = auth.authenticate(username=uName, password=password)
         if user is not None:
             if user.is_staff:
-                return redirect(goAdminPanel)
+                auth.login(request, user)
+                return redirect(goRegisteredClients)
             else:
                 status = ClientTrials.objects.get(user = user.id)
                 if status.purchase_status == 'valid':
@@ -263,6 +331,9 @@ def userLogin(request):
                     return redirect(goDashboard)
                 elif status.purchase_status == 'expired':
                     messages.warning(request, "Your Subscription has been expired.! Contact Admin.")
+                    return redirect(login)
+                elif status.purchase_status == 'cancelled':
+                    messages.warning(request, "Your Subscription has been Cancelled.! Contact Admin.")
                     return redirect(login)
                 else:
                     if status.trial_status:
@@ -1691,3 +1762,13 @@ def shareStockReportsToEmail(request):
         except Exception as e:
             print(e)
             return redirect(goStockReports)
+
+
+def changeTrialStatus(request, status):
+    if request.user:
+        trial = ClientTrials.objects.get(user = request.user)
+        trial.subscribe_status = status
+        trial.save()
+        # return HttpResponse('<script>alert("Success.!");window.history.back();</script>')
+        messages.success(request,'Success.!')
+        return redirect(goDashboard)

@@ -1,0 +1,72 @@
+{% extends 'admin/admin_index.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<style>
+    main{
+        background: #ddddbeed;
+    }
+    .btn:focus{
+        box-shadow: none;
+    }
+
+</style>
+<div class="container-fluid">
+    <div class="Purchased_clients py-4">
+        <h4 class="ms-2">Purchased Clients</h4>
+        <table id="pur_clients_table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Payment Term</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in clients %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.company.company_name}}</td>
+                    <td>{{i.user.email}}</td>
+                    <td>{{i.company.phone_number}}</td>
+                    <td>{{i.purchase_start_date}}</td>
+                    <td>{{i.purchase_end_date}}</td>
+                    <td>{{i.payment_term}}</td>
+                    <td>{{i.purchase_status}}</td>
+                    <td><a href="{% url 'cancelSubscription' i.id %}"><button type="button" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel subscription of the user..?')">CANCEL</button></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-purchased-clients')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    });
+
+    let table = new DataTable("#pur_clients_table", {
+        responsive: true
+    });
+</script>
+{% endblock %}

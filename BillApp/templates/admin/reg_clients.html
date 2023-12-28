@@ -1,0 +1,64 @@
+{% extends 'admin/admin_index.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<style>
+    main{
+        background: #ddddbeed;
+    }
+    .btn:focus{
+        box-shadow: none;
+    }
+
+</style>
+<div class="container-fluid">
+    <div class="Registered_clients py-4">
+        <h4 class="ms-2">Registered Clients</h4>
+        <table id="reg_clients_table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Company Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>GSTIN</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in clients %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.company_name}}</td>
+                    <td>{{i.user.email}}</td>
+                    <td>{{i.phone_number}}</td>
+                    <td>{{i.gst_number}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(()=>{
+        var nav_links = $(".nav-item.nav-link");
+        
+        for(var i = 0; i < nav_links.length; i++){
+            $(nav_links[i]).removeClass('active')
+            if($(nav_links[i]).hasClass('nav-reg-clients')){
+                $(nav_links[i]).addClass('active');
+                break;
+            }
+        }
+    });
+
+    let table = new DataTable("#reg_clients_table", {
+        responsive: true
+    });
+</script>
+{% endblock %}

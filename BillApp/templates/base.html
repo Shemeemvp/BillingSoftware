@@ -155,7 +155,7 @@
                             {% endif %}
                             <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-dark border-0 rounded-0 rounded-bottom m-0">
+                        <div class="notification-dropdown dropdown-menu dropdown-menu-end bg-dark border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 {% if days == 0 %}
                                 <h6 class="fw-normal mb-0">Your Trial Period expires Today..</h6>
@@ -163,15 +163,15 @@
                                 <h6 class="fw-normal mb-0">Your Trial Period expires in {{days}} days..</h6>
                                 {% endif %}
                                 <div class="d-flex px-1">
-                                    <small>Want to Subscribe.?</small>
+                                    <small>Want to Purchase.?</small>
                                     <div class="d-flex justify-content-end align-items-center">
-                                        <a href="#" class="text-decoration-none fw-bolder text-success">Yes</a>
-                                        <a href="#" class="text-decoration-none fw-bolder text-danger ms-3 me-3">Cancel</a>
+                                        <a href="{% url 'changeTrialStatus' 'yes' %}" class="text-decoration-none fw-bolder text-success">Yes</a>
+                                        <a href="{% url 'changeTrialStatus' 'no' %}" class="text-decoration-none fw-bolder text-danger ms-3 me-3">Cancel</a>
                                     </div>    
                                 </div>
                             </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                            <!-- <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all notifications</a> -->
                         </div>
                     </div>
                     {% endif %}

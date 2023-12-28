@@ -148,6 +148,12 @@ main{
     background:white;
     border-color: rgb(254, 232, 30);
 }
+
+.content .navbar .notification-dropdown .dropdown-item:hover {
+    background: #212529;
+    color: white;
+}
+
 .add-icon{
     color: white;
 }

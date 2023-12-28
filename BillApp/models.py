@@ -21,8 +21,14 @@ class ClientTrials(models.Model):
     trial_status = models.BooleanField(null = True, default = True)
     purchase_start_date = models.DateField(null = True)
     purchase_end_date = models.DateField(null = True)
+    payment_term = models.CharField(max_length=50,null=True)
     purchase_status = models.CharField(max_length = 15,null = True, default = 'false')
     subscribe_status = models.CharField(max_length = 50, null = True, default = 'null')
+
+class PaymentTerms(models.Model):
+    duration = models.IntegerField(null=True, default=0)
+    term = models.CharField(max_length=20, null=True, default='Days')
+    days = models.IntegerField(null=True, default = 0)
 
 class Items(models.Model):
     cid = models.ForeignKey(Company, on_delete=models.CASCADE)
