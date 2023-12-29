@@ -13,30 +13,35 @@
 
 </style>
 <div class="container-fluid">
-    <div class="Registered_clients py-4">
-        <h4 class="ms-2">Registered Clients</h4>
-        <table id="reg_clients_table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Company Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>GSTIN</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in clients %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.company_name}}</td>
-                    <td>{{i.user.email}}</td>
-                    <td>{{i.phone_number}}</td>
-                    <td>{{i.gst_number}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="Registered_clients py-4 my-3">
+        <div class="row px-3">
+            <div class="col-md-12">
+                <h4 class="ms-2">Registered Clients</h4>
+                <table id="reg_clients_table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Company Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>GSTIN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in clients %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{i.company_name}}</td>
+                            <td>{{i.user.email}}</td>
+                            <td>{{i.phone_number}}</td>
+                            <td>{{i.gst_number}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
     </div>
 </div>
 

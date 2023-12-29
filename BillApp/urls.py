@@ -69,6 +69,7 @@ urlpatterns = [
     path('share_stock_report_to_email',views.shareStockReportsToEmail, name='shareStockReportsToEmail'),
 
     path('change_trial_status/<str:status>',views.changeTrialStatus, name='changeTrialStatus'),
+    
     #ADMIN PANEL -- URLS
     path('go_registered_clients',views.goRegisteredClients, name='goRegisteredClients'),
     path('go_demo_clients',views.goDemoClients, name='goDemoClients'),
@@ -78,4 +79,6 @@ urlpatterns = [
     path('add_new_payment_term',views.addNewPaymentTerm, name='addNewPaymentTerm'),
     path('create_payment_term',views.createPaymentTerm, name='createPaymentTerm'),
     path('delete_payment_term/<int:id>',views.deletePaymentTerm, name='deletePaymentTerm'),
+    path('client_purchase/<int:id>',views.clientPurchase, name='clientPurchase'),
+    path('get_payment_terms',views.getPaymentTerms, name='getPaymentTerms'),
 ]

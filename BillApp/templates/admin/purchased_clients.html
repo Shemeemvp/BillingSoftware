@@ -40,7 +40,13 @@
                     <td>{{i.purchase_end_date}}</td>
                     <td>{{i.payment_term}}</td>
                     <td>{{i.purchase_status}}</td>
-                    <td><a href="{% url 'cancelSubscription' i.id %}"><button type="button" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel subscription of the user..?')">CANCEL</button></a></td>
+                    <td>
+                        {% if i.purchase_status == 'valid' %}
+                        <a href="{% url 'cancelSubscription' i.id %}"><button type="button" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel subscription of the user..?')">CANCEL</button></a>
+                        {% else %}
+                        <button disabled type="button" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel subscription of the user..?')">CANCEL</button>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

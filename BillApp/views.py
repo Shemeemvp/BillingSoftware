@@ -58,7 +58,8 @@ def goRegisteredClients(request):
 
 def goDemoClients(request):
     context = {
-        'clients' : ClientTrials.objects.filter(trial_status = True)
+        'clients' : ClientTrials.objects.filter(trial_status = True),
+        'terms' : PaymentTerms.objects.all()
     }
     return render(request, 'admin/demo_clients.html',context)
 
@@ -114,6 +115,55 @@ def deletePaymentTerm(request, id):
         term.delete()
         return redirect(goPaymentTerms)
     return redirect('/')
+
+
+def clientPurchase(request, id):
+    if request.user.is_staff:
+        client = ClientTrials.objects.get(id = id)
+
+        if request.method == 'POST':
+            start = request.POST['purchaseDate']
+            end = request.POST['endDate']
+            term = PaymentTerms.objects.get(id = request.POST['paymentTerm'])
+
+            client.purchase_start_date = start
+            client.purchase_end_date = end
+            client.payment_term = str(term.duration)+" "+term.term
+            client.purchase_status = 'valid'
+            client.trial_status = False
+            client.subscribe_status = 'purchased'
+            client.save()
+
+            messages.success(request,'Success.!')
+            return redirect(goDemoClients)
+        return redirect(goDemoClients)
+    return redirect('/')
+
+
+def getPaymentTerms(request):
+    if request.user.is_staff:
+        try:
+            terms = PaymentTerms.objects.all()
+            list = []
+
+            for item in terms:
+                paymentTerms = {
+                    "id": item.id,
+                    "days": item.days,
+                    "term": item.term,
+                    "duration" : item.duration,
+                }
+                list.append(paymentTerms)
+
+            print(list)
+            return JsonResponse({"terms": list}, safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse({"message": "failed"})
+    else:
+        return JsonResponse({"message": "failed"})
+
+
 
 def login(request):
     return render(request, "login.html")
@@ -297,7 +347,9 @@ def registerUser(request):
                         trial_status = True,
                         purchase_start_date = None,
                         purchase_end_date = None,
-                        purchase_status = "null"
+                        purchase_status = "null",
+                        payment_term = None,
+                        subscribe_status = 'null',
                     )
                     trail.save()
 
@@ -1750,10 +1802,7 @@ def shareStockReportsToEmail(request):
                 workbook.save(excelfile)
                 mail_subject = f'Stock Reports - {date.today()}'
                 message = f"Hi,\nPlease find the STOCK REPORTS file attached. \n{email_message}\n\n--\nRegards,\n{cmp.company_name}\n{cmp.address}\n{cmp.state} - {cmp.country}\n{cmp.phone_number}"
-                to_email = "shemeemvp123@gmail.com"
-                fromEmail = 'niyavijayan@gmail.com'
-                # message = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, emails_list)
-                message = EmailMessage(mail_subject, message, fromEmail, [to_email])
+                message = EmailMessage(mail_subject, message, settings.EMAIL_HOST_USER, emails_list)
                 message.attach(f'Stock Reports-{date.today()}.xlsx', excelfile.getvalue(), 'application/vnd.ms-excel')
                 message.send(fail_silently=False)
 

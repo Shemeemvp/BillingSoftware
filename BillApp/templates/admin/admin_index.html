@@ -107,8 +107,8 @@
                             {% for i in renewals %}
                             <a href="#" class="dropdown-item my-2">
                                 <h6 class="fw-normal mb-0">"{{i.company.company_name}}" wants to purchase..</h6>
-                                <a href="#" class="text-decoration-none text-success ms-3">Approve</a>
-                                <a href="#" class="text-decoration-none text-danger ms-2">Reject</a>
+                                <a href="{% url 'goDemoClients' %}" class="text-decoration-none text-success ms-3">Continue</a>
+                                <!-- <a href="#" class="text-decoration-none text-danger ms-2">Reject</a> -->
                             </a>
                             <hr class="dropdown-divider bg-white">
                             {% endfor %}
