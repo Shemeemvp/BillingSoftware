@@ -50,26 +50,42 @@ def is_admin(user):
 
 #Admin Panel
 def goRegisteredClients(request):
-    context = {
-        'clients' : Company.objects.all()
-    }
-    return render(request, 'admin/reg_clients.html',context)
+    if request.user.is_staff:
+        all_companies = Company.objects.all()
+        clients = []
+        for i in all_companies:
+            try:
+                trial = ClientTrials.objects.filter(company = i).first()
+            except:
+                trial = None
+            dict = {'company':i,'trial':trial}
+            clients.append(dict)
+        context = {
+            'clients' : clients,
+        }
+        return render(request, 'admin/reg_clients.html',context)
+    else:
+        return('/')
 
 
 def goDemoClients(request):
-    context = {
-        'clients' : ClientTrials.objects.filter(trial_status = True),
-        'terms' : PaymentTerms.objects.all()
-    }
-    return render(request, 'admin/demo_clients.html',context)
-
+    if request.user.is_staff:
+        context = {
+            'clients' : ClientTrials.objects.filter(trial_status = True),
+            'terms' : PaymentTerms.objects.all()
+        }
+        return render(request, 'admin/demo_clients.html',context)
+    else:
+        return redirect('/')
 
 def goPurchasedClients(request):
-    context = {
-        'clients' : ClientTrials.objects.exclude(purchase_status = 'null')
-    }
-    return render(request, 'admin/purchased_clients.html',context)
-
+    if request.user.is_staff:
+        context = {
+            'clients' : ClientTrials.objects.exclude(purchase_status = 'null')
+        }
+        return render(request, 'admin/purchased_clients.html',context)
+    else:
+        return redirect('/')
 
 def cancelSubscription(request,id):
     if request.user.is_staff:

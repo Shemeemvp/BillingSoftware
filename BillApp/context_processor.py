@@ -40,12 +40,23 @@ def trial_status(request):
         user = User.objects.get(id = request.user.id)
         if not user.is_staff:
             status = ClientTrials.objects.get(user = request.user)
-            if status.purchase_status == 'null' and status.trial_status == True and status.subscribe_status == 'null':
+            if status.purchase_status == 'null' and status.trial_status == True and status.subscribe_status != 'yes':
                 exp_days = (status.end_date - date.today()).days
                 if exp_days <= 10:
                     context = {
                         'notification':True,
                         'days':exp_days,
+                    }
+                    return context
+                else:
+                    return {'notification':False}
+            elif status.purchase_status == 'null' and status.trial_status == True and status.subscribe_status == 'yes':
+                exp_days = (status.end_date - date.today()).days
+                if exp_days <= 10:
+                    context = {
+                        'notification':True,
+                        'days':exp_days,
+                        'subscribe':True,
                     }
                     return context
                 else:
@@ -75,3 +86,17 @@ def renewStatus(request):
         return {'status':False}
     else:
         return {'notification':False}
+    
+def endDate(request):
+    if request.user.is_authenticated:
+        user = User.objects.get(id = request.user.id)
+        if not user.is_staff:
+            status = ClientTrials.objects.get(user = request.user)
+            if status.purchase_status == 'valid':
+                date = status.purchase_end_date    
+                return {'endDate':date}
+            else:
+                return {'endDate':False}
+        return {'endDate':False}
+    else:
+        return {'endDate':False}

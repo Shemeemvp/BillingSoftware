@@ -5,7 +5,7 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 <style>
     main{
-        background: #ddddbeed;
+        background: #fff;
     }
     .btn:focus{
         box-shadow: none;
@@ -21,37 +21,46 @@
     .submit_btn:hover, .submitunit_btn:hover{
         background: #C6AA58;
     }
+    .demo_clients{
+        background-color: #eae9c4;
+    }
 
 </style>
 <div class="container-fluid">
     <div class="Demo_clients py-4">
-        <h4 class="ms-2">Demo Clients</h4>
-        <table id="demo_clients_table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Company Name</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>GSTIN</th>
-                    <th>Purchase Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in clients %}
-                <tr>
-                    <td>{{forloop.counter}}</td>
-                    <td>{{i.company.company_name}}</td>
-                    <td>{{i.user.email}}</td>
-                    <td>{{i.company.phone_number}}</td>
-                    <td>{{i.company.gst_number}}</td>
-                    <td>{% if i.subscribe_status == 'yes' %}Interested{% elif i.subscribe_status == 'no' %}Not Interested{% else %}N/A{% endif %}</td>
-                    <td><a href="#"><button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#purchase{{i.id}}">ACTIVATE</button></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="demo_clients px-3 py-3">
+                    <h4 class="ms-2">Demo Clients</h4>
+                    <table id="demo_clients_table" width="98.5%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Company Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>GSTIN</th>
+                                <th>Purchase Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in clients %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{i.company.company_name}}</td>
+                                <td>{{i.user.email}}</td>
+                                <td>{{i.company.phone_number}}</td>
+                                <td>{{i.company.gst_number}}</td>
+                                <td>{% if i.subscribe_status == 'yes' %}Interested{% elif i.subscribe_status == 'no' %}Not Interested{% else %}N/A{% endif %}</td>
+                                <td><a href="#"><button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#purchase{{i.id}}">ACTIVATE</button></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -197,9 +206,7 @@
         }
     });
 
-    let table = new DataTable("#demo_clients_table", {
-        "scrollX": true
-    });
+    let table = new DataTable("#demo_clients_table",{'scrollX':true});
 
     $(document).on("click","#savePaymentTerm",function(){
         var dur = $("#duration").val();
@@ -253,5 +260,13 @@
             }
         });
     }
+    // $(document).ready(function(){
+    //     $('#demo_clients_table').width('98.5%');
+    // })
+    window.addEventListener('resize', function(){
+        $('#demo_clients_table').width('98.5%')
+    });
+    
+    
 </script>
 {% endblock %}

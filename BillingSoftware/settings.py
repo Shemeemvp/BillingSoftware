@@ -68,6 +68,7 @@ TEMPLATES = [
                 'BillApp.context_processor.checkTrialStatus',
                 'BillApp.context_processor.trial_status',
                 'BillApp.context_processor.renewStatus',
+                'BillApp.context_processor.endDate',
             ],
         },
     },

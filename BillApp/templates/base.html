@@ -87,6 +87,12 @@
                     <li onclick="window.location.href=`{% url 'goPurchases' %}`" class="nav-item nav-link nav-purchase"><i class="fa fa-store me-2"></i>Purchase<a href="{% url 'addNewPurchase' %}"><i class="fa-solid fa-plus bg-transparent float-end add-icon"></i></a></li>
                     <li onclick="window.location.href=`{% url 'goStockReports' %}`" class="nav-item nav-link nav-stockreports"><i class="fas fa-chart-pie me-2"></i>Stock Reports</li>
                 </div>
+                {% if endDate %}
+                <div class="endDate my-3 px-2">
+                    <p class="text-white fw-bold mb-0">Subscription Ends by:</p>
+                    <span class="fs-5 fw-bolder" style="color: #c6aa58;">{{endDate}}</span>
+                </div>
+                {% endif %}
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -162,6 +168,7 @@
                                 {% else %}
                                 <h6 class="fw-normal mb-0">Your Trial Period expires in {{days}} days..</h6>
                                 {% endif %}
+                                {% if not subscribe %}
                                 <div class="d-flex px-1">
                                     <small>Want to Purchase.?</small>
                                     <div class="d-flex justify-content-end align-items-center">
@@ -169,6 +176,7 @@
                                         <a href="{% url 'changeTrialStatus' 'no' %}" class="text-decoration-none fw-bolder text-danger ms-3 me-3">Cancel</a>
                                     </div>    
                                 </div>
+                                {% endif %}
                             </a>
                             <!-- <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item text-center">See all notifications</a> -->
