@@ -19,6 +19,7 @@ from .models import *
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import Font, Protection, Alignment
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 
 # Create your views here.
 
@@ -71,7 +72,8 @@ def goRegisteredClients(request):
 def goDemoClients(request):
     if request.user.is_staff:
         context = {
-            'clients' : ClientTrials.objects.filter(trial_status = True),
+            # 'clients' : ClientTrials.objects.filter(trial_status = True),
+            'clients': ClientTrials.objects.filter(Q(trial_status=True) | (Q(trial_status=False) & Q(subscribe_status='yes'))),
             'terms' : PaymentTerms.objects.all()
         }
         return render(request, 'admin/demo_clients.html',context)
