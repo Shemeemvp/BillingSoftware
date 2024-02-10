@@ -3,8 +3,11 @@ from django.urls import path, include
 from BillApp import views
 
 urlpatterns = [
-    path('',views.login, name='login'),
+    path('',views.index, name='index'),
+    path('blog',views.goBlog, name='goBlog'),
+    path('login',views.login, name='login'),
     path('register_user',views.registerUser, name='registerUser'),
+    path('register_trial_user',views.registerTrialUser, name='registerTrialUser'),
     path('user_login',views.userLogin, name='userLogin'),
     path('logout',views.userLogout, name='userLogout'),
     path('validate_email',views.validateEmail, name='validateEmail'),
@@ -81,4 +84,5 @@ urlpatterns = [
     path('delete_payment_term/<int:id>',views.deletePaymentTerm, name='deletePaymentTerm'),
     path('client_purchase/<int:id>',views.clientPurchase, name='clientPurchase'),
     path('get_payment_terms',views.getPaymentTerms, name='getPaymentTerms'),
+    path('remove_user/<int:id>',views.removeUser, name='removeUser'),
 ]

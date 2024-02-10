@@ -29,6 +29,7 @@
                                 <th>Contact</th>
                                 <th>GSTIN</th>
                                 <th>Registered Date</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +41,9 @@
                                 <td>{{i.company.phone_number}}</td>
                                 <td>{{i.company.gst_number}}</td>
                                 <td>{{i.trial.start_date}}</td>
+                                <td>
+                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'removeUser' i.company.user.id %}" onclick="return confirm('Are you sure you want to remove `{{i.company.company_name}}`.?\nAll data will be erased permanently.!')">REMOVE</a>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>

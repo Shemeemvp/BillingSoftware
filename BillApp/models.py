@@ -14,8 +14,8 @@ class Company(models.Model):
     logo = models.ImageField(upload_to='logo/',null=True)
 
 class ClientTrials(models.Model):
-    user = models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
-    company =  models.ForeignKey(Company,on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    company =  models.ForeignKey(Company,on_delete=models.CASCADE, null=True)
     start_date = models.DateField(null = True, blank=True)
     end_date = models.DateField(null = True, blank=True)
     trial_status = models.BooleanField(null = True, default = True)

@@ -18,6 +18,10 @@ def checkTrialStatus(request):
                     messages.warning(request, 'Your Trail Period has been expired, Contact Admin..!')
                     auth.logout(request)
                     return redirect(login)
+            elif status.purchase_status == 'null' and status.trial_status == False:
+                messages.warning(request, 'Your Trail Period has been expired, Contact Admin..!')
+                auth.logout(request)
+                return redirect(login)
             elif status.purchase_status == 'cancelled':
                 messages.warning(request, 'Your Subscription has been cancelled, Contact Admin..!')
                 auth.logout(request)
@@ -31,6 +35,28 @@ def checkTrialStatus(request):
                     auth.logout(request)
                     return redirect(login)
             return {'status':True}
+        return {'status':False}
+    return {'status':False}
+
+def checkTrialStatusAdmin(request):
+    if request.user.is_authenticated:
+        user = User.objects.get(id = request.user.id)
+        if user.is_staff:
+            trials = ClientTrials.objects.all()
+            for status in trials:
+                if status.purchase_status == 'null' and status.trial_status == True:
+                    exp_days = (status.end_date - date.today()).days
+                    if exp_days < 0:
+                        status.trial_status = False
+                        status.save()
+                        # return {'status':True}
+                elif status.purchase_status == 'valid':
+                    sub_exp_days = (status.purchase_end_date - date.today()).days
+                    if sub_exp_days < 0:
+                        status.purchase_status = 'expired'
+                        status.save()
+                        # return {'status':True}
+                # return {'status':True}
         return {'status':False}
     return {'status':False}
 

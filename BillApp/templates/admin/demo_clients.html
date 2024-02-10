@@ -40,6 +40,8 @@
                                 <th>Email</th>
                                 <th>Contact</th>
                                 <th>GSTIN</th>
+                                <!-- <th>Start Date</th> -->
+                                <th>Trial End Date</th>
                                 <th>Purchase Status</th>
                                 <th>Action</th>
                             </tr>
@@ -52,6 +54,8 @@
                                 <td>{{i.user.email}}</td>
                                 <td>{{i.company.phone_number}}</td>
                                 <td>{{i.company.gst_number}}</td>
+                                <!-- <td>{{i.start_date}}</td> -->
+                                <td>{{i.end_date}}</td>
                                 <td>{% if i.subscribe_status == 'yes' %}Interested{% elif i.subscribe_status == 'no' %}Not Interested{% else %}N/A{% endif %}</td>
                                 <td><a href="#"><button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#purchase{{i.id}}">ACTIVATE</button></a></td>
                             </tr>
