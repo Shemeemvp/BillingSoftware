@@ -121,10 +121,13 @@ h1, h2, h3, h4, h5, h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
+  position: relative;
   z-index: 997;
   transition: all 0.5s;
   padding: 16px 0;
-  background: #003e27;
+  /* background: #003e27; */
+  background:#222B31 !important;
+  border-bottom:4px solid #C6AA58 !important;
 }
 
 #header .logo h1 {
@@ -176,14 +179,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0 10px 30px;
+  padding: 10px 15px;
   font-size: 14px;
-  color: #fff;
+  font-weight: 600;
+  /* color: #fff; */
+  color: #a3bfc6;
   white-space: nowrap;
+  position: relative;
   transition: 0.3s;
+  z-index: 1000;
+}
+
+.hover{
+  display:block;
+  position:absolute;
+  width:0%;
+  height:100%;
+  top:0px;
+  left:0px;
+  background:#C6AA58 !important;
+  z-index:0;
+  opacity:0;
 }
 
 .navbar a i {
@@ -197,17 +213,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar .loginBtn {
-  background: #003e27;
+  background: #003e27 !important;
   font-weight: bold;
-  color: #fff;
+  color: #fff !important;
   padding: 4px 25px 6px 25px;
   margin-left: 30px;
   border-radius: 50px;
-  border: 2px solid #C6AA58;
+  border: 2px solid #C6AA58 !important;
 }
 
 .navbar .loginBtn:hover {
-  background: #C6AA58;
+  background: #C6AA58 !important;
   color: #fff;
 }
 
@@ -244,7 +260,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar .dropdown ul a:hover, .navbar .dropdown ul .active:hover, .navbar .dropdown ul li:hover > a {
-  color: #fdc134;
+  color: #fff;
 }
 
 .navbar .dropdown:hover > ul {
@@ -279,7 +295,7 @@ h1, h2, h3, h4, h5, h6 {
 * Mobile Navigation 
 */
 .mobile-nav-toggle {
-  color: #fdc134;
+  color: #C6AA58;
   font-size: 28px;
   cursor: pointer;
   display: none;
@@ -328,7 +344,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 15px;
   padding: 10px 0;
   border-radius: 10px;
-  background-color: #fff;
+  background-color: #222B31;
   overflow-y: auto;
   transition: 0.3s;
 }
@@ -336,11 +352,11 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-mobile a {
   padding: 10px 20px;
   font-size: 15px;
-  color: #213b52;
+  color: #a3bfc6;
 }
 
 .navbar-mobile a:hover, .navbar-mobile .active, .navbar-mobile li:hover > a {
-  color: #fdc134;
+  color: #fff;
 }
 
 .navbar-mobile .loginBtn {
@@ -374,7 +390,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover > a {
-  color: #fdc134;
+  color: #fff;
 }
 
 .navbar-mobile .dropdown > .dropdown-active {
@@ -394,21 +410,144 @@ h1, h2, h3, h4, h5, h6 {
 .getTrialBtn1 {
     right: unset;
     left: 0;
-    margin-left: 10%;
-    margin-bottom: 6%;
+    margin-left: 15%;
+    margin-bottom: 2%;
 }
 
 .getTrialBtn2 {
     right: 0;
     left: unset;
-    margin-right: 10%;
-    margin-bottom: 6%;
+    margin-right: 15%;
+    margin-bottom: 2%;
+}
+
+/* .caption1{
+  text-align: start !important;
+}
+
+.caption2{
+  text-align: end !important;
+} */
+
+.caption1 h3, .caption2 h3 {
+  font-size : calc(1.3rem + .5vw);
+}
+
+.caption1 p, .caption2 p {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 885px) {
+  .caption1 h3, .caption2 h3 {
+    font-size : calc(1.2rem + .5vw);
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 12px;
+  }
+
+  #hero .btn-get-trial {
+    padding: 7px 12px !important;
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .caption1 h3, .caption2 h3 {
+    font-size : calc(1.1rem + .4vw);
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 11px;
+  }
+
+  #hero .btn-get-trial {
+    padding: 6px 12px !important;
+    font-size: 0.84rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .carousel-item{
+    padding: 1.75rem 0rem;
+  }
+
+  .caption1 h3, .caption2 h3 {
+    font-size : calc(1rem + .4vw);
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 11px;
+  }
+
+  #hero .btn-get-trial {
+    padding: 6px 11px !important;
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 565px) {
+  .carousel-item{
+    padding: 2.5rem 0rem;
+  }
+
+  .caption1 h3, .caption2 h3 {
+    font-size : calc(0.9rem + .2vw);
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 10px;
+  }
+
+  #hero .btn-get-trial {
+    padding: 5px 11px !important;
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .carousel-item{
+    padding: 3.5rem 0rem;
+  }
+  .caption1 h3, .caption2 h3 {
+    font-size : calc(0.8rem + .1vw);
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 9px;
+  }
+
+  #hero .btn-get-trial {
+    padding: 4px 11px !important;
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .carousel-item{
+    padding: 3.8rem 0rem;
+  }
+}
+
+@media screen and (max-width: 300px) {
+
+  .carousel-item{
+    padding: 4rem 0rem;
+  }
+  .caption1 h3, .caption2 h3 {
+    font-size : 10px;
+  }
+
+  .caption1 p, .caption2 p {
+    font-size: 8px;
+  }
 }
 
 #hero {
   width: 100%;
   padding: 0 0 0 0;
-  background: #003e27;
+  /* background: #2c3733; */
+  background: black;
   /* background: linear-gradient(180deg, #213b52 0%, #213c54 35%, #204564 100%); */
 }
 
@@ -429,13 +568,38 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero .btn-get-trial {
   color: #fff;
-  border-radius: 5px;
   font-weight: bold;
   padding: 8px 35px 10px 35px;
-  border: 2px solid #C6AA58;
   transition: all ease-in-out 0.3s;
   display: inline-block;
-  background: #003e27;
+  background: #C6AA58;
+  position: relative;
+}
+
+.btn-get-trial::before,
+.btn-get-trial::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 0px solid transparent;
+}
+.btn-get-trial::before {
+  top: -4px;
+  left: -4px;
+  border-top: 2px solid #C6AA58;
+  border-left: 2px solid #C6AA58;
+}
+.btn-get-trial::after {
+  bottom: -4px;
+  right: -4px;
+  border-bottom: 2px solid #C6AA58;
+  border-right: 2px solid #C6AA58;
+}
+.btn-get-trial:hover::before,
+.btn-get-trial:hover::after {
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
 }
 
 @media screen and (max-width: 768px) {
@@ -444,10 +608,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 }
 
-#hero .btn-get-trial:hover {
+/* #hero .btn-get-trial:hover {
   background: #C6AA58;
   color: #003e27;
-}
+} */
 
 @media (max-width: 991px) {
   #hero .hero-img {
@@ -483,6 +647,49 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.carousel_image1 {
+  animation: cr_imgMove1 25s linear infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes cr_imgMove1 {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.carousel_image2 {
+  animation: cr_imgMove2 25s linear infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes cr_imgMove2 {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(10%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+/*--------------------------------------------------------------
+# MAIN
+--------------------------------------------------------------*/
+
+/* #main {
+  border-top:4px solid #003e27 !important;
+} */
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
@@ -492,7 +699,9 @@ section {
 }
 
 .section-bg {
-  background: linear-gradient(180deg, #f2f6fa 0%, #fff 100%);
+  border-top:4px solid #003e27 !important;
+  background: #192226;
+  /* background: linear-gradient(180deg, #f2f6fa 0%, #fff 100%); */
 }
 
 .section-title {
@@ -508,7 +717,7 @@ section {
   padding-bottom: 20px;
   position: relative;
   font-family: "Poppins", sans-serif;
-  color: #003e27;
+  color: #C6AA58;
 }
 
 .section-title h2::before {
@@ -538,189 +747,6 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Breadcrumbs
---------------------------------------------------------------*/
-.breadcrumbs {
-  padding: 15px 0;
-  background-color: #f6f9fb;
-  min-height: 40px;
-}
-
-.breadcrumbs h2 {
-  font-size: 24px;
-  font-weight: 300;
-}
-
-.breadcrumbs ol {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
-}
-
-.breadcrumbs ol li + li {
-  padding-left: 10px;
-}
-
-.breadcrumbs ol li + li::before {
-  display: inline-block;
-  padding-right: 10px;
-  color: #6c757d;
-  content: "/";
-}
-
-@media (max-width: 768px) {
-  .breadcrumbs .d-flex {
-    display: block !important;
-  }
-  .breadcrumbs ol {
-    display: block;
-  }
-  .breadcrumbs ol li {
-    display: inline-block;
-  }
-}
-/*--------------------------------------------------------------
-# About
---------------------------------------------------------------*/
-/* .about .content {
-  padding: 30px 0;
-}
-
-.about .content h3 {
-  font-weight: 700;
-  font-size: 34px;
-  color: #003e27;
-}
-
-.about .content p {
-  margin-bottom: 0;
-}
-
-.about .content .icon-box {
-  margin-top: 25px;
-}
-
-.about .content .icon-box h4 {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 5px 0 10px 60px;
-  color: #213b52;
-}
-
-.about .content .icon-box h4 a {
-  color: #213b52;
-  transition: 0.3s;
-}
-
-.about .content .icon-box h4 a:hover {
-  color: #C6AA58;
-}
-
-.about .content .icon-box i {
-  font-size: 48px;
-  float: left;
-  color: #fdc134;
-}
-
-.about .content .icon-box p {
-  font-size: 15px;
-  color: #848484;
-  margin-left: 60px;
-}
-
-.about .image {
-  background: url("{% static 'assets/img/about.jpg' %}") center center no-repeat;
-  background-size: cover;
-  min-height: 400px;
-}
-
-@media (max-width: 667px) {
-  .about .image img {
-    max-width: 100%;
-  }
-} */
-
-/*--------------------------------------------------------------
-# Services
---------------------------------------------------------------*/
-.services {
-  padding-bottom: 40px;
-}
-
-.services .card {
-  border: 0;
-  padding: 0 30px;
-  margin-bottom: 60px;
-  position: relative;
-  background: transparent;
-}
-
-.services .card-img {
-  width: calc(100% + 60px);
-  margin-left: -30px;
-  overflow: hidden;
-  z-index: 9;
-  border-radius: 0;
-}
-
-.services .card-img img {
-  max-width: 100%;
-  transition: all 0.3s ease-in-out;
-}
-
-.services .card-body {
-  z-index: 10;
-  background: #fff;
-  border-top: 4px solid #fff;
-  padding: 30px;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-  margin-top: -60px;
-  transition: 0.3s;
-}
-
-.services .card-title {
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.services .card-title a {
-  color: #213b52;
-  transition: 0.3s;
-}
-
-.services .card-text {
-  color: #5e5e5e;
-}
-
-.services .read-more a {
-  color: #777777;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 12px;
-  transition: 0.3s;
-}
-
-.services .read-more a:hover {
-  color: #fdc134;
-}
-
-.services .card:hover img {
-  transform: scale(1.1);
-}
-
-.services .card:hover .card-body {
-  border-color: #fdc134;
-}
-
-.services .card:hover .card-body .card-title a {
-  color: #fdc134;
-}
-
-/*--------------------------------------------------------------
 # About
 --------------------------------------------------------------*/
 .about .content + .content {
@@ -730,7 +756,7 @@ section {
 .about .content h3 {
   font-weight: 700;
   font-size: 26px;
-  color: #003e27;
+  color: #C6AA58;
 }
 
 .about .content ul {
@@ -740,6 +766,7 @@ section {
 
 .about .content ul li {
   padding-bottom: 10px;
+  color: wheat;
 }
 
 .about .content ul i {
@@ -751,6 +778,29 @@ section {
 .about .content p:last-child {
   margin-bottom: 0;
 }
+
+#about p{
+  color: white;
+}
+
+.about_image {
+  animation: imgMove 30s linear infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes imgMove {
+  0% {
+    transform: translateY(0%);
+  }
+  50% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
 /*--------------------------------------------------------------
 # PlanAndPricing
 --------------------------------------------------------------*/
@@ -760,7 +810,12 @@ section {
   padding: 35px 50px;
   border-radius: 20px;
   position: relative;
-  background-color: #00000029;
+  background-color: #e7e7e5d6;
+  z-index: 1;
+}
+
+.pricing-box p{
+  color: black !important;
 }
 
 .pricing-box .plan {
@@ -800,7 +855,8 @@ section {
     margin-bottom: .5rem!important;
 }
 #planAndPricing p {
-    line-height: 1.7;
+  line-height: 1.7;
+  color: whitesmoke;
 }
 
 .purchaseBtn{
@@ -811,6 +867,89 @@ section {
 .purchaseBtn:hover{
   background: #C6AA58;
   color: #005938cf !important;
+}
+
+/*--------------------------------------------------------------
+# FAQ
+--------------------------------------------------------------*/
+
+#FAQs p{
+  color: white;
+}
+
+.faqs .accordion .card {
+  border: none;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+.faqs .our-faq-wrapper .btn-link {
+  display: block;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  background: #242c42;
+  color: #fff;
+  border-radius: 0;
+  padding: 7px 15px 12px;
+  font-size: 16px;
+  overflow: hidden;
+  border: none;
+  font-weight:600;  
+}
+.faqs .our-faq-wrapper .btn-link:hover, .faqs .our-faq-wrapper .btn-link:focus {
+  text-decoration: none;
+}
+.faqs .our-faq-wrapper .btn-link:after {
+  position: absolute;
+  content: '\f068';
+  right: 15px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-family: fontawesome;
+}
+.faqs .our-faq-wrapper .btn-link.collapsed:after {
+  content: '\f067';
+}
+.faqs .our-faq-wrapper .btn-link:before {
+  position: absolute;
+  content: '';
+  background: #C6AA58;
+  -webkit-transform: skew(-35deg);
+  transform: skew(-35deg);
+  height: 100%;
+  width: 50%;
+  left: 90%;
+  top: 0;
+}
+.faqs .card-header {
+  padding: 0;
+  background: transparent;
+  border-bottom: none;
+}
+.faqs .card-body {
+  position: relative;
+  background: #c6c7c6;
+}
+.faqs .card-body:after {
+  position: absolute;
+  content: '';
+  height: 4px;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  background: #003e27;
+}
+.faqs .card-body:before {
+  position: absolute;
+  content: '';
+  height: 4px;
+  width: 50%;
+  left: 0;
+  bottom: 0;
+  background: #C6AA58;
+  z-index: 1;
 }
 
 /*--------------------------------------------------------------
@@ -846,93 +985,15 @@ section {
   margin-bottom: 0;
 }
 
-.contact .php-email-form {
-  box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
-  padding: 30px;
-  background: #fff;
-}
-
-.contact .php-email-form .error-message {
-  display: none;
-  color: #fff;
-  background: #ed3c0d;
-  text-align: left;
-  padding: 15px;
-  font-weight: 600;
-}
-
-.contact .php-email-form .error-message br + br {
-  margin-top: 25px;
-}
-
-.contact .php-email-form .sent-message {
-  display: none;
-  color: #fff;
-  background: #18d26e;
-  text-align: center;
-  padding: 15px;
-  font-weight: 600;
-}
-
-.contact .php-email-form .loading {
-  display: none;
-  background: #fff;
-  text-align: center;
-  padding: 15px;
-}
-
-.contact .php-email-form .loading:before {
-  content: "";
-  display: inline-block;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  margin: 0 10px -6px 0;
-  border: 3px solid #18d26e;
-  border-top-color: #eee;
-  -webkit-animation: animate-loading 1s linear infinite;
-  animation: animate-loading 1s linear infinite;
-}
-
-.contact .php-email-form input, .contact .php-email-form textarea {
-  border-radius: 0;
-  box-shadow: none;
-  font-size: 14px;
-}
-
-.contact .php-email-form input::focus, .contact .php-email-form textarea::focus {
-  background-color: #fdc134;
-}
-
-.contact .php-email-form input {
-  padding: 10px 15px;
-}
-
-.contact .php-email-form textarea {
-  padding: 12px 15px;
-}
-
-.contact .php-email-form button[type="submit"] {
-  background: #fdc134;
-  border: 0;
-  padding: 10px 24px;
-  color: #fff;
-  transition: 0.4s;
-}
-
-.contact .php-email-form button[type="submit"]:hover {
-  background: #fdd067;
-}
-
 .mapouter{
   position:relative;text-align:right;width:100%;height:400px;
 }
 .gmap_canvas {
   overflow:hidden;background:none!important;width:100%;height:400px;
 }
-.gmap_iframe {
-  height:400px!important;
-}
+/* .gmap_iframe {
+  height:390px!important;
+} */
 @-webkit-keyframes animate-loading {
   0% {
     transform: rotate(0deg);
@@ -958,6 +1019,7 @@ section {
   color: #fff;
   font-size: 14px;
   position: relative;
+  z-index: 997;
 }
 
 #footer::before {
@@ -967,7 +1029,7 @@ section {
   right: 0;
   top: 0;
   bottom: 0;
-  background: #003e27;
+  background: #222B31;
   z-index: -1;
 }
 
@@ -1165,26 +1227,6 @@ section {
   background: #eee;
 }
 
-.accordion-button:focus{
-  border-color: unset;
-  box-shadow: none;
-}
-
-.accordion-button.collapsed{
-  border-color: unset;
-}
-
-.accordion-button:not(.collapsed) {
-    color: #003e27;
-    background-color: #c6aa5880;
-}
-
-.accordion-button{
-  font-weight: bold;
-}
-.accordion-button:hover{
-  background-color: #c6aa5880;
-}
 @media (max-width: 768px) {
   #footer .copyright, #footer .credits {
     padding: 5px;
@@ -1287,7 +1329,6 @@ section {
     background: #C6AA58;
     color: #003e27;
 }
-
 </style>
 
 
@@ -1295,6 +1336,36 @@ section {
 </head>
 
 <body>
+  <style>
+    body, html {
+      background: #090d00;
+    }
+
+    /* BACKGROUND */
+
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #bg canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <div id="bg">
+    <canvas></canvas>
+    <canvas></canvas>
+    <canvas></canvas>
+  </div>
 
   <!-- ======= Header ======= -->
   <header id="header">
@@ -1308,11 +1379,11 @@ section {
       <nav id="navbar" class="navbar">
         <ul>
           <!-- <li><a class="nav-link scrollto active" href="#hero">Home</a></li> -->
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#planAndPricing">Plan & Pricing</a></li>
-          <li><a class="nav-link scrollto" href="#FAQs">FAQs</a></li>
-          <li><a class="nav-link" href="{% url 'goBlog' %}">Blog</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact Us</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a><span class="hover"></span></li>
+          <li><a class="nav-link scrollto" href="#planAndPricing">Plan & Pricing</a><span class="hover"></span></li>
+          <li><a class="nav-link scrollto" href="#FAQs">FAQs</a><span class="hover"></span></li>
+          <li><a class="nav-link" href="{% url 'goBlog' %}">Blog</a><span class="hover"></span></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact Us</a><span class="hover"></span></li>
           
           
           <li><a class="loginBtn" href="{% url 'login' %}">Login</a></li>
@@ -1328,53 +1399,56 @@ section {
   <section id="hero">
       <div
         id="carouselExampleControls"
-        data-bs-interval="3000"
+        data-bs-interval="4000"
         class="carousel slide"
         data-bs-ride="carousel"
       >
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img
-              src="{% static 'images/bn1.jpg' %}"
-              class="d-block w-100"
+              src="{% static 'images/ft5.svg' %}"
+              class="d-block carousel_image1"
               alt="..."
+              style="width: 31vw; float: right;"
             />
-            <div class="carousel-caption d-none d-sm-block top-0 mt-5">
-                <h3>What is Lorem Ipsum?</h3>
-                <p class="mt-3">
+            <div class="carousel-caption top-0 mt-4 w-50 caption1">
+                <h3 class="text-start">Ullamco laboris nisi ut aliquip</h3>
+                <p class="mt-3 text-start">
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry.<br>
-                  Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.
+                  Voluptatem dignissimos provident quasi
                 </p>
             </div>
-            <div class="carousel-caption getTrialBtn1 d-none d-md-block">
+            <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
             </div>
           </div>
           <div class="carousel-item">
             <img
-              src="{% static 'images/bn2.jpg' %}"
-              class="d-block w-100"
+              src="{% static 'images/ft6.svg' %}"
+              class="d-block carousel_image2"
               alt="..."
+              style="width: 31vw; float: left;"
             />
-            <div class="carousel-caption d-none d-sm-block top-0 mt-5">
-              <h3>What is Lorem Ipsum?</h3>
-              <p class="mt-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            <div class="carousel-caption top-0 mt-4 caption2">
+              <h3 class="text-end w-75 float-end">provident quasi corporis volupta</h3>
+              <p class="mt-3 text-end w-75 float-end">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
-            <div class="carousel-caption getTrialBtn2 d-none d-md-block">
+            <div class="carousel-caption getTrialBtn2 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
             </div>
           </div>
           <div class="carousel-item">
             <img
-              src="{% static 'images/bn3.jpg' %}"
-              class="d-block w-100"
+              src="{% static 'images/ft7.svg' %}"
+              class="d-block carousel_image1"
               alt="..."
+              style="width: 31vw; float: right;"
             />
-            <div class="carousel-caption d-none d-sm-block top-0 mt-5 mr-4">
-              <h3>What is Lorem Ipsum?</h3>
-              <p class="mt-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            <div class="carousel-caption top-0 mt-4 w-50 caption1">
+              <h3 class="text-start">Excepteur sint occaecat cupidatat</h3>
+              <p class="mt-3 text-start">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
-            <div class="carousel-caption getTrialBtn1 d-none d-md-block">
+            <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
             </div>
           </div>
@@ -1408,17 +1482,17 @@ section {
       <div class="container">
 
         <div class="section-title">
-          <h2 data-aos="fade-in">About</h2>
-          <p data-aos="fade-in">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+          <h2 data-aos="fade-in" style="position: relative; z-index: 1;">About</h2>
+          <p data-aos="fade-in" style="position: relative; z-index: 1;">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="row content">
-          <div class="col-md-5" data-aos="fade-right">
+          <div class="col-md-5 about_image" data-aos="fade-right">
             <img src="{% static 'images/ft1.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-4" data-aos="fade-left">
-            <h3>Excepteur sint occaecat cupidatat non proident, sunt occaecat.</h3>
-            <p class="font-italic">
+            <h3 style="position: relative; z-index: 1;">Excepteur sint occaecat cupidatat non proident, sunt occaecat.</h3>
+            <p class="font-italic" style="position: relative; z-index: 1;">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
               magna aliqua.
             </p>
@@ -1429,23 +1503,18 @@ section {
           </div>
         </div>
 
-        <div class="row demo-video py-5">
-          <div class="col-12 d-flex justify-content-center">
-            <iframe style="width: 75vw; height: 70vh;" src="https://www.youtube.com/embed/CcjZ2x72iF0?si=WrJTLSJ7EThuf5kA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-          </div>
-        </div>
 
         <div class="row content">
-          <div class="col-md-5 order-1 order-md-2" data-aos="fade-left">
-            <img src="{% static 'images/ft2.svg' %}" class="img-fluid" alt="">
+          <div class="col-md-5 order-1 order-md-2 about_image" data-aos="fade-left">
+            <img src="{% static 'images/ft2.svg' %}"class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5 order-2 order-md-1" data-aos="fade-right">
-            <h3>Corporis temporibus maiores provident</h3>
-            <p class="font-italic">
+            <h3 style="position: relative; z-index: 1;">Corporis temporibus maiores provident</h3>
+            <p class="font-italic" style="z-index: 1;">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
               magna aliqua.
             </p>
-            <p>
+            <p style="position: relative; z-index: 1;">
               Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
               velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
               culpa qui officia deserunt mollit anim id est laborum
@@ -1453,8 +1522,14 @@ section {
           </div>
         </div>
 
+        <div class="row demo-video py-5">
+          <div class="col-12 d-flex justify-content-center">
+            <iframe style="width: 75vw; height: 70vh; position: relative; z-index: 1;" src="https://www.youtube.com/embed/CcjZ2x72iF0?si=WrJTLSJ7EThuf5kA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          </div>
+        </div>
+
         <div class="row content">
-          <div class="col-md-5" data-aos="fade-right">
+          <div class="col-md-5 about_image" data-aos="fade-right">
             <img src="{% static 'images/ft3.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5" data-aos="fade-left">
@@ -1469,7 +1544,7 @@ section {
         </div>
 
         <div class="row content">
-          <div class="col-md-5 order-1 order-md-2" data-aos="fade-left">
+          <div class="col-md-5 order-1 order-md-2 about_image" data-aos="fade-left">
             <img src="{% static 'images/ft4.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5 order-2 order-md-1" data-aos="fade-right">
@@ -1540,8 +1615,8 @@ section {
                   <div class="mt-4 pt-2">
                       <p class="mb-2">Features</p>
                       <!-- <p class="mb-2"><i class="bx bxs-check-circle text-success me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p> -->
-                      <p class="mb-2"><i class="bx bxs-check-circle text-success me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is dummy text</p>
-                      <p class="mb-2"><i class="bx bxs-check-circle text-success me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy</p>
+                      <p class="mb-2"><i class="bx bxs-check-circle text-success me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
+                      <p class="mb-2"><i class="bx bxs-check-circle text-success me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
                       <p class="mb-2"><i class="bx bxs-x-circle text-danger me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
                   </div>
 
@@ -1567,9 +1642,9 @@ section {
                   <div class="mt-4 pt-2">
                       <p class="mb-2 f-18">Features</p>                      
                       <!-- <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply</p> -->
-                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem</b>Lorem Ipsum is simply dummy text</p>
-                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is dummy text</p>
-                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem</b>Lorem Ipsum is simply text</p>
+                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
+                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
+                      <p class="mb-2"><i class="bx bxs-check-circle text-success f-18 me-2"></i><b>Lorem Ipsum</b>Lorem Ipsum is simply dummy text</p>
                   </div>
 
                   <!-- <p class="mt-4 pt-2 text-muted">Semper urna veal tempus pharetra elit habisse platea dictumst.
@@ -1594,45 +1669,84 @@ section {
 
     <!-- ======= FAQs Section ======= -->
     <section id="FAQs" class="faqs section-bg">
+
+      <div class="our-faq-wrapper">
+      <div class="container">
       <div class="container">
 
-        <div class="section-title">
-          <h2 data-aos="fade-in">FAQ<sub>s</sub></h2>
-          <p data-aos="fade-in">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
+        <div class="container">
 
-        <div class="accordion" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#FAQ1" aria-expanded="true" aria-controls="FAQ1">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy ?
-              </button>
-            </h2>
-            <div id="FAQ1" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-              <div class="accordion-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
-            </div>
+          <div class="section-title">
+            <h2 data-aos="fade-in">FAQ<sub>s</sub></h2>
+            <p data-aos="fade-in">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
           </div>
 
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#FAQ2" aria-expanded="false" aria-controls="FAQ2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's ?
-              </button>
-            </h2>
-            <div id="FAQ2" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="accordion" id="accordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-bs-parent="#accordion">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="col-lg-6">
+              <div class="accordion" id="accordion2">
+                <div class="card">
+                  <div class="card-header" id="heading4">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapse4" class="collapse" aria-labelledby="heading4" data-bs-parent="#accordion2">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="heading5">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapse5" class="collapse" aria-labelledby="heading5" data-bs-parent="#accordion2">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="heading6">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6"> Frequently Asked Questions ? </button>
+                    </h5>
+                  </div>
+                  <div id="collapse6" class="collapse show" aria-labelledby="heading6" data-bs-parent="#accordion2">
+                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
           </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#FAQ3" aria-expanded="false" aria-controls="FAQ3">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard ?
-              </button>
-            </h2>
-            <div id="FAQ3" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
-            </div>
           </div>
 
           <div class="accordion-item">
@@ -1644,22 +1758,24 @@ section {
             <div id="FAQ4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
               <div class="accordion-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
             </div>
+            </div>
+          </div>
+                  </div>
           </div>
 
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#FAQ5" aria-expanded="false" aria-controls="FAQ5">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#FAQ4" aria-expanded="false" aria-controls="FAQ4">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard ?
               </button>
             </h2>
-            <div id="FAQ5" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div id="FAQ4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
               <div class="accordion-body">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</div>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
-
-
       </div>
     </section>
     <!-- End FAQs Section -->
@@ -1674,9 +1790,9 @@ section {
 
         <div class="row">
           <div class="col-lg-6 mt-4 mt-lg-0">
-            <div class="mapouter" style="border: 1;">
+            <div class="mapouter">
               <div class="gmap_canvas">
-                <iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.0739866451886!2d76.35812367376452!3d10.01074747285229!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d9bfaa6db61%3A0xa5df6acfc2d1e5fd!2sALTOS%20Technologies!5e0!3m2!1sen!2sin!4v1707387050232!5m2!1sen!2sin"></iframe>
+                <iframe class="gmap_iframe h-100" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.0739866451886!2d76.35812367376452!3d10.01074747285229!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d9bfaa6db61%3A0xa5df6acfc2d1e5fd!2sALTOS%20Technologies!5e0!3m2!1sen!2sin!4v1707387050232!5m2!1sen!2sin"></iframe>
                 <!-- <a href="https://www.embedmymap.com/">Embed My Map</a> -->
               </div>
             </div>
@@ -1684,7 +1800,7 @@ section {
 
           <div class="col-lg-6">
 
-            <div class="row">
+            <div class="row pt-3">
               <div class="col-md-12">
                 <div class="info-box" data-aos="fade-up">
                   <i class="bx bx-map"></i>
@@ -1733,7 +1849,7 @@ section {
   <div class="chat-box-section" id="chat-box">
     <div class="card" id="chat2">
       <div class="card-header d-flex justify-content-between align-items-center px-2">
-        <h6 class="mb-0">BillingSoftware</h6>
+        <h6 class="mb-0">BillingSoftwareIndia</h6>
         <span id="chat-box-close" onclick="closeChatBox()" style="cursor: pointer; font-size: 2em;"><i class="bx bx-x"></i></span>
       </div>
       <div class="card-body" data-mdb-perfect-scrollbar="true" id="chat-message-box">
@@ -1793,7 +1909,7 @@ section {
 
   <a href="#registerTrial" data-bs-toggle="modal" class="get-trial-button d-flex align-items-center justify-content-center"><i class="bx bxs-hand-right mr-1"></i>Get Trial</a>
   <!-- Trial Register Modal -->
-  <div class="modal fade" id="registerTrial" tabindex="-1" data-bs-backdrop="static" aria-labelledby="registerTrialLabel" aria-hidden="true">
+  <div class="modal fade" id="registerTrial" tabindex="-1" data-bs-backdrop="static" aria-labelledby="registerTrialLabel" aria-hidden="true" style="z-index: 100000;">
     <div class="modal-dialog modal-lg">
       <div class="modal-content" style="background: #ddddbe;">
         <div class="modal-header" style="border-bottom: 1px solid #C6AA58;">
@@ -1941,7 +2057,25 @@ section {
 
   <!-- Template chat JS File -->
   <script src="{% static 'assets/js/chat.js' %}"></script>
+
+
   <script>
+    $( "li" ).hover(
+      function() {
+          $(this).find("span").stop().animate({
+          width:"100%",
+          opacity:"1",
+        }, 400, function () {
+        })
+      }, function() {
+          $(this).find("span").stop().animate({
+          width:"0%",
+          opacity:"0",
+        }, 400, function () {
+        })
+      }
+    );
+
     function togglePasswordVisibility1(){
       if($('#pwd').attr('type') == 'text'){
         $('#pwd').attr('type','password')
@@ -2021,7 +2155,7 @@ $(document).ready(function(){
   $("#email").blur(function () {
     var email = $(this).val().trim();
     // alert(email)
-    if(email != ""){
+    if(email !=""){
       $.ajax({
         method:'GET',
         url: "{% url 'validateEmail' %}",
@@ -2061,40 +2195,40 @@ function deactivateForm(){
 }
 
 $(document).ready(function(){
-    $("#user").blur(function () {
-      if($('#register-form').hasClass('form_active')){
-        var user = $(this).val().trim();
-        if(user != ""){
-          $.ajax({
-            url: "{% url 'validateUsername' %}",
-            data: {
-            'username': user
-            },
-            dataType: 'json',
-            success: function (data) {
-              if (data.is_taken) {
-                $("#user").val("");
-                $('#userErr').text('User name "'+ user +'" already exists..').show()
-                $('#registerBtn').prop('disabled', true);
-              }else{
-                $('#userErr').hide()
-                $('#registerBtn').prop('disabled', false);
-              }
+  $("#user").blur(function () {
+    if($('#register-form').hasClass('form_active')){
+      var user = $(this).val().trim();
+      if(user != ""){
+        $.ajax({
+          url: "{% url 'validateUsername' %}",
+          data: {
+          'username': user
+          },
+          dataType: 'json',
+          success: function (data) {
+            if (data.is_taken) {
+              $("#user").val("");
+              $('#userErr').text('User name "'+ user +'" already exists..').show()
+              $('#registerBtn').prop('disabled', true);
+            }else{
+              $('#userErr').hide()
+              $('#registerBtn').prop('disabled', false);
             }
-          });
-        }else{
-          $('#userErr').text('User name is required..').show()
-          $('#registerBtn').prop('disabled', true);
-        }
-      }
-    });
+          }
+        });
+      }else{
+        $('#userErr').text('User name is required..').show()
+        $('#registerBtn').prop('disabled', true);
+      } 
+    }
   });
+});
 
   $(document).ready(function(){
     $("#phone").blur(function () {
         var phone = $(this).val().trim();
         if(phone != ""){
-            $.ajax({
+          $.ajax({
             method:'GET',
             url: "{% url 'validatePhone' %}",
             data: {
@@ -2111,7 +2245,7 @@ $(document).ready(function(){
                 $('#registerBtn').prop('disabled', false);
               }
             }
-            });
+          });
         }else{
           $('#phoneErr').text('Phone No. is required..').show()
           $('#registerBtn').prop('disabled', true);
@@ -2120,35 +2254,35 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-  $("#company").blur(function () {
-    var company = $(this).val().trim();
-    if(company != ""){
-      $.ajax({
-        method:'GET',
-        url: "{% url 'validateCompany' %}",
-        data: {
-            'company': company
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.is_taken) {
-            $("#company").val("");
-            $('#cmpErr').text('Company "'+ company +'" already exists..').show()
-            $('#registerBtn').prop('disabled', true);
-          }else{
-            $('#cmpErr').hide()
-            $('#registerBtn').prop('disabled', false);
-          }
+    $("#company").blur(function () {
+        var company = $(this).val().trim();
+        if(company != ""){
+          $.ajax({
+            method:'GET',
+            url: "{% url 'validateCompany' %}",
+            data: {
+                'company': company
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                $("#company").val("");
+                $('#cmpErr').text('Company "'+ company +'" already exists..').show()
+                $('#registerBtn').prop('disabled', true);
+              }else{
+                $('#cmpErr').hide()
+                $('#registerBtn').prop('disabled', false);
+              }
+            }
+          });
+        }else{
+          $('#cmpErr').text('Company Name is required..').show()
+          $('#registerBtn').prop('disabled', true);
         }
-      });
-    }else{
-      $('#cmpErr').text('Company Name is required..').show()
-      $('#registerBtn').prop('disabled', true);
-    }
-  });
+    });
 });
 
-    (function() {
+(function() {
   "use strict";
 
   /**
@@ -2379,6 +2513,692 @@ button.addEventListener('click', () => {
 picker.togglePicker(button);
 });
 </script>
+
+<script>
+  (function($){
+      var canvas = $('#bg').children('canvas'),
+        background = canvas[0],
+        foreground1 = canvas[1],
+        foreground2 = canvas[2],
+        config = {
+          circle: {
+            amount: 18,
+            layer: 3,
+            color: [207, 192, 97],
+            alpha: 0.3
+          },
+          line: {
+            amount: 12,
+            layer: 3,
+            color: [255, 255, 255],
+            alpha: 0.3
+          },
+          speed: 0.5,
+          angle: 20
+        };
+
+      if (background.getContext){
+        var bctx = background.getContext('2d'),
+          fctx1 = foreground1.getContext('2d'),
+          fctx2 = foreground2.getContext('2d'),
+          M = window.Math, // Cached Math
+          degree = config.angle/360*M.PI*2,
+          circles = [],
+          lines = [],
+          wWidth, wHeight, timer;
+        
+        requestAnimationFrame = window.requestAnimationFrame || 
+          window.mozRequestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          function(callback, element) { setTimeout(callback, 1000 / 60); };
+
+        cancelAnimationFrame = window.cancelAnimationFrame ||
+          window.mozCancelAnimationFrame ||
+          window.webkitCancelAnimationFrame ||
+          window.msCancelAnimationFrame ||
+          window.oCancelAnimationFrame ||
+          clearTimeout;
+
+        var setCanvasHeight = function(){
+          wWidth = $(window).width();
+          wHeight = $(window).height(),
+
+          canvas.each(function(){
+            this.width = wWidth;
+            this.height = wHeight;
+          });
+        };
+
+        var drawCircle = function(x, y, radius, color, alpha){
+          var gradient = fctx1.createRadialGradient(x, y, radius, x, y, 0);
+          gradient.addColorStop(0, 'rgba('+color[0]+','+color[1]+','+color[2]+','+alpha+')');
+          gradient.addColorStop(1, 'rgba('+color[0]+','+color[1]+','+color[2]+','+(alpha-0.1)+')');
+
+          fctx1.beginPath();
+          fctx1.arc(x, y, radius, 0, M.PI*2, true);
+          fctx1.fillStyle = gradient;
+          fctx1.fill();
+        };
+
+        var drawLine = function(x, y, width, color, alpha){
+          var endX = x+M.sin(degree)*width,
+            endY = y-M.cos(degree)*width,
+            gradient = fctx2.createLinearGradient(x, y, endX, endY);
+          gradient.addColorStop(0, 'rgba('+color[0]+','+color[1]+','+color[2]+','+alpha+')');
+          gradient.addColorStop(1, 'rgba('+color[0]+','+color[1]+','+color[2]+','+(alpha-0.1)+')');
+
+          fctx2.beginPath();
+          fctx2.moveTo(x, y);
+          fctx2.lineTo(endX, endY);
+          fctx2.lineWidth = 3;
+          fctx2.lineCap = 'round';
+          fctx2.strokeStyle = gradient;
+          fctx2.stroke();
+        };
+
+        var drawBack = function(){
+          bctx.clearRect(0, 0, wWidth, wHeight);
+
+          var gradient = [];
+          
+          gradient[0] = bctx.createRadialGradient(wWidth*0.3, wHeight*0.1, 0, wWidth*0.3, wHeight*0.1, wWidth*0.9);
+          // gradient[0].addColorStop(0, 'rgb(0, 26, 77)');
+          gradient[0].addColorStop(0, 'transparent');
+          gradient[0].addColorStop(1, 'transparent');
+
+          bctx.translate(wWidth, 0);
+          bctx.scale(-1,1);
+          bctx.beginPath();
+          bctx.fillStyle = gradient[0];
+          bctx.fillRect(0, 0, wWidth, wHeight);
+
+          gradient[1] = bctx.createRadialGradient(wWidth*0.1, wHeight*0.1, 0, wWidth*0.3, wHeight*0.1, wWidth);
+          // gradient[1].addColorStop(0, 'rgb(0, 150, 240)');
+          gradient[1].addColorStop(0, 'transparent');
+          gradient[1].addColorStop(0.8, 'transparent');
+
+          bctx.translate(wWidth, 0);
+          bctx.scale(-1,1);
+          bctx.beginPath();
+          bctx.fillStyle = gradient[1];
+          bctx.fillRect(0, 0, wWidth, wHeight);
+
+          gradient[2] = bctx.createRadialGradient(wWidth*0.1, wHeight*0.5, 0, wWidth*0.1, wHeight*0.5, wWidth*0.5);
+          // gradient[2].addColorStop(0, 'rgb(40, 20, 105)');
+          gradient[2].addColorStop(0, 'transparent');
+          gradient[2].addColorStop(1, 'transparent');
+
+          bctx.beginPath();
+          bctx.fillStyle = gradient[2];
+          bctx.fillRect(0, 0, wWidth, wHeight);
+        };
+
+        var animate = function(){
+          var sin = M.sin(degree),
+            cos = M.cos(degree);
+
+          if (config.circle.amount > 0 && config.circle.layer > 0){
+            fctx1.clearRect(0, 0, wWidth, wHeight);
+            for (var i=0, len = circles.length; i<len; i++){
+              var item = circles[i],
+                x = item.x,
+                y = item.y,
+                radius = item.radius,
+                speed = item.speed;
+
+              if (x > wWidth + radius){
+                x = -radius;
+              } else if (x < -radius){
+                x = wWidth + radius
+              } else {
+                x += sin*speed;
+              }
+
+              if (y > wHeight + radius){
+                y = -radius;
+              } else if (y < -radius){
+                y = wHeight + radius;
+              } else {
+                y -= cos*speed;
+              }
+
+              item.x = x;
+              item.y = y;
+              drawCircle(x, y, radius, item.color, item.alpha);
+            }
+          }
+
+          if (config.line.amount > 0 && config.line.layer > 0){
+            fctx2.clearRect(0, 0, wWidth, wHeight);
+            for (var j=0, len = lines.length; j<len; j++){
+              var item = lines[j],
+                x = item.x,
+                y = item.y,
+                width = item.width,
+                speed = item.speed;
+
+              if (x > wWidth + width * sin){
+                x = -width * sin;
+              } else if (x < -width * sin){
+                x = wWidth + width * sin;
+              } else {
+                x += sin*speed;
+              }
+
+              if (y > wHeight + width * cos){
+                y = -width * cos;
+              } else if (y < -width * cos){
+                y = wHeight + width * cos;
+              } else {
+                y -= cos*speed;
+              }
+              
+              item.x = x;
+              item.y = y;
+              drawLine(x, y, width, item.color, item.alpha);
+            }
+          }
+
+          timer = requestAnimationFrame(animate);
+        };
+
+        var createItem = function(){
+          circles = [];
+          lines = [];
+
+          if (config.circle.amount > 0 && config.circle.layer > 0){
+            for (var i=0; i<config.circle.amount/config.circle.layer; i++){
+              for (var j=0; j<config.circle.layer; j++){
+                circles.push({
+                  x: M.random() * wWidth,
+                  y: M.random() * wHeight,
+                  radius: M.random()*(20+j*5)+(20+j*5),
+                  color: config.circle.color,
+                  alpha: M.random()*0.2+(config.circle.alpha-j*0.1),
+                  speed: config.speed*(1+j*0.5)
+                });
+              }
+            }
+          }
+
+          if (config.line.amount > 0 && config.line.layer > 0){
+            for (var m=0; m<config.line.amount/config.line.layer; m++){
+              for (var n=0; n<config.line.layer; n++){
+                lines.push({
+                  x: M.random() * wWidth,
+                  y: M.random() * wHeight,
+                  width: M.random()*(20+n*5)+(20+n*5),
+                  color: config.line.color,
+                  alpha: M.random()*0.2+(config.line.alpha-n*0.1),
+                  speed: config.speed*(1+n*0.5)
+                });
+              }
+            }
+          }
+
+          cancelAnimationFrame(timer);
+          timer = requestAnimationFrame(animate);
+          drawBack();
+        };
+
+        $(document).ready(function(){
+          setCanvasHeight();
+          createItem();
+        });
+        $(window).resize(function(){
+          setCanvasHeight();
+          createItem();
+        });
+      }
+    })(jQuery);
+</script>
+
+<!-- <script>
+  // ABOUT PAGE ANIMATION 
+  (function(name, factory) {
+      if (typeof window === 'object') {
+        window[name] = factory()
+      }
+    })('Ribbons', function() {
+      var _w = window,
+        _b = document.body,
+        _d = document.documentElement
+    
+      // random helper
+      var random = function() {
+        if (arguments.length === 1) {
+          // only 1 argument
+          if (Array.isArray(arguments[0])) {
+            // extract index from array
+            var index = Math.round(random(0, arguments[0].length - 1))
+            return arguments[0][index]
+          }
+          return random(0, arguments[0]) // assume numeric
+        } else if (arguments.length === 2) {
+          // two arguments range
+          return Math.random() * (arguments[1] - arguments[0]) + arguments[0]
+        } else if (arguments.length === 4) {
+          //
+    
+          var array = [arguments[0], arguments[1], arguments[2], arguments[3]]
+          return array[Math.floor(Math.random() * array.length)]
+          //return console.log(item)
+        }
+        return 0 // default
+      }
+    
+      // screen helper
+      var screenInfo = function(e) {
+        var width = Math.max(
+            0,
+            _w.innerWidth || _d.clientWidth || _b.clientWidth || 0
+          ),
+          height = Math.max(
+            0,
+            _w.innerHeight || _d.clientHeight || _b.clientHeight || 0
+          ),
+          scrollx =
+            Math.max(0, _w.pageXOffset || _d.scrollLeft || _b.scrollLeft || 0) -
+            (_d.clientLeft || 0),
+          scrolly =
+            Math.max(0, _w.pageYOffset || _d.scrollTop || _b.scrollTop || 0) -
+            (_d.clientTop || 0)
+    
+        return {
+          width: width,
+          height: height,
+          ratio: width / height,
+          centerx: width / 2,
+          centery: height / 2,
+          scrollx: scrollx,
+          scrolly: scrolly
+        }
+      }
+    
+      // mouse/input helper
+      var mouseInfo = function(e) {
+        var screen = screenInfo(e),
+          mousex = e ? Math.max(0, e.pageX || e.clientX || 0) : 0,
+          mousey = e ? Math.max(0, e.pageY || e.clientY || 0) : 0
+    
+        return {
+          mousex: mousex,
+          mousey: mousey,
+          centerx: mousex - screen.width / 2,
+          centery: mousey - screen.height / 2
+        }
+      }
+    
+      // point object
+      var Point = function(x, y) {
+        this.x = 0
+        this.y = 0
+        this.set(x, y)
+      }
+      Point.prototype = {
+        constructor: Point,
+    
+        set: function(x, y) {
+          this.x = x || 0
+          this.y = y || 0
+        },
+        copy: function(point) {
+          this.x = point.x || 0
+          this.y = point.y || 0
+          return this
+        },
+        multiply: function(x, y) {
+          this.x *= x || 1
+          this.y *= y || 1
+          return this
+        },
+        divide: function(x, y) {
+          this.x /= x || 1
+          this.y /= y || 1
+          return this
+        },
+        add: function(x, y) {
+          this.x += x || 0
+          this.y += y || 0
+          return this
+        },
+        subtract: function(x, y) {
+          this.x -= x || 0
+          this.y -= y || 0
+          return this
+        },
+        clampX: function(min, max) {
+          this.x = Math.max(min, Math.min(this.x, max))
+          return this
+        },
+        clampY: function(min, max) {
+          this.y = Math.max(min, Math.min(this.y, max))
+          return this
+        },
+        flipX: function() {
+          this.x *= -1
+          return this
+        },
+        flipY: function() {
+          this.y *= -1
+          return this
+        }
+      }
+    
+      // class constructor
+      var Factory = function(options) {
+        this._canvas = null
+        this._context = null
+        this._sto = null
+        this._width = 0
+        this._height = 0
+        this._scroll = 0
+        this._ribbons = []
+        this._options = {
+          // ribbon color HSL saturation amount
+          colorSaturation: '80%',
+          // ribbon color HSL brightness amount
+          colorBrightness: '60%',
+          // ribbon color opacity amount
+          colorAlpha: 0.65,
+          // how fast to cycle through colors in the HSL color space
+          colorCycleSpeed: 6,
+          // where to start from on the Y axis on each side (top|min, middle|center, bottom|max, random)
+          verticalPosition: 'center',
+          // how fast to get to the other side of the screen
+          horizontalSpeed: 150,
+          // how many ribbons to keep on screen at any given time
+          ribbonCount: 5,
+          // add stroke along with ribbon fill colors
+          strokeSize: 0,
+          // move ribbons vertically by a factor on page scroll
+          parallaxAmount: -0.5,
+          // add animation effect to each ribbon section over time
+          animateSections: true
+        }
+        this._onDraw = this._onDraw.bind(this)
+        this._onResize = this._onResize.bind(this)
+        this._onScroll = this._onScroll.bind(this)
+        this.setOptions(options)
+        this.init()
+      }
+    
+      // class prototype
+      Factory.prototype = {
+        constructor: Factory,
+    
+        // Set and merge local options
+        setOptions: function(options) {
+          if (typeof options === 'object') {
+            for (var key in options) {
+              if (options.hasOwnProperty(key)) {
+                this._options[key] = options[key]
+              }
+            }
+          }
+        },
+    
+        // Initialize the ribbons effect
+        init: function() {
+          try {
+            this._canvas = document.createElement('canvas')
+            this._canvas.style['display'] = 'block'
+            this._canvas.style['position'] = 'fixed'
+            this._canvas.style['margin'] = '0'
+            this._canvas.style['padding'] = '0'
+            this._canvas.style['border'] = '0'
+            this._canvas.style['outline'] = '0'
+            this._canvas.style['left'] = '0'
+            this._canvas.style['top'] = '80vh'
+            this._canvas.style['width'] = '100%'
+            this._canvas.style['height'] = '100%'
+            this._canvas.style['z-index'] = '0'
+            this._onResize()
+    
+            this._context = this._canvas.getContext('2d')
+            this._context.clearRect(0, 0, this._width, this._height)
+            this._context.globalAlpha = this._options.colorAlpha
+    
+            window.addEventListener('resize', this._onResize)
+            window.addEventListener('scroll', this._onScroll)
+            document.body.appendChild(this._canvas)
+          } catch (e) {
+            console.warn('Canvas Context Error: ' + e.toString())
+            return
+          }
+          this._onDraw()
+        },
+    
+        // Create a new random ribbon and to the list
+        addRibbon: function() {
+          // movement data
+          var dir = Math.round(random(1, 9)) > 5 ? 'right' : 'left',
+            stop = 1000,
+            hide = 200,
+            min = 0 - hide,
+            max = this._width + hide,
+            movex = 0,
+            movey = 0,
+            startx = dir === 'right' ? min : max,
+            starty = Math.round(random(0, this._height))
+    
+          // asjust starty based on options
+          if (/^(top|min)$/i.test(this._options.verticalPosition)) {
+            starty = 0 + hide
+          } else if (/^(middle|center)$/i.test(this._options.verticalPosition)) {
+            starty = this._height / 2
+          } else if (/^(bottom|max)$/i.test(this._options.verticalPosition)) {
+            starty = this._height - hide
+          }
+    
+          // ribbon sections data
+          var ribbon = [],
+            point1 = new Point(startx, starty),
+            point2 = new Point(startx, starty),
+            point3 = null,
+            color = Math.round(random(35, 35, 40, 40)),
+            delay = 0
+    
+          // buils ribbon sections
+          while (true) {
+            if (stop <= 0) break
+            stop--
+    
+            movex = Math.round(
+              (Math.random() * 1 - 0.2) * this._options.horizontalSpeed
+            )
+            movey = Math.round((Math.random() * 1 - 0.5) * (this._height * 0.25))
+    
+            point3 = new Point()
+            point3.copy(point2)
+    
+            if (dir === 'right') {
+              point3.add(movex, movey)
+              if (point2.x >= max) break
+            } else if (dir === 'left') {
+              point3.subtract(movex, movey)
+              if (point2.x <= min) break
+            }
+            // point3.clampY( 0, this._height );
+            //console.log(Math.round(random(1, 5)))
+            ribbon.push({
+              // single ribbon section
+              point1: new Point(point1.x, point1.y),
+              point2: new Point(point2.x, point2.y),
+              point3: point3,
+              color: color,
+              delay: delay,
+              dir: dir,
+              alpha: 0,
+              phase: 0
+            })
+    
+            point1.copy(point2)
+            point2.copy(point3)
+    
+            delay += 4
+            //color += 1
+            //console.log('colorCycleSpeed', color)
+          }
+          this._ribbons.push(ribbon)
+        },
+    
+        // Draw single section
+        _drawRibbonSection: function(section) {
+          if (section) {
+            if (section.phase >= 1 && section.alpha <= 0) {
+              return true // done
+            }
+            if (section.delay <= 0) {
+              section.phase += 0.02
+              section.alpha = Math.sin(section.phase) * 1
+              section.alpha = section.alpha <= 0 ? 0 : section.alpha
+              section.alpha = section.alpha >= 1 ? 1 : section.alpha
+    
+              if (this._options.animateSections) {
+                var mod = Math.sin(1 + section.phase * Math.PI / 2) * 0.1
+    
+                if (section.dir === 'right') {
+                  section.point1.add(mod, 0)
+                  section.point2.add(mod, 0)
+                  section.point3.add(mod, 0)
+                } else {
+                  section.point1.subtract(mod, 0)
+                  section.point2.subtract(mod, 0)
+                  section.point3.subtract(mod, 0)
+                }
+                section.point1.add(0, mod)
+                section.point2.add(0, mod)
+                section.point3.add(0, mod)
+              }
+            } else {
+              section.delay -= 0.5
+            }
+            //console.log('section.color', section.color)
+            var s = this._options.colorSaturation,
+              l = this._options.colorBrightness,
+              c =
+                'hsla(' +
+                section.color +
+                ', ' +
+                s +
+                ', ' +
+                l +
+                ', ' +
+                section.alpha +
+                ' )'
+    
+            this._context.save()
+    
+            if (this._options.parallaxAmount !== 0) {
+              this._context.translate(
+                0,
+                this._scroll * this._options.parallaxAmount
+              )
+            }
+            this._context.beginPath()
+            this._context.moveTo(section.point1.x, section.point1.y)
+            this._context.lineTo(section.point2.x, section.point2.y)
+            this._context.lineTo(section.point3.x, section.point3.y)
+            this._context.fillStyle = c
+            this._context.fill()
+    
+            if (this._options.strokeSize > 0) {
+              this._context.lineWidth = this._options.strokeSize
+              this._context.strokeStyle = c
+              this._context.lineCap = 'round'
+              this._context.stroke()
+            }
+            this._context.restore()
+          }
+          return false // not done yet
+        },
+    
+        // Draw ribbons
+        _onDraw: function() {
+          // cleanup on ribbons list to rtemoved finished ribbons
+          for (var i = 0, t = this._ribbons.length; i < t; ++i) {
+            if (!this._ribbons[i]) {
+              this._ribbons.splice(i, 1)
+            }
+          }
+    
+          // draw new ribbons
+          this._context.clearRect(0, 0, this._width, this._height)
+    
+          for (
+            var a = 0;
+            a < this._ribbons.length;
+            ++a // single ribbon
+          ) {
+            var ribbon = this._ribbons[a],
+              numSections = ribbon.length,
+              numDone = 0
+    
+            for (
+              var b = 0;
+              b < numSections;
+              ++b // ribbon section
+            ) {
+              if (this._drawRibbonSection(ribbon[b])) {
+                numDone++ // section done
+              }
+            }
+            if (numDone >= numSections) {
+              // ribbon done
+              this._ribbons[a] = null
+            }
+          }
+          // maintain optional number of ribbons on canvas
+          if (this._ribbons.length < this._options.ribbonCount) {
+            this.addRibbon()
+          }
+          requestAnimationFrame(this._onDraw)
+        },
+    
+        // Update container size info
+        _onResize: function(e) {
+          var screen = screenInfo(e)
+          this._width = screen.width
+          this._height = screen.height
+    
+          if (this._canvas) {
+            this._canvas.width = this._width
+            this._canvas.height = this._height
+    
+            if (this._context) {
+              this._context.globalAlpha = this._options.colorAlpha
+            }
+          }
+        },
+    
+        // Update container size info
+        _onScroll: function(e) {
+          var screen = screenInfo(e)
+          this._scroll = screen.scrolly
+        }
+      }
+    
+      // export
+      return Factory
+    })
+    
+    new Ribbons({
+      colorSaturation: '60%',
+      colorBrightness: '50%',
+      colorAlpha: 0.5,
+      colorCycleSpeed: 5,
+      verticalPosition: 'random',
+      horizontalSpeed: 200,
+      ribbonCount: 3,
+      strokeSize: 0,
+      parallaxAmount: -0.2,
+      animateSections: true
+    })
+
+</script> -->
 
 {%if messages%} {%for message in messages%} {%if message.tags == "success"%}
 <script>
