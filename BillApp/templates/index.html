@@ -437,7 +437,23 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
 }
 
+@media screen and (min-width: 1110px) {
+  .caption1 p, .caption2 p {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 1130px) {
+  .carousel-item{
+    padding: 2.85rem 0rem;
+  }
+}
+
 @media screen and (max-width: 885px) {
+
+  #header .logo h1 {
+    font-size: 23px;
+  }
   .caption1 h3, .caption2 h3 {
     font-size : calc(1.2rem + .5vw);
   }
@@ -469,7 +485,11 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 768px) {
   .carousel-item{
-    padding: 1.75rem 0rem;
+    padding: 2.95rem 0rem;
+  }
+
+  .caption1 h6, .caption2 h6 {
+    font-size : 0.93rem;
   }
 
   .caption1 h3, .caption2 h3 {
@@ -486,13 +506,26 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@media screen and (max-width: 565px) {
+@media screen and (max-width: 695px) {
   .carousel-item{
-    padding: 2.5rem 0rem;
+    padding: 4.55rem 0rem;
+  }
+}
+
+@media screen and (max-width: 565px) {
+  #header .logo h1 {
+    font-size: 21px;
+  }
+  .carousel-item{
+    padding: 5rem 0rem;
   }
 
   .caption1 h3, .caption2 h3 {
     font-size : calc(0.9rem + .2vw);
+  }
+  
+  .caption1 h6, .caption2 h6 {
+    font-size : 0.9rem;
   }
 
   .caption1 p, .caption2 p {
@@ -505,9 +538,9 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 510px) {
   .carousel-item{
-    padding: 3.5rem 0rem;
+    padding: 6.4rem 0rem;
   }
   .caption1 h3, .caption2 h3 {
     font-size : calc(0.8rem + .1vw);
@@ -521,21 +554,41 @@ h1, h2, h3, h4, h5, h6 {
     padding: 4px 11px !important;
     font-size: 0.7rem;
   }
+
+  .caption1 h6, .caption2 h6 {
+    font-size : 0.85rem;
+  }
 }
 
 @media screen and (max-width: 380px) {
+  #header .logo h1 {
+    font-size: 18px;
+  }
   .carousel-item{
-    padding: 3.8rem 0rem;
+    padding: 7rem 0rem;
+  }
+  .caption1 h6, .caption2 h6 {
+    font-size : 0.87rem;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .carousel-item{
+    padding: 7.65rem 0rem;
   }
 }
 
 @media screen and (max-width: 300px) {
 
   .carousel-item{
-    padding: 4rem 0rem;
+    padding: 8.5rem 0rem;
   }
   .caption1 h3, .caption2 h3 {
     font-size : 10px;
+  }
+
+  .caption1 h6, .caption2 h6 {
+    font-size : 0.85rem;
   }
 
   .caption1 p, .caption2 p {
@@ -891,7 +944,7 @@ section {
   background: #242c42;
   color: #fff;
   border-radius: 0;
-  padding: 7px 15px 12px;
+  padding: 7px 55px 7px 10px;
   font-size: 16px;
   overflow: hidden;
   border: none;
@@ -1412,11 +1465,9 @@ section {
               style="width: 31vw; float: right;"
             />
             <div class="carousel-caption top-0 mt-4 w-50 caption1">
-                <h3 class="text-start">Ullamco laboris nisi ut aliquip</h3>
-                <p class="mt-3 text-start">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry.<br>
-                  Voluptatem dignissimos provident quasi
-                </p>
+                <h6 class="text-start">BillingSoftware</h6>
+                <h3 class="text-start">Your Ultimate Billing Solution</h3>
+                <p class="mt-3 text-start">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
             </div>
             <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
@@ -1430,8 +1481,9 @@ section {
               style="width: 31vw; float: left;"
             />
             <div class="carousel-caption top-0 mt-4 caption2">
-              <h3 class="text-end w-75 float-end">provident quasi corporis volupta</h3>
-              <p class="mt-3 text-end w-75 float-end">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              <h6 class="text-end">BillingSoftware</h6>
+              <h3 class="text-end w-75 float-end">Your Ultimate Billing Solution</h3>
+              <p class="mt-3 text-end w-75 float-end">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
             </div>
             <div class="carousel-caption getTrialBtn2 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
@@ -1445,8 +1497,9 @@ section {
               style="width: 31vw; float: right;"
             />
             <div class="carousel-caption top-0 mt-4 w-50 caption1">
-              <h3 class="text-start">Excepteur sint occaecat cupidatat</h3>
-              <p class="mt-3 text-start">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              <h6 class="text-start">BillingSoftware</h6>
+              <h3 class="text-start">Your Ultimate Billing Solution</h3>
+              <p class="mt-3 text-start">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
             </div>
             <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
@@ -1483,7 +1536,7 @@ section {
 
         <div class="section-title">
           <h2 data-aos="fade-in" style="position: relative; z-index: 1;">About</h2>
-          <p data-aos="fade-in" style="position: relative; z-index: 1;">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+          <!-- <p data-aos="fade-in" style="position: relative; z-index: 1;">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
         </div>
 
         <div class="row content">
@@ -1491,14 +1544,23 @@ section {
             <img src="{% static 'images/ft1.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-4" data-aos="fade-left">
-            <h3 style="position: relative; z-index: 1;">Excepteur sint occaecat cupidatat non proident, sunt occaecat.</h3>
-            <p class="font-italic" style="position: relative; z-index: 1;">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
+            <!-- <h3 style="position: relative; z-index: 1;">Excepteur sint occaecat cupidatat non proident, sunt occaecat.</h3> -->
+            <p class="font-italic" style="position: relative; z-index: 1; text-align: justify">
+              At BillingSoftware, we redefine billing software for small businesses. Our
+              user-friendly platform simplifies financial management, empowering
+              entrepreneurs without accounting backgrounds. With intuitive reporting and
+              visual insights, BillingSoftware streamlines decision-making processes. We
+              prioritize efficiency, allowing for on-the-spot billing and seamless
+              communication with customers. Join us and experience the power of
+              BillingSoftware in driving your business forward.
             </p>
             <ul>
-              <li><i class="fa fa-check"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-              <li><i class="fa fa-check"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
+              <li><i class="fa fa-check"></i> User-friendly interface.</li>
+              <li><i class="fa fa-check"></i> Intuitive stock reporting.</li>
+              <li><i class="fa fa-check"></i> Visual data insights.</li>
+              <li><i class="fa fa-check"></i> Efficient on-the-spot billing.</li>
+              <li><i class="fa fa-check"></i> Comprehensive transaction records.</li>
+              <li><i class="fa fa-check"></i> Versatile data export options.</li>
             </ul>
           </div>
         </div>
@@ -1509,15 +1571,18 @@ section {
             <img src="{% static 'images/ft2.svg' %}"class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5 order-2 order-md-1" data-aos="fade-right">
-            <h3 style="position: relative; z-index: 1;">Corporis temporibus maiores provident</h3>
-            <p class="font-italic" style="z-index: 1;">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
+            <h3 style="position: relative; z-index: 1;">Why BillingSoftware</h3>
+            <p class="font-italic" style="z-index: 1; text-align: justify">
+              BillingSoftware is more than just billing software; it's a
+              comprehensive solution crafted to enhance the efficiency and
+              growth of your small business. From simplified stock reporting to
+              intuitive data visualization and versatile export options, BillingSoftware empowers you to take control of your financial landscape.
+              Join countless businesses that have embraced the power of
+              BillingSoftware. Experience simplicity, precision, and efficiency in
+              billing like never before.
             </p>
             <p style="position: relative; z-index: 1;">
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum
+              Take the first step towards seamless business operations. Try BillingSoftwareIndia today!
             </p>
           </div>
         </div>
@@ -1533,12 +1598,21 @@ section {
             <img src="{% static 'images/ft3.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5" data-aos="fade-left">
-            <h3>Sunt consequatur ad ut est nulla consectetur reiciendis animi voluptas</h3>
-            <p>Cupiditate placeat cupiditate placeat est ipsam culpa. Delectus quia minima quod. Sunt saepe odit aut quia voluptatem hic voluptas dolor doloremque.</p>
+            <h3> Unlock Business Insights Instantly </h3>
+            <p style="text-align: justify">
+              Transform your decision-making process with our
+              revolutionary software. Gain immediate access to intuitive
+              visual data insights, providing clarity and actionable
+              information for strategic choices. Experience a swift and
+              dynamic approach to managing your financial operations with
+              our innovative platform.
+            </p>
             <ul>
-              <li><i class="fa fa-check"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-              <li><i class="fa fa-check"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-              <li><i class="fa fa-check"></i> Facilis ut et voluptatem aperiam. Autem soluta ad fugiat.</li>
+              <li><i class="fa fa-check"></i> Immediate Access to Insights.</li>
+              <li><i class="fa fa-check"></i> Clarity for Strategic Decisions.</li>
+              <li><i class="fa fa-check"></i> Dynamic Financial Management.</li>
+              <li><i class="fa fa-check"></i> Streamlined Decision-Making.</li>
+              <li><i class="fa fa-check"></i> Innovative Financial Management.</li>
             </ul>
           </div>
         </div>
@@ -1548,15 +1622,18 @@ section {
             <img src="{% static 'images/ft4.svg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-md-7 pt-5 order-2 order-md-1" data-aos="fade-right">
-            <h3>Quas et necessitatibus eaque impedit ipsum animi consequatur incidunt in</h3>
-            <p class="font-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
+            <h3> Transform Transactions with Speed </h3>
+            <p class="font-italic" style="text-align: justify">
+              Revolutionize your customer service and operational
+              efficiency. Our on-the-spot billing feature is a game-changer,
+              allowing you to streamline transactions with unparalleled
+              speed. Instantly generate slips or bills, providing a seamless
+              experience for both you and your customers. Accelerate your
+              business transactions, ensuring precision and efficiency in
+              every interaction.
             </p>
             <p>
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum
+              Experience a swift and dynamic approach to managing your financial operations with our innovative software.
             </p>
           </div>
         </div>
@@ -1570,8 +1647,8 @@ section {
       <div class="container">
 
         <div class="section-title">
-          <h2 data-aos="fade-in">Plan & Pricings</h2>
-          <p data-aos="fade-in">Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+          <h2 data-aos="fade-in">Plan & Pricing</h2>
+          <p data-aos="fade-in">Explore our flexible pricing option. Find the perfect plan for you.</p>
         </div>
 
         <div class="row mt-5 pt-4">
@@ -1683,31 +1760,31 @@ section {
                 <div class="card">
                   <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
-                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> Can users with no accounting background use the software? </button>
                     </h5>
                   </div>
                   <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> Yes, our user-friendly interface ensures easy navigation for individuals without accounting expertise. </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> How quickly can I generate slips or bills with the on-the-spot billing feature? </button>
                     </h5>
                   </div>
                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> Instantly! Our software allows for immediate generation, streamlining transactions for efficiency. </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="headingThree">
                     <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"> Can I export data to Excel for versatility in data management? </button>
                     </h5>
                   </div>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-bs-parent="#accordion">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> Absolutely, every module can be exported seamlessly to Excel for flexible data handling. </div>
                   </div>
                 </div>
               </div>
@@ -1717,31 +1794,31 @@ section {
                 <div class="card">
                   <div class="card-header" id="heading4">
                     <h5 class="mb-0">
-                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4"> What types of insights do the visual data representations provide? </button>
                     </h5>
                   </div>
                   <div id="collapse4" class="collapse" aria-labelledby="heading4" data-bs-parent="#accordion2">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> The graphical representations offer clear insights into sales trends for informed decision-making. </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="heading5">
                     <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5"> Is the software suitable for businesses dealing with VAT ? </button>
                     </h5>
                   </div>
                   <div id="collapse5" class="collapse" aria-labelledby="heading5" data-bs-parent="#accordion2">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> Certainly, our software is tailored for small businesses navigating Value Added Tax complexities. </div>
                   </div>
                 </div>
                 <div class="card">
                   <div class="card-header" id="heading6">
                     <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6"> Frequently Asked Questions ? </button>
+                      <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6"> How can I share sales bills with multiple users ? </button>
                     </h5>
                   </div>
                   <div id="collapse6" class="collapse show" aria-labelledby="heading6" data-bs-parent="#accordion2">
-                    <div class="card-body"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, numquam quis perferendis beatae? Alias reprehenderit ut voluptatem mollitia sit aut eum ratione laudantium soluta ipsam adipisci, molestias delectus iure. Recusandae? </div>
+                    <div class="card-body"> Easily share sales bills in PDF format directly via email, ensuring efficient communication with stakeholders. </div>
                   </div>
                 </div>
               </div>
