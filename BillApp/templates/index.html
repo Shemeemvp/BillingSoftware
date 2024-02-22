@@ -429,8 +429,8 @@ h1, h2, h3, h4, h5, h6 {
   text-align: end !important;
 } */
 
-.caption1 h3, .caption2 h3 {
-  font-size : calc(1.3rem + .5vw);
+.caption1 h4, .caption2 h4 {
+  font-size : calc(1.3rem);
 }
 
 .caption1 p, .caption2 p {
@@ -439,13 +439,17 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (min-width: 1110px) {
   .caption1 p, .caption2 p {
-    font-size: 15px;
+    font-size: 16px;
+  }
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(1.55rem);
+    margin: 18px 0px;
   }
 }
 
 @media screen and (max-width: 1130px) {
   .carousel-item{
-    padding: 2.85rem 0rem;
+    padding: 3.15rem 0rem;
   }
 }
 
@@ -454,8 +458,8 @@ h1, h2, h3, h4, h5, h6 {
   #header .logo h1 {
     font-size: 23px;
   }
-  .caption1 h3, .caption2 h3 {
-    font-size : calc(1.2rem + .5vw);
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(1.2rem);
   }
 
   .caption1 p, .caption2 p {
@@ -469,8 +473,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media screen and (max-width: 820px) {
-  .caption1 h3, .caption2 h3 {
-    font-size : calc(1.1rem + .4vw);
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(1.1rem);
   }
 
   .caption1 p, .caption2 p {
@@ -485,15 +489,15 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 768px) {
   .carousel-item{
-    padding: 2.95rem 0rem;
+    padding: 3.3rem 0rem;
   }
 
   .caption1 h6, .caption2 h6 {
     font-size : 0.93rem;
   }
 
-  .caption1 h3, .caption2 h3 {
-    font-size : calc(1rem + .4vw);
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(1rem);
   }
 
   .caption1 p, .caption2 p {
@@ -508,7 +512,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 695px) {
   .carousel-item{
-    padding: 4.55rem 0rem;
+    padding: 5rem 0rem;
   }
 }
 
@@ -517,15 +521,15 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 21px;
   }
   .carousel-item{
-    padding: 5rem 0rem;
+    padding: 5.78rem 0rem;
   }
 
-  .caption1 h3, .caption2 h3 {
-    font-size : calc(0.9rem + .2vw);
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(0.9rem);
   }
   
   .caption1 h6, .caption2 h6 {
-    font-size : 0.9rem;
+    font-size : 0.85rem;
   }
 
   .caption1 p, .caption2 p {
@@ -540,10 +544,10 @@ h1, h2, h3, h4, h5, h6 {
 
 @media screen and (max-width: 510px) {
   .carousel-item{
-    padding: 6.4rem 0rem;
+    padding: 7.75rem 0rem;
   }
-  .caption1 h3, .caption2 h3 {
-    font-size : calc(0.8rem + .1vw);
+  .caption1 h4, .caption2 h4 {
+    font-size : calc(0.9rem);
   }
 
   .caption1 p, .caption2 p {
@@ -556,7 +560,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .caption1 h6, .caption2 h6 {
-    font-size : 0.85rem;
+    font-size : 11px;
   }
 }
 
@@ -565,30 +569,30 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 18px;
   }
   .carousel-item{
-    padding: 7rem 0rem;
+    padding: 8rem 0rem;
   }
   .caption1 h6, .caption2 h6 {
-    font-size : 0.87rem;
+    font-size : 9px;
   }
 }
 
 @media screen and (max-width: 350px) {
   .carousel-item{
-    padding: 7.65rem 0rem;
+    padding: 8.2rem 0rem;
   }
 }
 
 @media screen and (max-width: 300px) {
 
   .carousel-item{
-    padding: 8.5rem 0rem;
+    padding: 9rem 0rem;
   }
-  .caption1 h3, .caption2 h3 {
+  .caption1 h4, .caption2 h4 {
     font-size : 10px;
   }
 
   .caption1 h6, .caption2 h6 {
-    font-size : 0.85rem;
+    font-size : 8px;
   }
 
   .caption1 p, .caption2 p {
@@ -1465,9 +1469,9 @@ section {
               style="width: 31vw; float: right;"
             />
             <div class="carousel-caption top-0 mt-4 w-50 caption1">
-                <h6 class="text-start">BillingSoftware</h6>
-                <h3 class="text-start">Your Ultimate Billing Solution</h3>
-                <p class="mt-3 text-start">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
+                <h6 class="text-start float-start" style="width: fit-content;">BillingSoftware</h6>
+                <h4 class="text-start d-flex" style="width: 115%; font-weight: bold;">Your Ultimate Billing Solution</h4>
+                <p class="mt-2" style="text-align: justify;">Unlock the Power of Seamless Business Operations with BillingSoftwareIndia the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftwareIndia empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
             </div>
             <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
@@ -1478,14 +1482,14 @@ section {
               src="{% static 'images/ft6.svg' %}"
               class="d-block carousel_image2"
               alt="..."
-              style="width: 31vw; float: left;"
+              style="width: 31vw; float: right;"
             />
-            <div class="carousel-caption top-0 mt-4 caption2">
-              <h6 class="text-end">BillingSoftware</h6>
-              <h3 class="text-end w-75 float-end">Your Ultimate Billing Solution</h3>
-              <p class="mt-3 text-end w-75 float-end">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
+            <div class="carousel-caption w-50 top-0 mt-1 caption1">
+              <h6 class="text-start" style="width: fit-content;">BillingSoftware</h6>
+              <h4 class="d-flex" style="text-align: start; width: 115%; font-weight: bold">Streamline Your Finances with Seamless Billing Solutions</h4>
+              <p class="mt-2" style="text-align: justify;">Simplify financial management with our comprehensive billing software. This solution offers seamless invoicing, precise expense tracking, and efficient payment processing, empowering your business with a robust and user-friendly platform. Navigate effortlessly through billing complexities, ensuring accuracy and timely transactions. Experience the ease of monitoring and controlling your finances in one central hub, making it an indispensable tool for optimizing your financial processes and fostering business growth.</p>
             </div>
-            <div class="carousel-caption getTrialBtn2 mt-1">
+            <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
             </div>
           </div>
@@ -1496,10 +1500,10 @@ section {
               alt="..."
               style="width: 31vw; float: right;"
             />
-            <div class="carousel-caption top-0 mt-4 w-50 caption1">
-              <h6 class="text-start">BillingSoftware</h6>
-              <h3 class="text-start">Your Ultimate Billing Solution</h3>
-              <p class="mt-3 text-start">Unlock the Power of Seamless Business Operations with BillingSoftware the billing software tailored for small businesses navigating the complexities of Value Added Tax (VAT). Designed with user- friendliness in mind, BillingSoftware empowers entrepreneurs without an accounting background to effortlessly manage their financial transactions and gain valuable insights into their business performance.</p>
+            <div class="carousel-caption top-0 mt-1 w-50 caption1">
+              <h6 class="text-start float-start" style="width: fit-content;">BillingSoftware</h6>
+              <h4 class="d-flex" style="text-align: start; width: 120%; font-weight: bold">Effortless Invoicing and Payments for Your Business Success</h4>
+              <p class="mt-2" style="text-align: justify;">Revolutionize your billing process effortlessly with our software. Enjoy a smooth and error-free invoicing experience, complemented by seamless payment handling. Elevate your business success by reducing complexities and enhancing efficiency in managing invoices and transactions. This intuitive solution ensures quick, secure, and reliable payment processing, freeing up valuable time for you to focus on strategic aspects of your business, confident in the knowledge that your billing operations are streamlined for success.</p>
             </div>
             <div class="carousel-caption getTrialBtn1 mt-1">
               <a href="#registerTrial" data-bs-toggle="modal" class="btn-get-trial trialBtn">Get Free Trial</a>
